@@ -1,5 +1,5 @@
 import numpy as np
-
+import pandas as pd
 
 def range_is_occupied(occupied_coords, start, end):
     sites = np.arange(start, end)
@@ -35,3 +35,16 @@ def longest_unoccupied_gap(occupied_coords):
     # array. Used to determine is there is still space in a list for another
     # cluster
     return len(max(''.join([str(i) for i in occupied_coords]).split('1'), key=lambda s: len(s)))
+
+
+def get_int_half_length(length):
+    half_len = int(length / 2)
+    other_half = length - half_len
+    return half_len, other_half
+
+
+def read_variable_region_config_file(file_path):
+    table = pd.read_csv(file_path)
+    table = pd.replace('NA', None)
+
+    return table
