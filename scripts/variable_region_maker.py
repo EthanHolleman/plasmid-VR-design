@@ -19,9 +19,11 @@ def brute_force_gc_count_calculator(gc_skew, gc_content, seq_len, closest=True):
 
 class Sequence():
     
-    def __init__(self, count_dict, cluster_length=None, cluster_nuc=None,
+    def __init__(self, name, count_dict, variable_region, cluster_length=None, cluster_nuc=None,
                 cluster_dist_func=None):
+        self.name = name
         self.count_dict = count_dict
+        self.variable_region = variable_region
         self.cluster_length = cluster_length
         self.cluster_nuc = cluster_nuc
         self.cluster_dist_func = cluster_dist_func
@@ -123,44 +125,110 @@ class Sequence():
 
             
 
-
-
-
-
-
 class VairableRegion():
     # defines the content of a Sequence
 
     name_prefix = 'VR'  # variable region
 
-    def __init__(self, length, gc_content, gc_skew, at_skew=None, 
-                at_content=None, role=None):
+    @classmethod
+    def init_from_csv_row(cls, row_dict):
+        return cls(**row_dict)
+
+
+    def __init__(self, length, gc_content=None, gc_skew=None, at_skew=None, 
+                at_content=None, cluster_length=None, cluster_nuc=None,
+                cluster_dist_func=None, role=None):
+
+        self.length = length
         self.gc_skew = gc_skew
         self.gc_content = gc_content
         self.at_skew = at_skew
         self.at_content = at_content
+        self.cluster_length = cluster_length
+        self.cluster_nuc = cluster_nuc
+        self.cluster_dist_func = cluster_dist_func
         self.role = role
+
         self.gc_count = None
-        self._generated_sequences = 1  # base 1 for plebs
+        self.at_count
+        self._generated_sequences = 0
     
+    @property
+    def cluster_nuc(self):
+        return self._cluster_nuc
     
-    def calculate_g_c_count(self):
+    @cluseter_nuc.setter
+    def cluster_nuc(self, new_nuc):
+        if new_nuc == None or new_nuc in self.nuc_dict:
+            self.cluster_nuc = new_nuc
+        else:
+            raise TypeError(
+                f'Must pass a cannonical nucleotide or None! Not this shit {new_nuc}')
+
+
+    @property
+    def nuc_dict(self):
+        return {
+            'A': self.at_count[0],
+            'T': self.at_count[1],
+            'G': self.gc_count[0],
+            'C': self.gc_count[1]
+        }
+
+
+    def calculate_nucleotide_counts(self):
+        # gc arbitrary takes priority in calculation because
+        # it is my favorite
+        self._calculate_gc_count()
+        self._calculate_at_count()
+
+
+    def _calculate_gc_count(self):
         '''Calculate the number of G and C nucleotides that should be included
         in the sequence given the gc skew and content.
         '''
-        self.gc_count = gc_count
-
-        return gc_count
+        if self._at_count:  # already calculated AT count
+            effective_length = self.length - sum(self._gc_count)
+        
+        if self.gc_skew and self.gc_content:
+            self.gc_count = calculate_nucleotide_count(
+                skew=self.gc_skew,
+                content=self.gc_content,
+                seq_len=effective_length
+            )
+        else:
+            self.gc_count = get_int_half_length(effective_length)
     
+
+    def _calculate_at_count(self):
+        if self._gc_count:  # already calculated GC count
+            effective_length = self.length - sum(self._gc_count)
+        
+        if self.at_skew and self.at_content:
+            self.at_count = calculate_nucleotide_count(
+                skew=self.at_skew,
+                content=self.at_content,
+                seq_len=effective_length
+            )
+        else:
+            self.at_count = get_int_half_length(effective_length)
+        
+        
 
     def generate_sequence(self):
         if not self.gc_count:
-            self.calculate_g_c_count
+            self.calculate_nucleotide_counts()
         
         self._generated_sequences += 1
+        return Sequence(
+            self._sequence_name(),
+            self._nuc_count,
+            self,
+            self.cluster_length,
+            self.cluster_nuc,
+            self.cluster_dist_func
+            )
         
-        return name, sequence
-
     def _sequence_name(self):
         return f'{VairableRegion.name_prefix}_{self.role}_{self._generated_sequences}_{self.gc_skew}_{self.gc_content}_unclustered'
 
