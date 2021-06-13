@@ -39,7 +39,6 @@ def nuc_count_calculator(skew, content, seq_len, closest=True):
             best_nuc_combo = nuc_combo
 
     
-    
     return best_nuc_combo
 
 
@@ -52,7 +51,8 @@ def calculate_content(nuc_combo, seq_len):
         
     
 def range_is_occupied(occupied_coords, start, end):
-    sites = np.arange(start, end)
+    sites = np.arange(start, end, dtype=int)
+    occupied_coords = occupied_coords.astype(int)
     if any(np.take(occupied_coords, sites)) != 0:
         return True  # is occupied
     else:
@@ -74,7 +74,7 @@ def find_available_random_range(occupied_coords, range_length):
             if range_is_occupied(occupied_coords, start, end):
                 continue
             else:
-                return start, end
+                return int(start), int(end)
     else:
         # no possible ranges
         return False
@@ -95,6 +95,12 @@ def get_int_half_length(length):
 
 def read_variable_region_config_file(file_path):
     table = pd.read_table(file_path)
-    table = table.replace('NA', None).to_dict(orient='records')
+    table = table.to_dict(orient='records')
+    for row in table:
+        for key, val in row.items():
+            if val == 'NA' or pd.isna(val):
+                row[key] = None
 
     return table
+
+
