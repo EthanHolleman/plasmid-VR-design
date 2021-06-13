@@ -34,8 +34,10 @@ def nuc_count_calculator(skew, content, seq_len, closest=True):
         closest_skew_diff = abs(closest_skew-skew)
 
         if cur_content_diff < closest_content_diff and cur_skew_diff < closest_skew_diff:
-            closest_skeq = cur_skew
+            
+            closest_skew = cur_skew
             closest_content = cur_content
+            print(cur_skew, cur_content, nuc_combo, skew, content)
             best_nuc_combo = nuc_combo
 
     
