@@ -5,7 +5,7 @@ import pandas as pd
 nuc_cache = {}
 
 
-def brute_force_nuc_count_calculator(skew, content, seq_len, closest=True):
+def nuc_count_calculator(skew, content, seq_len, closest=True):
     '''Calculate the number of G and C nucleotides to include in a DNA
     sequence given a sequence length, GC skew and content. 
 
@@ -16,17 +16,31 @@ def brute_force_nuc_count_calculator(skew, content, seq_len, closest=True):
         closest (bool, optional): If no exact result returns the closest. Defaults to True.
     '''
     closest_skew, closest_content = 0, 0
+    best_nuc_combo = (0, 0)
     if seq_len not in nuc_cache:
         nuc_combos = []
-        for k in range(2, l):
+        for k in range(2, seq_len):
             nuc_combos += [(i, k-i) for i in range(0, k+1)]
-    nuc_cache[length] = nuc_combos
-    for nuc_combo in nuc_cache[length]:
-        cur_content, cur_skew = calculate_content(nuc_combo, len_seq), calculate_skew(nuc_combo)
-        if abs(content - content) < abs(closest_content - content):
-            closest_content = content
+        nuc_cache[seq_len] = nuc_combos
 
+    
+    for nuc_combo in nuc_cache[seq_len]:
+        
+        cur_content, cur_skew = calculate_content(nuc_combo, seq_len), calculate_skew(nuc_combo)
+        
+        cur_content_diff = abs(cur_content-content)
+        cur_skew_diff = abs(cur_skew-content)
+        closest_content_diff = abs(closest_content-content)
+        closest_skew_diff = abs(closest_skew-skew)
 
+        if cur_content_diff < closest_content_diff and cur_skew_diff < closest_skew_diff:
+            closest_skeq = cur_skew
+            closest_content = cur_content
+            best_nuc_combo = nuc_combo
+
+    
+    
+    return best_nuc_combo
 
 
 def calculate_skew(nuc_combo):
@@ -37,9 +51,6 @@ def calculate_content(nuc_combo, seq_len):
     return sum(nuc_combo) / seq_len
         
     
-
-
-
 def range_is_occupied(occupied_coords, start, end):
     sites = np.arange(start, end)
     if any(np.take(occupied_coords, sites)) != 0:

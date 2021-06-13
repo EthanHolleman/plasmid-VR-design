@@ -187,25 +187,31 @@ class VairableRegion():
         '''Calculate the number of G and C nucleotides that should be included
         in the sequence given the gc skew and content.
         '''
-        if self._at_count:  # already calculated AT count
-            effective_length = self.length - sum(self._gc_count)
-        
+        if self.at_count:  # already calculated AT count
+            effective_length = self.length - sum(self.gc_count)
+        else:
+            effective_length = self.length
+
         if self.gc_skew and self.gc_content:
-            self.gc_count = calculate_nucleotide_count(
+            print(self.gc_skew, self.gc_content, 'gc')
+            self.gc_count = nuc_count_calculator(
                 skew=self.gc_skew,
                 content=self.gc_content,
                 seq_len=effective_length
             )
+            print(self.gc_count, 'gc_count')
         else:
             self.gc_count = get_int_half_length(effective_length)
     
 
     def _calculate_at_count(self):
-        if self._gc_count:  # already calculated GC count
-            effective_length = self.length - sum(self._gc_count)
+        if self.gc_count:  # already calculated GC count
+            effective_length = self.length - sum(self.gc_count)
+        else:
+            effective_length = self.length
         
-        if self.at_skew and self.at_content:
-            self.at_count = calculate_nucleotide_count(
+        if self.at_skew > 0 and self.at_content > 0:
+            self.at_count = nuc_count_calculator(
                 skew=self.at_skew,
                 content=self.at_content,
                 seq_len=effective_length
