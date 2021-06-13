@@ -1,6 +1,45 @@
 import numpy as np
 import pandas as pd
 
+
+nuc_cache = {}
+
+
+def brute_force_nuc_count_calculator(skew, content, seq_len, closest=True):
+    '''Calculate the number of G and C nucleotides to include in a DNA
+    sequence given a sequence length, GC skew and content. 
+
+    Args:
+        gc_skew (float): Level of GC skew, between 0 and 1.
+        gc_content (float): Level of GC content between 0 and 1.
+        seq_len (int): Length of sequence in nucleotides.
+        closest (bool, optional): If no exact result returns the closest. Defaults to True.
+    '''
+    closest_skew, closest_content = 0, 0
+    if seq_len not in nuc_cache:
+        nuc_combos = []
+        for k in range(2, l):
+            nuc_combos += [(i, k-i) for i in range(0, k+1)]
+    nuc_cache[length] = nuc_combos
+    for nuc_combo in nuc_cache[length]:
+        cur_content, cur_skew = calculate_content(nuc_combo, len_seq), calculate_skew(nuc_combo)
+        if abs(content - content) < abs(closest_content - content):
+            closest_content = content
+
+
+
+
+def calculate_skew(nuc_combo):
+    return (nuc_combo[1] - nuc_combo[0]) / sum(nuc_combo)
+
+
+def calculate_content(nuc_combo, seq_len):
+    return sum(nuc_combo) / seq_len
+        
+    
+
+
+
 def range_is_occupied(occupied_coords, start, end):
     sites = np.arange(start, end)
     if any(np.take(occupied_coords, sites)) != 0:
@@ -44,7 +83,7 @@ def get_int_half_length(length):
 
 
 def read_variable_region_config_file(file_path):
-    table = pd.read_csv(file_path)
-    table = pd.replace('NA', None)
+    table = pd.read_table(file_path)
+    table = table.replace('NA', None).to_dict(orient='records')
 
     return table

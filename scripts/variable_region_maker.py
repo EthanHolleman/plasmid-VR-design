@@ -1,6 +1,6 @@
 import numpy as np
 
-from utils import find_available_random_range 
+from utils import *
 
 BRUTE_FORCE_CACHE = {}
 
@@ -33,6 +33,9 @@ class Sequence():
             assert cluster_nuc, 'Must specify cluster nuc if passing cluster len!'
             assert cluster_nuc in count_dict
     
+    @property
+    def cluster_dict_func(self):
+        return self._cluster_dict_func
 
     @cluster_dict_func.setter
     def cluster_dict_func(self, new_func):
@@ -40,12 +43,6 @@ class Sequence():
             self._cluster_dict_func = new_func
         else:
             return find_available_random_range
-
-
-    @property
-    def cluster_dict_func(self):
-        return self._cluster_dict_func
-
 
     @property
     def __len__(self):
@@ -135,10 +132,14 @@ class VairableRegion():
         return cls(**row_dict)
 
 
-    def __init__(self, length, gc_content=None, gc_skew=None, at_skew=None, 
+    def __init__(self, name, length, gc_content=None, gc_skew=None, at_skew=None, 
                 at_content=None, cluster_length=None, cluster_nuc=None,
-                cluster_dist_func=None, role=None):
+                cluster_dist_func=None, role=None, **kwargs):
+        
+        self.gc_count = (0, 0)
+        self.at_count = (0, 0)
 
+        self.name = name
         self.length = length
         self.gc_skew = gc_skew
         self.gc_content = gc_content
@@ -149,18 +150,17 @@ class VairableRegion():
         self.cluster_dist_func = cluster_dist_func
         self.role = role
 
-        self.gc_count = None
-        self.at_count
         self._generated_sequences = 0
     
     @property
     def cluster_nuc(self):
         return self._cluster_nuc
     
-    @cluseter_nuc.setter
+    @cluster_nuc.setter
     def cluster_nuc(self, new_nuc):
-        if new_nuc == None or new_nuc in self.nuc_dict:
-            self.cluster_nuc = new_nuc
+
+        if isinstance(new_nuc, float) or new_nuc in self.nuc_dict:
+            self._cluster_nuc = new_nuc
         else:
             raise TypeError(
                 f'Must pass a cannonical nucleotide or None! Not this shit {new_nuc}')
@@ -214,7 +214,6 @@ class VairableRegion():
             self.at_count = get_int_half_length(effective_length)
         
         
-
     def generate_sequence(self):
         if not self.gc_count:
             self.calculate_nucleotide_counts()
@@ -234,9 +233,18 @@ class VairableRegion():
 
     def __len__(self):
         return self.length
-    
 
-    
+
+p = '/home/ethan/Documents/GitHub/plasmid-design/variable_defs/initiation_plamids.csv'
+vrs = read_variable_region_config_file(p)
+
+for row_dict in vrs:
+    v = VairableRegion.init_from_csv_row(row_dict)
+    print(v.nuc_dict)
+
+
+#v = VairableRegion.init_from_csv('
+
 
 
 
