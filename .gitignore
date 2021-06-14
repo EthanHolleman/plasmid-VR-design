@@ -1,3 +1,7 @@
 .vscode/
 output/
+.snakemake/
+logs/
+.RData
+
 
