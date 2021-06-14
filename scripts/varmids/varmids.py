@@ -6,12 +6,12 @@ from utils import *
 
 
 def main():
-    input_var_regions = 'variable_defs/termination_plasmids.tsv'
-    output_fasta = 'test.fasta'
-    output_tsv = 'test.tsv'
-    # input_var_regions = str(snakemake.params['input_file'])
-    # output_fasta = str(snakemake.output['fasta'])
-    # output_tsv = str(snakemake.output['tsv'])
+    # input_var_regions = 'variable_defs/termination_plasmids.tsv'
+    # output_fasta = 'test.fasta'
+    # output_tsv = 'test.tsv'
+    input_var_regions = str(snakemake.params['input_file'])
+    output_fasta = str(snakemake.output['fasta'])
+    output_tsv = str(snakemake.output['tsv'])
 
 
     # Create variable regions instances
