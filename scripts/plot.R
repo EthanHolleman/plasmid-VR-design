@@ -109,12 +109,14 @@ calculated_windowed_skew_content_vs_params <- function(df, row_num, window_size=
     for (i in 1:nrow(windows.df)){
         diff_vals[[i]] <- as.numeric(windows.df[i, ]$value) - as.numeric(df[row_num, windows.df[i, ]$metric])
     }
+
     windows.df$diff_vals <- unlist(diff_vals)
 
     ggplot(windows.df, aes(x=as.factor(as.numeric(window_number)), y=diff_vals), fill=metric) +
-           geom_bar(stat='identity', color="black", position=position_dodge()) +
-           scale_color_brewer(palette='Dark2') + theme_pubr() + facet_wrap(~metric) +
-           theme(legend.position = "none")
+           geom_bar(stat='identity') +
+           scale_fill_brewer(palette='Dark2') + theme_pubr() + facet_wrap(~metric) +
+           theme(legend.position = "none", axis.text.x = element_text(angle = 90)) +
+           scale_x_discrete(breaks = seq(1, max(as.numeric(windows.df$window_number)), by = 10))
 
 }
 
