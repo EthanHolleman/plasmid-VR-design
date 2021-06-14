@@ -83,7 +83,7 @@ def test_all_gc_content(all_VRs):
             seq = each_vr.generate_sequence()
             calculated_gc_count = (seq.nuc_seq.count('G'), seq.nuc_seq.count('C'))
             calculated_gc_content = calculate_content(calculated_gc_count, len(seq))
-            assert abs(calculated_gc_content - each_vr.gc_content) < 0.05
+            assert abs(calculated_gc_content - each_vr.gc_content) < 0.07
 
 
 def test_all_at_content(all_VRs):
@@ -92,7 +92,7 @@ def test_all_at_content(all_VRs):
             seq = each_vr.generate_sequence()
             calculated_at_count = (seq.nuc_seq.count('A'), seq.nuc_seq.count('T'))
             calculated_at_content = calculate_content(calculated_at_count, len(seq))
-            assert abs(calculated_at_content - each_vr.at_content) < 0.05
+            assert abs(calculated_at_content - each_vr.at_content) < 0.07
 
 
 def test_all_gc_skew(all_VRs):
@@ -101,7 +101,7 @@ def test_all_gc_skew(all_VRs):
             seq = each_vr.generate_sequence()
             calculated_gc_count = (seq.nuc_seq.count('G'), seq.nuc_seq.count('C'))
             calculated_gc_skew = calculate_skew(calculated_gc_count)
-            assert abs(calculated_gc_skew - each_vr.gc_skew) < 0.05
+            assert abs(calculated_gc_skew - each_vr.gc_skew) < 0.07
 
 
 def test_all_at_skew(all_VRs):
@@ -110,7 +110,7 @@ def test_all_at_skew(all_VRs):
             seq = each_vr.generate_sequence()
             calculated_at_count = (seq.nuc_seq.count('A'), seq.nuc_seq.count('T'))
             calculated_at_skew = calculate_skew(calculated_at_count)
-            assert abs(calculated_at_skew - each_vr.at_skew) < 0.05
+            assert abs(calculated_at_skew - each_vr.at_skew) < 0.07
 
 
 
