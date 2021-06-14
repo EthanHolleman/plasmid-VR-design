@@ -109,7 +109,7 @@ def write_sequence_list_to_output_files(seq_list, fasta_path, tsv_path):
             fasta_handle.write(seq.as_fasta_entry())
             seq_rows.append(seq.to_dict())
 
-    pd.DataFrame(seq_rows).to_csv(tsv_path, sep='\t', index=False)
+    pd.DataFrame(seq_rows).to_csv(tsv_path, sep='\t', index=False, na_rep='NA')
     
     return fasta_path, tsv_path
 
