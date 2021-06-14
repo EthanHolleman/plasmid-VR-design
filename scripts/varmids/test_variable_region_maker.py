@@ -67,7 +67,7 @@ def test_nuc_seq_nucleotide_count(all_VRs):
     for each_vr in all_VRs:
         seq = each_vr.generate_sequence()
         for nucleotide, count in each_vr.nuc_dict.items():
-            assert seq.nuc_seq.count(nucleotide) - count <= 1
+            assert seq.nuc_seq.count(nucleotide) - count <= 2
             # tolerance of 1 nuc diff to account for rounding
 
 
