@@ -19,3 +19,15 @@ Init_17	0.6	70	200	NA	NA	NA	NA	NA	initiation_region_17
 Init_18	0	70	200	NA	NA	NA	NA	NA	initiation_region_18
 Init_19	0.4	40	200	NA	NA	NA	NA	NA	initiation_region_19
 Init_20	0.2	50	200	NA	NA	NA	NA	NA	initiation_region_20
+Init_21	0.4	0.6	200	0	NA	1	G	find_available_random_range	init_G_clustered
+Init_22	0.4	0.6	200	0	NA	2	G	find_available_random_range	init_G_clustered
+Init_23	0.4	0.6	200	0	NA	3	G	find_available_random_range	init_G_clustered
+Init_24	0.4	0.6	200	0	NA	4	G	find_available_random_range	init_G_clustered
+Init_25	0.4	0.6	200	0.2	NA	1	G	find_available_random_range	init_G_clustered
+Init_26	0.4	0.6	200	0.2	NA	2	G	find_available_random_range	init_G_clustered
+Init_27	0.4	0.6	200	0.2	NA	3	G	find_available_random_range	init_G_clustered
+Init_28	0.4	0.6	200	0.2	NA	4	G	find_available_random_range	init_G_clustered
+Init_29	0.4	0.6	200	0.4	NA	1	G	find_available_random_range	init_G_clustered
+Init_30	0.4	0.6	200	0.4	NA	2	G	find_available_random_range	init_G_clustered
+Init_31	0.4	0.6	200	0.4	NA	3	G	find_available_random_range	init_G_clustered
+Init_32	0.4	0.6	200	0.4	NA	4	G	find_available_random_range	init_G_clustered
