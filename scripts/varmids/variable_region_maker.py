@@ -82,7 +82,11 @@ class Sequence():
             else:
                 break  # exit since no more clusters can be added
         
-        seq_list = [None for _ in range(len(bins))]
+        # set up seq_list as random nucleotide sequence. This is to avoid having
+        # empty bins in cases where rounding in order to get the closest possible
+        # content / skew counts causes sum of nucleotide count to differ
+        # from specified length by one or two nucleotides
+        seq_list = [str(np.random.choice(['A', 'T', 'G', 'C'], 1)[0]) for _ in range(len(bins))]
         for i in np.where(bins == 1)[0]:
             seq_list[i] = self.cluster_nuc
         
@@ -193,7 +197,7 @@ class VairableRegion():
             assert self.at_content + self.gc_content == 1, f'AT + GC content must equal 1: {self.at_content}, {self.gc_content}'
         for param in (self.gc_skew, self.gc_content, self.at_content, self.at_skew):
             if param:
-                assert param <= 1 and param >= 0, f'{param} not valid value'
+                assert param <= 1 and param >= -1, f'{param} not valid value'
     
 
     def _infer_contents(self):

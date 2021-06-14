@@ -2,6 +2,15 @@ library(stringr)
 library(ggplot2)
 library(ggpubr)
 
+
+read_variable_region_tsv <- function(file.path){
+
+    as.data.frame(read.table(file.path))
+
+}
+
+
+
 skew <- function(a_count, b_count, interval){
 
     (b_count - a_count) / (a_count + b_count)
@@ -24,6 +33,8 @@ get_nucleotide_counts <- function(seq){
 
 }
 
+## Calculate skew and content metrics for a given character vector
+## using a specific window size.
 seq_skew_content_sliding_window <- function(seq, window_size=10){
 
     windows <- list()
@@ -70,6 +81,35 @@ plot_skew_content_windows <- function(windows.df){
 
 }
 
-seq='ATTTGTGTACCACAGTGTGTACACATGTGTGACACATGTACAACTGGTGTGAACCAACACAGTGTGACACGTGTGAC'
-df <- seq_skew_content_sliding_window(seq)
-plot_skew_content_windows(df)
+## generate skew and content plots from a variable region dataframe and
+## the row number of a variable region.
+skew_content_plot_from_df_row <- function(df, row_num, window_size=30){
+
+    row <- df[row_num, ]
+    seq <- row$sequence
+    windows.df <- seq_skew_content_sliding_window(seq, window_size)
+    plot_skew_content_windows(windows.df)
+
+}
+
+
+main <- function(){
+
+    input.path <- as.character(snakemake@input)
+    output.path <- as.character(snakemake@output)
+    df <- read_variable_region_tsv(input.path)
+    pdf(output.path)
+    for (i in 1:nrow(df)){
+        skew_content_plot <- skew_content_plot_from_df_row(df, i)
+        print(skew_content_plot)
+    }
+    dev.off()
+
+}
+
+
+if (!interactive()){
+
+    main()
+
+}
