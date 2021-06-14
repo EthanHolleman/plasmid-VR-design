@@ -1,9 +1,0 @@
-
-
-variable_regions = {
-    'initiation_regions': '',
-    'termination_regions': ''
-}
-
-
-rule all:
