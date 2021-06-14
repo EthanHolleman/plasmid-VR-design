@@ -2,7 +2,7 @@ library(stringr)
 library(ggplot2)
 library(ggpubr)
 
-skew <- function(a_count, b_count interval){
+skew <- function(a_count, b_count, interval){
 
     (b_count - a_count) / (a_count + b_count)
 
@@ -24,31 +24,52 @@ get_nucleotide_counts <- function(seq){
 
 }
 
-seq_skew_content_sliding_window <- function(seq, window_size=25){
+seq_skew_content_sliding_window <- function(seq, window_size=10){
 
     windows <- list()
+    k <- 1
+    for (i in 1:(nchar(seq)-window_size))
 
-    for (i in seq(1, length(seq)-window_size, window_size){
+    {
 
         window_start = i
         window_end = i + window_size
         window_seq = substr(seq, window_start, window_end)
 
         nuc_counts <- get_nucleotide_counts(window_seq)
-        
-        gc_skew <- skew(nuc_counts['G'], nuc_counts['C'])
-        at_skew <- skew(nuc_counts['A'], nuc_counts['T'])
+        gc_skew <- skew(nuc_counts[['G']], nuc_counts[['C']])
+        at_skew <- skew(nuc_counts[['A']], nuc_counts[['T']])
 
-        gc_content <- content(nuc_counts['G'], nuc_counts['C'], length(window_seq))
-        at_content <- content(nuc_counts['A'], nuc_counts['T'], length(window_seq))
+        gc_content <- content(nuc_counts[['G']], nuc_counts[['C']], nchar(window_seq))
+        at_content <- content(nuc_counts[['A']], nuc_counts[['T']], nchar(window_seq))
 
-        windows[[i]] <- c(gc_skew, at_skew, gc_content, at_content)
+        print(i)
+        windows[[k]] <- c(i, gc_skew, 'GC_skew')
+        windows[[k+1]] <- c(i, gc_content, 'GC_content')
+        windows[[k+2]] <- c(i, gc_content, 'GC_content')
+        windows[[k+3]] <- c(i, at_skew, 'AT_skew')
+        windows[[k+4]] <- c(i, at_content, 'AT_content')
+        k = k + 5
 
     }
 
     df <- as.data.frame(do.call(rbind, windows))
-    colnames(df) <- 'gc_skew', 'at_skew', 'gc_content', 'at_content'
+    colnames(df) <- c('window_number', 'value', 'metric')
     df
 
 
 }
+
+
+plot_skew_content_windows <- function(windows.df){
+
+    plot <- ggplot(windows.df, aes(x=as.numeric(window_number), y=as.numeric(value), color=metric)) +
+            geom_point() + geom_line() + theme_pubr() + scale_color_brewer(palette='Dark2')
+    ggsave('test.png', plot)
+        
+
+}
+
+seq='ATTTGTGTACCACAGTGTGTACACATGTGTGACACATGTACAACTGGTGTGAACCAACACAGTGTGACACGTGTGAC'
+df <- seq_skew_content_sliding_window(seq)
+plot_skew_content_windows(df)
