@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import csv
 
 
 nuc_cache = {}
@@ -16,30 +17,24 @@ def nuc_count_calculator(skew, content, seq_len, closest=True):
         closest (bool, optional): If no exact result returns the closest. Defaults to True.
     '''
     closest_skew, closest_content = 0, 0
-    best_nuc_combo = (0, 0)
-    if seq_len not in nuc_cache:
-        nuc_combos = []
-        for k in range(2, seq_len):
-            nuc_combos += [(i, k-i) for i in range(0, k+1)]
-        nuc_cache[seq_len] = nuc_combos
+    best_nuc_combo = (1, 1)
 
-    
-    for nuc_combo in nuc_cache[seq_len]:
-        
-        cur_content, cur_skew = calculate_content(nuc_combo, seq_len), calculate_skew(nuc_combo)
-        
-        cur_content_diff = abs(cur_content-content)
-        cur_skew_diff = abs(cur_skew-content)
-        closest_content_diff = abs(closest_content-content)
-        closest_skew_diff = abs(closest_skew-skew)
+    number_nucs = int(seq_len * content)
+    nuc_combos = [(i, number_nucs-i) for i in range(1, number_nucs+1)]
+    skew_content_dict = {
+        tuple(nuc_combo):(calculate_content(nuc_combo, seq_len), calculate_skew(nuc_combo))
+        for nuc_combo in nuc_combos
+    }
+    best_nuc_combo, cur_distance = None, float('inf')
 
-        if cur_content_diff < closest_content_diff and cur_skew_diff < closest_skew_diff:
-            
-            closest_skew = cur_skew
-            closest_content = cur_content
-            print(cur_skew, cur_content, nuc_combo, skew, content)
+    for nuc_combo in skew_content_dict:
+        combo_content, combo_skew = skew_content_dict[nuc_combo]
+        distance = abs(combo_content - content) + abs(combo_skew - skew)
+        if distance == 0:
             best_nuc_combo = nuc_combo
-
+            break
+        elif distance < cur_distance:
+            best_nuc_combo, cur_distance = nuc_combo, distance
     
     return best_nuc_combo
 
@@ -104,5 +99,20 @@ def read_variable_region_config_file(file_path):
                 row[key] = None
 
     return table
+
+
+def write_sequence_list_to_output_files(seq_list, fasta_path, tsv_path):
+    seq_rows = []
+    with open(fasta_path, 'w') as fasta_handle:
+        for seq in seq_list:
+            fasta_handle.write(seq.as_fasta_entry())
+            seq_rows.append(seq.to_dict())
+    print(seq_rows)
+    pd.DataFrame(seq_rows).to_csv(tsv_path, sep='\t')
+    
+
+    
+    return fasta_path, tsv_path
+
 
 

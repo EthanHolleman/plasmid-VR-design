@@ -2,25 +2,11 @@ import numpy as np
 
 from utils import *
 
-BRUTE_FORCE_CACHE = {}
-
-def brute_force_gc_count_calculator(gc_skew, gc_content, seq_len, closest=True):
-    '''Calculate the number of G and C nucleotides to include in a DNA
-    sequence given a sequence length, GC skew and content. 
-
-    Args:
-        gc_skew (float): Level of GC skew, between 0 and 1.
-        gc_content (float): Level of GC content between 0 and 1.
-        seq_len (int): Length of sequence in nucleotides.
-        closest (bool, optional): If no exact result returns the closest. Defaults to True.
-    '''
-    pass
-
 
 class Sequence():
     
-    def __init__(self, name, count_dict, variable_region, cluster_length=None, cluster_nuc=None,
-                cluster_dist_func=None):
+    def __init__(self, name, count_dict, variable_region, cluster_length=None, 
+                cluster_nuc=None, cluster_dist_func=None):
         self.name = name
         self.count_dict = count_dict
         self.variable_region = variable_region
@@ -33,13 +19,13 @@ class Sequence():
             assert cluster_nuc, 'Must specify cluster nuc if passing cluster len!'
     
     @property
-    def cluster_dict_func(self):
-        return self._cluster_dict_func
+    def cluster_dist_func(self):
+        return self._cluster_dist_func
 
-    @cluster_dict_func.setter
-    def cluster_dict_func(self, new_func):
+    @cluster_dist_func.setter
+    def cluster_dist_func(self, new_func):
         if callable(new_func):
-            self._cluster_dict_func = new_func
+            self._cluster_dist_func = new_func
         else:
             self._cluster_dist_func = find_available_random_range
 
@@ -82,12 +68,11 @@ class Sequence():
             # if cluster length is less than nucleotide count reset
             # cluster length to number of available nucleotides
             number_clusters = 1
-            self.cluster_len = int(self.count_dict[self.cluster_nuc])
+            self.cluster_length = int(self.count_dict[self.cluster_nuc])
 
         seq_bins = [None for _ in range(len(bins))]
         for i in range(number_clusters):
-            self.cluster_dist_func = find_available_random_range
-            rand_range = self.cluster_dist_func(bins, self.cluster_len)
+            rand_range = self.cluster_dist_func(bins, self.cluster_length)
 
             if rand_range:
                 start, end = rand_range
@@ -97,10 +82,11 @@ class Sequence():
                 break  # exit since no more clusters can be added
         
         seq_list = [None for _ in range(len(bins))]
-        for i in np.where(bins == 1):
-            seq_list[int(i)] = self.cluster_nuc
+        for i in np.where(bins == 1)[0]:
+            seq_list[i] = self.cluster_nuc
         
-        seq_list = self._randomly_distribute_all_nucleotides(bins, ignore_nucs=self.cluster_nuc, seq_list=seq_list)
+        seq_list = self._randomly_distribute_all_nucleotides(bins, 
+                ignore_nucs=[self.cluster_nuc], seq_list=seq_list)
         return seq_list
 
 
@@ -126,20 +112,38 @@ class Sequence():
                 available_bins, len(available_bins), replace=False)
                 )
         
-        temp_count_dict = self.count_dict
-        for nuc in ignore_nucs:
-            temp_count_dict.pop(nuc)
-
         if not seq_list:
             seq_list = [None for _ in range(len(bins))]
         for nucleotide, count in self.count_dict.items():
-            for _ in range(count):
-                seq_list[random_bins.pop()] = nucleotide
+            if nucleotide not in ignore_nucs:
+                for _ in range(count):
+                    seq_list[random_bins.pop()] = nucleotide
         return seq_list
+    
+
+    def as_fasta_entry(self):
+        '''Return sequence as fasta formated string.
+        '''
+        return f'>{self.name}\n{self.nuc_seq}\n'
+    
+
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'GC_content': self.variable_region.gc_content,
+            'GC_skew': self.variable_region.gc_skew,
+            'AT_content': self.variable_region.at_content,
+            'AT_skew': self.variable_region.at_skew,
+            'Cluster_length': self.cluster_length,
+            'Clustered_nucleotide': self.cluster_nuc,
+            'Clustering method': self.cluster_dist_func.__name__,
+            'Sequence': self.nuc_seq,
+        }
+        
 
 
-            
 
+        
 class VairableRegion():
     # defines the content of a Sequence
 
@@ -199,10 +203,14 @@ class VairableRegion():
 
 
     def calculate_nucleotide_counts(self):
-        # gc arbitrary takes priority in calculation because
-        # it is my favorite
-        self._calculate_gc_count()
-        self._calculate_at_count()
+        # The order which counts are calculated matters when only at or gc
+        if self.at_content or self.at_skew:
+            self._calculate_at_count()
+            self._calculate_gc_count()
+        else:
+            self._calculate_gc_count()
+            self._calculate_at_count()
+
 
 
     def _calculate_gc_count(self):
@@ -218,7 +226,7 @@ class VairableRegion():
             )
         else:
             self.gc_count = get_int_half_length(len(self) - sum(self.at_count))
-    
+            
 
     def _calculate_at_count(self):
         
@@ -245,9 +253,10 @@ class VairableRegion():
             self.cluster_nuc,
             self.cluster_dist_func
             )
+    
         
     def _sequence_name(self):
-        return f'{VairableRegion.name_prefix}_{self.role}_{self._generated_sequences}_{self.gc_skew}_{self.gc_content}_unclustered'
+        return f'{VairableRegion.name_prefix}_{self.name}_{self.role}_{self._generated_sequences}_{self.gc_skew}_{self.gc_content}_unclustered'
 
     def __len__(self):
         return self.length

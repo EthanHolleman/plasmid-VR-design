@@ -16,7 +16,8 @@ TEST_PLASMIDS_DICT = read_variable_region_config_file(TEST_PLASMIDS_PATH)
 def all_VRs():
     vrs = []
     for p in TEST_PLASMIDS_DICT:
-        vrs.append(VairableRegion.init_from_csv_row(p))
+        vr = VairableRegion.init_from_csv_row(p)
+        vrs.append(vr)
     return vrs
 
 

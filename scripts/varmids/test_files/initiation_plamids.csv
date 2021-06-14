@@ -1,0 +1,4 @@
+name	length	gc_content	gc_skew	at_skew	at_content	cluster_length	cluster_nuc	clustering_method	role
+TEST1	200	0.5	0.2	NA	NA	NA	NA	NA	NA
+TEST2	200	NA	NA	0.2	0.5	NA	NA	NA	NA
+TEST2	200	0.5	0.2	NA	NA	5	A	NA	NA

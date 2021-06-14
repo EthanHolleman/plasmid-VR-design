@@ -1,0 +1,32 @@
+
+
+from variable_region_maker import *
+from utils import *
+
+
+
+def main():
+    input_var_regions = 'scripts/varmids/test_files/initiation_plamids.csv'
+    output_fasta = 'test.fasta'
+    output_tsv = 'test.tsv'
+
+    # Create variable regions instances
+    variable_regions_dict = read_variable_region_config_file(input_var_regions)
+    var_regions = [
+        VairableRegion.init_from_csv_row(row) for row in variable_regions_dict
+    ] 
+
+    # Generate sequences from variable regions
+    seqs = []
+    for vr in var_regions:
+        vr.calculate_nucleotide_counts()
+        seqs.append(vr.generate_sequence())
+    
+    # Write sequences to output files
+    write_sequence_list_to_output_files(seqs, output_fasta, output_tsv)
+
+
+if __name__ == '__main__':
+    main()
+
+
