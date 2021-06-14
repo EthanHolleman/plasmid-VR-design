@@ -1,5 +1,7 @@
 # Plasmid design for investigating sequence effect on R-loop initiation and termination
 
+![example workflow](https://github.com/ethanholleman/plasmid-design/actions/workflows/tests.yml/badge.svg)
+
 ## Grant language
 
 Language taken directly from grant describing the work.
