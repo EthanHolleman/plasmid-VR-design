@@ -15,6 +15,8 @@ class Sequence():
         self.cluster_dist_func = cluster_dist_func
         self.nuc_seq = self._make_sequence()
 
+        assert len(self.nuc_seq) == self.variable_region.length, f'Nuc seq: {len(self.nuc_seq)} VR: {self.variable_region.length}'
+
         if self.cluster_length:
             assert cluster_nuc, 'Must specify cluster nuc if passing cluster len!'
     
@@ -42,7 +44,6 @@ class Sequence():
         Returns:
             str: Nucleotide sequence as a string.
         '''
-
         bins = np.zeros(len(self))
         if self.cluster_length:
             bins = self._distribute_nucleotides_with_clustering(bins)
@@ -124,7 +125,7 @@ class Sequence():
     def as_fasta_entry(self):
         '''Return sequence as fasta formated string.
         '''
-        return f'>{self.name}\n{self.nuc_seq}\n'
+        return f'>{self.name}\n{fasta_seq_printer(self.nuc_seq)}\n'
     
 
     def to_dict(self):
@@ -161,9 +162,6 @@ class VairableRegion():
         self.gc_count = (0, 0)
         self.at_count = (0, 0)
 
-        if gc_content and at_content:
-            assert gc_content + at_content == 1, 'AT and GC content must equal 1!' 
-
         self.name = name
         self.length = length
         self.gc_skew = gc_skew
@@ -176,8 +174,65 @@ class VairableRegion():
         self.role = role
 
         self._generated_sequences = 0
+
+        self._infer_contents()
+        self._check_content_skew()
     
+    def _check_content_skew(self):
+        '''Private method to check if all content and skew type attributes are
+        valid.
+
+        Raises:
+            AssertionError: Raise if content or skew is not valid value (> 1).
+
+        Returns:
+            
+            None: Return None if all checks passed.
+        '''
+        if self.at_content and self.gc_content:
+            assert self.at_content + self.gc_content == 1, f'AT + GC content must equal 1: {self.at_content}, {self.gc_content}'
+        for param in (self.gc_skew, self.gc_content, self.at_content, self.at_skew):
+            if param:
+                assert param <= 1 and param >= 0, f'{param} not valid value'
     
+
+    def _infer_contents(self):
+        '''Setting GC content implies an AT content and vice versa. This
+        private function detects when one has been set and not the other
+        and infers the unset value. GC + AT content must equal 1. 
+        '''
+        if self.gc_content and not self.at_content:
+            self.at_content = 1 - self.gc_content
+        elif self.at_content and not self.gc_content:
+            self.gc_content = 1 - self.at_content
+    
+    @property
+    def gc_skew(self):
+        return self._gc_skew
+    
+    @gc_skew.setter
+    def gc_skew(self, new_skew):
+        if type(new_skew) == None:
+            new_skew = 0
+        elif not isinstance(new_skew, float):
+            raise TypeError
+        else:
+            self._gc_skew = new_skew
+
+    @property
+    def at_skew(self):
+        return self._gc_skew
+    
+    @at_skew.setter
+    def at_skew(self, new_skew):
+        if new_skew == None:
+            new_skew = 0
+        elif not isinstance(new_skew, float):
+            raise TypeError(f'{type(new_skew)}')
+        else:
+            self._at_skew = new_skew
+    
+        
     @property
     def cluster_nuc(self):
         return self._cluster_nuc
@@ -217,27 +272,26 @@ class VairableRegion():
         '''Calculate the number of G and C nucleotides that should be included
         in the sequence given the gc skew and content.
         '''
-
-        if self.gc_skew and self.gc_content:
+        if self.gc_skew or self.gc_content:
             self.gc_count = nuc_count_calculator(
                 skew=self.gc_skew,
                 content=self.gc_content,
-                seq_len=len(self)
+                seq_len=self.length
             )
         else:
-            self.gc_count = get_int_half_length(len(self) - sum(self.at_count))
+            self.gc_count = get_int_half_length(self.length - sum(self.at_count))
             
 
     def _calculate_at_count(self):
         
-        if self.at_skew and self.at_content:
+        if self.at_skew or self.at_content:
             self.at_count = nuc_count_calculator(
                 skew=self.at_skew,
                 content=self.at_content,
-                seq_len=len(self)
+                seq_len=self.length
             )
         else:
-            self.at_count = get_int_half_length(len(self) - sum(self.gc_count))
+            self.at_count = get_int_half_length(self.length - sum(self.gc_count))
         
         
     def generate_sequence(self):
@@ -256,10 +310,7 @@ class VairableRegion():
     
         
     def _sequence_name(self):
-        return f'{VairableRegion.name_prefix}_{self.name}_{self.role}_{self._generated_sequences}_{self.gc_skew}_{self.gc_content}_unclustered'
-
-    def __len__(self):
-        return self.length
+        return f'{VairableRegion.name_prefix}_{self.name}_{self.role}_{self._generated_sequences}_{self.gc_skew}_{self.gc_content}'
 
 
 

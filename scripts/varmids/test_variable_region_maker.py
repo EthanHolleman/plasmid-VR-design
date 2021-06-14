@@ -41,63 +41,39 @@ def test_VR_cluster():
     return VairableRegion.init_from_csv_row(p)
 
 
-def test_VR_creation_from_file(test_VR, test_VR_with_at, test_VR_cluster):
-    assert isinstance(test_VR, VairableRegion)
-    assert isinstance(test_VR_with_at, VairableRegion)
-    assert isinstance(test_VR_cluster, VairableRegion)
+def test_VR_creation_from_file(all_VRs):
+    for each_vr in all_VRs:
+        assert isinstance(each_vr, VairableRegion)
 
 
-def test_calculate_nucleotide_counts(test_VR):
-    test_VR.calculate_nucleotide_counts()
-    assert sum(test_VR.gc_count) > 1 
-    assert sum(test_VR.at_count) > 1
-    assert sum(test_VR.nuc_dict.values()) == len(test_VR)
+def test_calculate_nucleotide_counts(all_VRs):
+    for each_vr in all_VRs:
+        each_vr.calculate_nucleotide_counts()
+        assert sum(each_vr.gc_count) > 1 
+        assert sum(each_vr.at_count) > 1
+        assert sum(each_vr.nuc_dict.values()) == each_vr.length
 
 
-def test_calc_nuc_counts_cluster(test_VR_cluster):
-    test_VR_cluster.calculate_nucleotide_counts()
-    assert sum(test_VR_cluster.gc_count) > 1 
-    assert sum(test_VR_cluster.at_count) > 1
-    assert sum(test_VR_cluster.nuc_dict.values()) == len(test_VR_cluster)
+def test_generate_sequence(all_VRs):
+    for each_vr in all_VRs:
+        seq = each_vr.generate_sequence()
+        assert isinstance(seq, Sequence)
+        assert len(seq.nuc_seq) == each_vr.length
+        assert isinstance(seq.nuc_seq, str)
+        assert len(set(seq.nuc_seq)) <= 4  # no more than 4 diff nucleotides 
 
 
-def test_generate_sequence_cluster(test_VR_cluster):
-    seq = test_VR_cluster.generate_sequence()
-    assert isinstance(seq, Sequence)
-    assert len(seq.nuc_seq) == len(test_VR_cluster)
-    assert isinstance(seq.nuc_seq, str)
+def test_nuc_seq_nucleotide_count(all_VRs):
+    for each_vr in all_VRs:
+        seq = each_vr.generate_sequence()
+        for nucleotide, count in each_vr.nuc_dict.items():
+            assert seq.nuc_seq.count(nucleotide) == count
 
 
-def test_calc_nuc_counts_at(test_VR_with_at):
-    test_VR_with_at.calculate_nucleotide_counts()
-    assert sum(test_VR_with_at.gc_count) > 1 
-    assert sum(test_VR_with_at.at_count) > 1
-    assert sum(test_VR_with_at.nuc_dict.values()) == len(test_VR_with_at)
-
-
-def test_generate_sequence(test_VR):
-    seq = test_VR.generate_sequence()
-    assert isinstance(seq, Sequence)
-    assert len(seq.nuc_seq) == len(test_VR)
-    assert isinstance(seq.nuc_seq, str)
-
-
-def test_generate_sequence_at(test_VR_with_at):
-    seq = test_VR_with_at.generate_sequence()
-    assert isinstance(seq, Sequence)
-    assert len(seq.nuc_seq) == len(test_VR_with_at)
-    assert isinstance(seq.nuc_seq, str) 
-
-
-def test_nuc_seq_nucleotide_count(test_VR):
-    seq = test_VR.generate_sequence()
-    for nucleotide, count in test_VR.nuc_dict.items():
-        assert seq.nuc_seq.count(nucleotide) == count
-
-
-def test_seq_name(test_VR):
-    assert isinstance(test_VR._sequence_name(), str)
-    assert test_VR._sequence_name()
+def test_seq_name(all_VRs):
+    for each_vr in all_VRs:
+        assert isinstance(each_vr._sequence_name(), str)
+        assert each_vr._sequence_name()
 
 
 def test_all_gc_content(all_VRs):

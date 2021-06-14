@@ -20,6 +20,7 @@ def nuc_count_calculator(skew, content, seq_len, closest=True):
     best_nuc_combo = (1, 1)
 
     number_nucs = int(seq_len * content)
+
     nuc_combos = [(i, number_nucs-i) for i in range(1, number_nucs+1)]
     skew_content_dict = {
         tuple(nuc_combo):(calculate_content(nuc_combo, seq_len), calculate_skew(nuc_combo))
@@ -107,12 +108,15 @@ def write_sequence_list_to_output_files(seq_list, fasta_path, tsv_path):
         for seq in seq_list:
             fasta_handle.write(seq.as_fasta_entry())
             seq_rows.append(seq.to_dict())
-    print(seq_rows)
+
     pd.DataFrame(seq_rows).to_csv(tsv_path, sep='\t')
     
-
-    
     return fasta_path, tsv_path
+
+
+def fasta_seq_printer(seq):
+    n = 80
+    return '\n'.join([seq[i:i+n] for i in range(0, len(seq), n)])
 
 
 

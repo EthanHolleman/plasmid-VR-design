@@ -6,9 +6,13 @@ from utils import *
 
 
 def main():
-    input_var_regions = 'scripts/varmids/test_files/initiation_plamids.csv'
+    input_var_regions = 'variable_defs/initiation_plamids.tsv'
     output_fasta = 'test.fasta'
     output_tsv = 'test.tsv'
+    # input_var_regions = str(snakemake.params['input_file'])
+    # output_fasta = str(snakemake.output['fasta'])
+    # output_tsv = str(snakemake.output['tsv'])
+
 
     # Create variable regions instances
     variable_regions_dict = read_variable_region_config_file(input_var_regions)
