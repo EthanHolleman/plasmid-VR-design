@@ -314,7 +314,11 @@ class VairableRegion():
     
         
     def _sequence_name(self):
-        return f'{VairableRegion.name_prefix}_{self.name}_{self.role}_{self._generated_sequences}_{self.gc_skew}_{self.gc_content}'
+        if self.cluster_nuc:
+            cluster = self.cluster_nuc
+        else:
+            cluster=False
+        return f'{VairableRegion.name_prefix}_{self.name}_{self.role}_GCskew:{self.gc_skew}_GCcontent:{self.gc_content}_ATskew:{self.at_skew}_ATcontent:{self.at_content}_Clustered:{cluster}'
 
 
 
