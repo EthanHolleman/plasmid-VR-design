@@ -26,8 +26,20 @@ We will next design substrates to systematically test the notion, reported in th
 We will add a constant extension region of 100 bp, and synthesize and clone a series of 200 bp sequences immediately thereafter. These potential termination regions will possess decreasing GC content (50, 40, 30%) and decreasing GC skew (0, -0.2, -0.4), thus producing increasingly unfavorable contexts for RNA:DNA base-pairing. We will test the eﬀect of C clustering and negative AT skews, as described above for initiation
 ```
 
+## Running the workflow
 
-## Specifing variable region parameters
+Workflow is run via snakemake.
+
+![](resources/dag.png)
+
+Ways to execute workflow
+
+`snakemake -j 1 --use-conda`
+
+Edit the `run.sh` and `cluster.yml` files for your computing environment.
+Then make `run.sh` executable and run the workflow by calling `./run.sh`.
+
+### Specifying variable region parameters
 
 Create a csv file in the `variable_defs` directory with the fields listed below.
 | Field name                |       Description                                                                                                                                       |
@@ -45,16 +57,36 @@ Create a csv file in the `variable_defs` directory with the fields listed below.
 
 If a field is not specified is should be set to `NA`.
 
-### Currently available clustering methods
+#### Currently available clustering methods
 
-#### `find_available_random_range`
+##### `find_available_random_range`
 
 Places each cluster randomly in the variable region sequence so that clusters
 do not overlap.
 
-## Example output
+### Example output
 
-### Fasta
+All output will be written to a directory called `output` located
+where ever the workflow is executed. Below is example directory structure
+after executing the workflow with two variable region definition tsv files.
+
+```
+.
+├── initiation_regions
+│   ├── files
+│   │   ├── initiation_regions.fasta
+│   │   └── initiation_regions.tsv
+│   └── plots
+│       └── initiation_regions.pdf
+└── termination_regions
+    ├── files
+    │   ├── termination_regions.fasta
+    │   └── termination_regions.tsv
+    └── plots
+        └── termination_regions.pdf
+```
+
+#### Fasta
 
 Fasta formatted file of all generated variable regions.
 
@@ -69,7 +101,7 @@ CTCCGCCTTGTACGCTCGCCCATGCCGGAGTGCCTCGTCCCACCGCATTCCGTCCCACCCCGCTCCGTTGGGCTCGCCAC
 CCCTCCCCTGCCTCTTTACCTTCTGGGGTTCCGGCGCCTG
 ```
 
-### TSV
+#### TSV
 
 Tab seperated file of all generated regions, used mainly for plotting.
 
@@ -80,7 +112,7 @@ VR_Init_2_initiation_region_2_GCskew:0.4_GCcontent:0.7_ATskew:0.4_ATcontent:0.30
 ```
 
 
-### Plots
+#### Plots
 
 Plots produced for one variable region.
 
