@@ -119,4 +119,10 @@ def fasta_seq_printer(seq):
     return '\n'.join([seq[i:i+n] for i in range(0, len(seq), n)])
 
 
+def count_nucleotides_in_seq(seq):
+    nucs = ['A', 'T', 'G', 'C']
+    counts = {each_nuc: seq.count(each_nuc) for each_nuc in nucs}
+    return counts
+
+
 
