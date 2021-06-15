@@ -128,24 +128,25 @@ distance_to_next_same_nucleotide <- function(seq, nuc_index){
     k <- 1
     right_index <- nuc_index
     left_index <- nuc_index
-    while (right_index <= nchar(seq) & left_index >= 1){
+    while (right_index <= nchar(seq) | left_index >= 1){
         k <- k + 1
-        left_index <- nuc_index - 1
-        right_index <- nuc_index + 1
+        left_index <- left_index - 1
+        right_index <- right_index + 1
         for (index in c(left_index, right_index)){
-            if (index > 0){
+            if (index > 0 & index < nchar(seq)){
                 index_nuc <- substr(seq, index, index)
                 if (index_nuc == nuc){
-                    dist <- abs(nuc_index - index)
-                    break
+                    dist <- abs(abs(index) - nuc_index)
+                    return(dist)
                 }
             }
         }
+
         if (k > nchar(seq)){
+            
             break  # emergency stop
         }
     }
-
     dist
 
 }
@@ -162,15 +163,14 @@ plot_distance_to_next_same_nucleotide <- function(df, row_num){
             distance_to_next_same_nucleotide(seq, nuc_index),
             nuc
             )
+    }
     dist.df <- as.data.frame(do.call(rbind, dists))
     colnames(dist.df) <- c('Distance', 'Nucleotide')
-    print(dist.df)
-    print('DIST DF!!!')
-    ggplot(dist.df, aes(x=Nucleotide, y=Distance), fill=Nucleotide) + 
-            geom_boxplot() + theme_pubr() + 
-            scale_fill_brewer(palette='Dark2') + theme(legend.position = "none")
-
-    }
+    plot <- ggplot(dist.df, aes(y=Nucleotide, x=as.numeric(Distance), fill=Nucleotide)) + 
+           geom_density_ridges(alpha=0.7) + theme_pubr() + 
+            scale_fill_brewer(palette='Dark2') + theme(legend.position = "none") +
+            labs(x='Distance to nucleotide of same species')
+    plot
 
 
 }
@@ -285,7 +285,7 @@ main <- function(){
         seq_and_table <- ggarrange(
             vr_table,
             nuc_props,
-            clustering,
+            ggarrange(clustering, sequence, nrow=2, ncol=1, heights=c(1, 0.5)),
             nrow=1, ncol=3
         )
 
