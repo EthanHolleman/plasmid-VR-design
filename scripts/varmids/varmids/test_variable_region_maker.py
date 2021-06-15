@@ -16,7 +16,7 @@ TEST_PLASMIDS_DICT = read_variable_region_config_file(TEST_PLASMIDS_PATH)
 def all_VRs():
     vrs = []
     for p in TEST_PLASMIDS_DICT:
-        vr = VairableRegion.init_from_csv_row(p)
+        vr = VariableRegion.init_from_csv_row(p)
         vrs.append(vr)
     return vrs
 
@@ -24,7 +24,7 @@ def all_VRs():
 @pytest.fixture
 def test_VR():
     p = TEST_PLASMIDS_DICT[0]
-    return VairableRegion.init_from_csv_row(p)
+    return VariableRegion.init_from_csv_row(p)
 
 
 @pytest.fixture
@@ -32,18 +32,18 @@ def test_VR_with_at():
     p = TEST_PLASMIDS_DICT[1] 
     # second variable region also has AT content and skew
     # set
-    return VairableRegion.init_from_csv_row(p)
+    return VariableRegion.init_from_csv_row(p)
 
 
 @pytest.fixture
 def test_VR_cluster():
     p = TEST_PLASMIDS_DICT[2]
-    return VairableRegion.init_from_csv_row(p)
+    return VariableRegion.init_from_csv_row(p)
 
 
 def test_VR_creation_from_file(all_VRs):
     for each_vr in all_VRs:
-        assert isinstance(each_vr, VairableRegion)
+        assert isinstance(each_vr, VariableRegion)
 
 
 def test_calculate_nucleotide_counts(all_VRs):

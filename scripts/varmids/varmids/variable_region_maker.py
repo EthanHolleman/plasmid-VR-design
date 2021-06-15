@@ -146,10 +146,7 @@ class Sequence():
         }
         
 
-
-
-        
-class VairableRegion():
+class VariableRegion():
     # defines the content of a Sequence
 
     name_prefix = 'VR'  # variable region
@@ -220,8 +217,8 @@ class VairableRegion():
             new_skew = 0
         elif not isinstance(new_skew, float):
             raise TypeError
-        else:
-            self._gc_skew = new_skew
+        
+        self._gc_skew = new_skew
 
     @property
     def at_skew(self):
@@ -233,10 +230,9 @@ class VairableRegion():
             new_skew = 0
         elif not isinstance(new_skew, float):
             raise TypeError(f'{type(new_skew)}')
-        else:
-            self._at_skew = new_skew
-    
         
+        self._at_skew = new_skew
+    
     @property
     def cluster_nuc(self):
         return self._cluster_nuc
@@ -318,7 +314,7 @@ class VairableRegion():
             cluster = self.cluster_nuc
         else:
             cluster=False
-        return f'{VairableRegion.name_prefix}_{self.name}_{self.role}_GCskew:{round(self.gc_skew, 2)}_GCcontent:{round(self.gc_content, 2)}_ATskew:{round(self.at_skew, 2)}_ATcontent:{round(self.at_content, 2)}_Clustered:{cluster}'
+        return f'{VariableRegion.name_prefix}_{self.name}_{self.role}_GCskew:{round(self.gc_skew, 2)}_GCcontent:{round(self.gc_content, 2)}_ATskew:{round(self.at_skew, 2)}_ATcontent:{round(self.at_content, 2)}_Clustered:{cluster}'
 
 
 

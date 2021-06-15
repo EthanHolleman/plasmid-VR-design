@@ -17,7 +17,7 @@ def main():
     # Create variable regions instances
     variable_regions_dict = read_variable_region_config_file(input_var_regions)
     var_regions = [
-        VairableRegion.init_from_csv_row(row) for row in variable_regions_dict
+        VariableRegion.init_from_csv_row(row) for row in variable_regions_dict
     ] 
 
     # Generate sequences from variable regions
