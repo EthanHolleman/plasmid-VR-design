@@ -1,0 +1,3 @@
+[submodule "submodules/SPOT-RNA"]
+	path = submodules/SPOT-RNA
+	url = https://github.com/jaswindersingh2/SPOT-RNA
