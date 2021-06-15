@@ -1,4 +1,4 @@
-from utils import *
+from varmids.utils import *
 
 class SeqSelector():
 

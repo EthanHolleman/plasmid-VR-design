@@ -1,6 +1,6 @@
 import numpy as np
 
-from utils import *
+from varmids.utils import *
 
 
 class Sequence():
@@ -86,7 +86,7 @@ class Sequence():
         # empty bins in cases where rounding in order to get the closest possible
         # content / skew counts causes sum of nucleotide count to differ
         # from specified length by one or two nucleotides
-        seq_list = [str(np.random.choice(['A', 'T', 'G', 'C'], 1)[0]) for _ in range(len(bins))]
+        seq_list = [str(RAND_GEN.choice(['A', 'T', 'G', 'C'], 1)[0]) for _ in range(len(bins))]
         for i in np.where(bins == 1)[0]:
             seq_list[i] = self.cluster_nuc
         
@@ -113,7 +113,7 @@ class Sequence():
         '''
         available_bins = np.where(bins==0)[0]
 
-        random_bins = list(np.random.choice(
+        random_bins = list(RAND_GEN.choice(
                 available_bins, len(available_bins), replace=False)
                 )
         

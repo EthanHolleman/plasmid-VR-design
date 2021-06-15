@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import csv
 
+from varmids import RAND_GEN
 
 nuc_cache = {}
 
@@ -58,7 +59,7 @@ def range_is_occupied(occupied_coords, start, end):
 
 
 def random_range_of_length_n(length_seq, range_length):
-    start = int(np.random.choice(np.arange(0, length_seq-range_length), 1)[0])
+    start = int(RAND_GEN.choice(np.arange(0, length_seq-range_length), 1)[0])
     end = start + range_length
     return start, end
 

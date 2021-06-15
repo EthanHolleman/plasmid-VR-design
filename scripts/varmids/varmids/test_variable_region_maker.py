@@ -1,8 +1,8 @@
 import os
 import pytest
 
-from variable_region_maker import *
-from utils import *
+from varmids.variable_region_maker import *
+from varmids.utils import *
 
 import os
 
