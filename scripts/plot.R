@@ -1,6 +1,7 @@
 library(stringr)
 library(ggplot2)
 library(ggpubr)
+library(ggridges)
 
 WINDOW_SIZE <- 30
 
@@ -120,6 +121,48 @@ variable_region_table <- function(df, row_num){
 
 }
 
+distance_to_next_same_nucleotide <- function(seq, nuc_index){
+
+    nuc <- substr(seq, nuc_index, nuc_index)
+    dist <- 1
+    while (TRUE){
+        left_index <- nuc_index - 1
+        right_index <- nuc_index + 1
+        for (index in c(left_index, right_index))
+            if (index > 0){
+                index_nuc <- substr(seq, index, index)
+                if (index_nuc == nuc){
+                    return(abs(nuc_index - index))
+                }
+            }
+
+    }
+
+}
+
+plot_distance_to_next_same_nucleotide <- function(df, row_num){
+
+    row <- df[row_num, ]
+    seq <- row$Sequence
+
+    dists <- list()
+    for (nuc_index in 1:nchar(seq)){
+        nuc <- subset(seq, nuc_index, nuc_index)
+        dists[[nuc_index]] <- c(
+            distance_to_next_same_nucleotide(seq, nuc_index),
+            nuc
+            )
+    dist.df <- as.data.frame(do.call(rbind, dists))
+    colanmes(dist.df) <- c('Distance', 'Nucleotide')
+    ggplot(dist.df, aes(x=Nucleotide, y=Distance), fill=Nucleotide) + 
+            geom_density_ridges(alpha=0.7) + theme_pubr() + 
+            scale_color_brewer(palette='Dark2') +  theme(legend.position = "none")
+
+    }
+
+
+}
+
 
 nucleotide_proportions <- function(df, row_num){
 
@@ -223,21 +266,22 @@ main <- function(){
         diffs_barplot <- calculated_windowed_skew_content_vs_params(df, i, WINDOW_SIZE)
         nuc_props <- nucleotide_proportions(df, i)
         sequence <- plot_seq(df, i)
+        clustering <- plot_distance_to_next_same_nucleotide(df, i)
 
         seq_and_table <- ggarrange(
             vr_table,
             nuc_props, 
-            sequence,
-            nrow=1, ncol=3, labels=c('B')
+            ggarrange(sequence, clustering, nrow=2, ncol=1, heights=c(0.5, 1),
+            nrow=1, ncol=3
         )
+
         
         #figure_text <- plot_text(df, i, WINDOW_SIZE)
 
         aranged <- ggarrange(
             skew_content_plot, seq_and_table, diffs_barplot,
             nrow=3, ncol=1,
-            padding=2,
-            labels=c('A', 'D')
+            padding=1,
             )
         print(aranged)
     }

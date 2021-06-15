@@ -13,3 +13,4 @@ dependencies:
   - r-umap
   - r-ggforce
   - r-stringr
+  - r-ggridges
