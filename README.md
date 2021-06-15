@@ -111,7 +111,6 @@ VR_Init_1_initiation_region_1_GCskew:0.1_GCcontent:0.4_ATskew:0.1_ATcontent:0.6_
 VR_Init_2_initiation_region_2_GCskew:0.4_GCcontent:0.7_ATskew:0.4_ATcontent:0.30000000000000004_Clustered:False	0.7	0.4	0.30000000000000004	0.4	NA	NA	find_available_random_range	CACCGCCCCCCCCGCTGCTCGACCGAAGTATCGCCTGCGCTCCCCCTGCTACGCACCTTCCCACCTTCCGTGCGCAATCGCTCCGCCTTGTACGCTCGCCCATGCCGGAGTGCCTCGTCCCACCGCATTCCGTCCCACCCCGCTCCGTTGGGCTCGCCACCCCTCCCCTGCCTCTTTACCTTCTGGGGTTCCGGCGCCTG
 ```
 
-
 #### Plots
 
 Plots produced for one variable region.
@@ -122,3 +121,9 @@ There is currently a bug that prints sequence text twice. Not sure what is
 causing this as the double printing is not limited to sequence
 but any string that is passed to `ggparagraph` and then plotted
 in that position.
+
+## Known bugs
+
+- R script `plot.R` generates an extra blank page for each plot
+- R script `plot.R` duplicates nucleotide sequence when rendered to page
+  using `ggparagraph`. This occurs for *any* string not just the nucleotide seq. 
