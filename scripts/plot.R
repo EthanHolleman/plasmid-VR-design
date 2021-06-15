@@ -1,6 +1,7 @@
 library(stringr)
 library(ggplot2)
 library(ggpubr)
+library(ggridges)
 
 WINDOW_SIZE <- 30
 
@@ -120,6 +121,60 @@ variable_region_table <- function(df, row_num){
 
 }
 
+distance_to_next_same_nucleotide <- function(seq, nuc_index){
+
+    nuc <- substr(seq, nuc_index, nuc_index)
+    dist <- nchar(seq)
+    k <- 1
+    right_index <- nuc_index
+    left_index <- nuc_index
+    while (right_index <= nchar(seq) | left_index >= 1){
+        k <- k + 1
+        left_index <- left_index - 1
+        right_index <- right_index + 1
+        for (index in c(left_index, right_index)){
+            if (index > 0 & index < nchar(seq)){
+                index_nuc <- substr(seq, index, index)
+                if (index_nuc == nuc){
+                    dist <- abs(abs(index) - nuc_index)
+                    return(dist)
+                }
+            }
+        }
+
+        if (k > nchar(seq)){
+            
+            break  # emergency stop
+        }
+    }
+    dist
+
+}
+
+plot_distance_to_next_same_nucleotide <- function(df, row_num){
+
+    row <- df[row_num, ]
+    seq <- row$Sequence
+
+    dists <- list()
+    for (nuc_index in 1:nchar(seq)){
+        nuc <- substr(seq, nuc_index, nuc_index)
+        dists[[nuc_index]] <- c(
+            distance_to_next_same_nucleotide(seq, nuc_index),
+            nuc
+            )
+    }
+    dist.df <- as.data.frame(do.call(rbind, dists))
+    colnames(dist.df) <- c('Distance', 'Nucleotide')
+    plot <- ggplot(dist.df, aes(y=Nucleotide, x=as.numeric(Distance), fill=Nucleotide)) + 
+           geom_density_ridges(alpha=0.7) + theme_pubr() + 
+            scale_fill_brewer(palette='Dark2') + theme(legend.position = "none") +
+            labs(x='Distance to nucleotide of same species')
+    plot
+
+
+}
+
 
 nucleotide_proportions <- function(df, row_num){
 
@@ -223,22 +278,23 @@ main <- function(){
         diffs_barplot <- calculated_windowed_skew_content_vs_params(df, i, WINDOW_SIZE)
         nuc_props <- nucleotide_proportions(df, i)
         sequence <- plot_seq(df, i)
+        clustering <- plot_distance_to_next_same_nucleotide(df, i)
+        print(clustering)
+        print('clustering!')
 
         seq_and_table <- ggarrange(
             vr_table,
-            nuc_props, 
-            sequence,
-            nrow=1, ncol=3, labels=c('B')
+            nuc_props,
+            ggarrange(clustering, sequence, nrow=2, ncol=1, heights=c(1, 0.5)),
+            nrow=1, ncol=3
         )
+
         
         #figure_text <- plot_text(df, i, WINDOW_SIZE)
 
         aranged <- ggarrange(
             skew_content_plot, seq_and_table, diffs_barplot,
-            nrow=3, ncol=1,
-            padding=2,
-            labels=c('A', 'D')
-            )
+            nrow=3, ncol=1)
         print(aranged)
     }
     dev.off()
