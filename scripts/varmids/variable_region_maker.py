@@ -318,7 +318,7 @@ class VairableRegion():
             cluster = self.cluster_nuc
         else:
             cluster=False
-        return f'{VairableRegion.name_prefix}_{self.name}_{self.role}_GCskew:{self.gc_skew}_GCcontent:{self.gc_content}_ATskew:{self.at_skew}_ATcontent:{self.at_content}_Clustered:{cluster}'
+        return f'{VairableRegion.name_prefix}_{self.name}_{self.role}_GCskew:{round(self.gc_skew, 2)}_GCcontent:{round(self.gc_content, 2)}_ATskew:{round(self.at_skew, 2)}_ATcontent:{round(self.at_content, 2)}_Clustered:{cluster}'
 
 
 
