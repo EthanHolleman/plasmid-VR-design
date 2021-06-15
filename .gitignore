@@ -3,5 +3,6 @@ output/
 .snakemake/
 logs/
 .RData
+submodules/
 
 
