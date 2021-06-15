@@ -3,6 +3,7 @@ import numpy as np
 import os
 
 from varmids.utils import *
+from varmids.test_variable_region_maker import all_VRs
 
 
 
@@ -16,6 +17,23 @@ from varmids.utils import *
 #     for params, vals in known_skew_content.items():
 #         nuc_combo = nuc_count_calculator(*params)
 #         assert nuc_combo == vals
+
+@pytest.fixture
+def seq_list(all_VRs):
+    return [vr.generate_sequence() for vr in all_VRs]
+
+
+@pytest.fixture
+def fasta_path():
+    cur_dir = os.path.dirname(os.path.realpath(__file__))
+    return os.path.join(cur_dir, 'test_files/test.fasta')
+
+
+@pytest.fixture
+def tsv_path():
+    cur_dir = os.path.dirname(os.path.realpath(__file__))
+    return os.path.join(cur_dir, 'test_files/test.tsv')
+
 
 @pytest.fixture
 def variable_region_file():
@@ -127,6 +145,24 @@ def test_read_variable_region_config_file(variable_region_file):
             assert not val == 'NA'
     
     assert len(set(lengths)) == 1
+
+
+def test_write_sequence_list_to_output_files(seq_list, fasta_path, tsv_path):
+    write_fasta, write_tsv =  write_sequence_list_to_output_files(
+                                seq_list, fasta_path, tsv_path
+                            )
+    
+    assert write_fasta == fasta_path
+    assert write_tsv == tsv_path
+
+    assert os.path.isfile(write_fasta)
+    assert os.path.isfile(write_tsv)
+
+    assert len(open(write_fasta).readlines()) > 0
+    assert len(open(write_tsv).readlines()) > 0
+
+    os.remove(write_fasta)
+    os.remove(write_tsv)
 
 
 
