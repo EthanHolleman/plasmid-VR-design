@@ -1,0 +1,13 @@
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.6
+  - tensorflow==1.14.0
+  - numpy
+  - pandas
+  - six
+  - argparse
+  - tqdm
+
