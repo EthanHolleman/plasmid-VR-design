@@ -225,7 +225,7 @@ class VairableRegion():
 
     @property
     def at_skew(self):
-        return self._gc_skew
+        return self._at_skew
     
     @at_skew.setter
     def at_skew(self, new_skew):
