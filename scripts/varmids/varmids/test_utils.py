@@ -1,5 +1,6 @@
 import pytest
 import numpy as np
+import os
 
 from varmids.utils import *
 
@@ -15,6 +16,12 @@ from varmids.utils import *
 #     for params, vals in known_skew_content.items():
 #         nuc_combo = nuc_count_calculator(*params)
 #         assert nuc_combo == vals
+
+@pytest.fixture
+def variable_region_file():
+    cur_dir = os.path.dirname(os.path.realpath(__file__))
+    return os.path.join(cur_dir, 'test_files/initiation_plamids.csv')
+
 
 
 @pytest.fixture
@@ -95,6 +102,36 @@ def test_random_range_of_length_n(known_range_lengths):
 #     for val, params in known_occupied.items():
 #         is_occupied = range_is_occupied(*params)
 #         assert is_occupied == val
+
+def test_get_int_half_length():
+    for _ in range(0, 100):
+        rand_int = np.random.randint(0, 10000)
+        half = int(rand_int / 2)
+        half_2 = rand_int - half
+        calculated_halves = get_int_half_length(rand_int)
+        assert calculated_halves == (half, half_2)
+        assert sum(calculated_halves) - rand_int <= 1
+
+
+def test_read_variable_region_config_file(variable_region_file):
+    table = read_variable_region_config_file(variable_region_file)
+    assert isinstance(table, list)
+    assert(len(table)) > 0
+    
+    lengths = []
+
+    for item in table:
+        assert isinstance(item, dict)
+        lengths.append(len(item))
+        for key, val in item.items():
+            assert not val == 'NA'
+    
+    assert len(set(lengths)) == 1
+
+
+
+        
+
 
 
 
