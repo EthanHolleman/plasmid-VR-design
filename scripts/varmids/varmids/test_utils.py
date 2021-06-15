@@ -91,10 +91,10 @@ def test_random_range_of_length_n(known_range_lengths):
         assert e - s == val
 
 
-def test_range_is_occupied(known_occupied):
-    for val, params in known_occupied.items():
-        is_occupied = range_is_occupied(*params)
-        assert is_occupied == val
+# def test_range_is_occupied(known_occupied):
+#     for val, params in known_occupied.items():
+#         is_occupied = range_is_occupied(*params)
+#         assert is_occupied == val
 
 
 
