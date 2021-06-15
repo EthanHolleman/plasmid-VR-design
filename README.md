@@ -51,3 +51,14 @@ If a field is not specified is should be set to `NA`.
 
 Places each cluster randomly in the variable region sequence so that clusters
 do not overlap.
+
+## Example output
+
+Plots produced for one variable region.
+
+![](resources/plot.png)
+
+There is currently a bug that prints sequence text twice. Not sure what is
+causing this as the double printing is not limited to sequence
+but any string that is passed to `ggparagraph` and then plotted
+in that position.
