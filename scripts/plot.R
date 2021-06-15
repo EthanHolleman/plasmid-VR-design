@@ -97,9 +97,26 @@ variable_region_table <- function(df, row_num){
 
     text_table_reg <- df[row_num, c('GC_content', 'GC_skew', 'AT_content', 'AT_skew')]
     text_table_clust <- df[row_num, c('Cluster_length', 'Clustered_nucleotide', 'Clustering.method')]
-    t1 <- ggtexttable(text_table_reg, rows=NULL)
-    t2 <- ggtexttable(text_table_clust, rows=NULL)
-    ggarrange(t1, t2, nrow=2, ncol=1)
+    
+    row <- df[row_num, ]
+    seq <- row$Sequence
+    nuc_counts <- get_nucleotide_counts(seq)
+
+    gc_skew <- skew(nuc_counts[['G']], nuc_counts[['C']])
+    at_skew <- skew(nuc_counts[['A']], nuc_counts[['T']])
+    gc_content <- content(nuc_counts[['G']], nuc_counts[['C']], nchar(seq))
+    at_content <- content(nuc_counts[['A']], nuc_counts[['T']], nchar(seq))
+
+    calc_metrics_table <- data.frame(
+        gc_skew=gc_skew, at_skew=at_skew, gc_content=gc_content, at_content=at_content
+    )
+
+    t1 <- ggtexttable(text_table_reg, rows=NULL, theme = ttheme("light"))
+    t1 <- tab_add_footnote(t1, 'User defined parameters.')
+    t2 <- ggtexttable(text_table_clust, rows=NULL, theme = ttheme("light"))
+    t3 <- ggtexttable(calc_metrics_table, rows=NULL, theme = ttheme("light"))
+    t3 <- tab_add_footnote(t3, 'Values calculated from sequence.')
+    ggarrange(t1, t2, t3, nrow=3, ncol=1)
 
 }
 
@@ -161,9 +178,9 @@ format_sequence_string <- function(df, i){
     for (i in seq(1, nchar(row$Sequence)-wrap, wrap)){
         seq_str <- paste(seq_str, substr(row$Sequence, i, i+wrap), sep='\n')
     }
-    formated <- paste(name, seq_str, sep='')
-    formated
 
+    formated <- seq_str
+    formated
 
 }
 
@@ -171,27 +188,25 @@ format_sequence_string <- function(df, i){
 plot_seq <- function(df, i){
 
     formated_seq <- format_sequence_string(df, i)
-    ggparagraph(text = formated_seq, face = "bold", size = 14, color = "black")
-
-
+    ggparagraph(formated_seq, face = "bold", size = 14, color = "black")
 }
 
 
-plot_text <- function(df, i, window_size){
+# plot_text <- function(df, i, window_size){
 
-    row <- df[i, ]
-    text <- paste(
-        'Sequence metrics for variable region',
-        row$name,
-        '.',
-        'A: Lineplot showing GC AT skew and content over',
-        window_size,
-        'nulceotide intervals.'
+#     row <- df[i, ]
+#     text <- paste(
+#         'Sequence metrics for variable region',
+#         row$name,
+#         '.',
+#         'A: Lineplot showing GC AT skew and content over',
+#         window_size,
+#         'nulceotide intervals.'
 
-    )
-    ggparagraph(text = text, face = "italic", size = 11, color = "black")
+#     )
+#     ggparagraph(text = text, face = "italic", size = 11, color = "black")
 
-}
+# }
 
 
 main <- function(){
@@ -216,7 +231,7 @@ main <- function(){
             nrow=1, ncol=3, labels=c('B')
         )
         
-        figure_text <- plot_text(df, i, WINDOW_SIZE)
+        #figure_text <- plot_text(df, i, WINDOW_SIZE)
 
         aranged <- ggarrange(
             skew_content_plot, seq_and_table, diffs_barplot,
