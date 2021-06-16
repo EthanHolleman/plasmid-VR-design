@@ -279,9 +279,6 @@ main <- function(){
         nuc_props <- nucleotide_proportions(df, i)
         sequence <- plot_seq(df, i)
         clustering <- plot_distance_to_next_same_nucleotide(df, i)
-        print(clustering)
-        print('clustering!')
-
         seq_and_table <- ggarrange(
             vr_table,
             nuc_props,
