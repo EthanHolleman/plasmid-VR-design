@@ -1,0 +1,24 @@
+# separate snakefile for small jobs and tests that are related but
+# not directly part of the main workflow
+
+
+RLOOPER_FILE_SUFFI = [
+    'avgG.wig',
+    'bpprob.wig',
+    'bpprob.bed',
+    'mfe.bed',
+    'mfe.wig'
+]
+
+RAND_SEQ_NAMES = [f'RAND_{i}' for i in range(0, 1000)]
+
+
+include: 'rules/make_variable_regions.smk'
+include: 'rules/plot_variable_regions.smk'
+include: 'rules/RNA_sec_struct.smk'
+include: 'rules/rlooper.smk'
+include: 'rules/misc_testing.smk'
+
+rule all:
+    input:
+        'testing/rlooper_benchmarking/plots/rand_seq_LAE_dist.png'
