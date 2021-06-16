@@ -24,8 +24,10 @@ def main():
     seqs = []
     for vr in var_regions:
         vr.calculate_nucleotide_counts()
-        seqs.append(vr.generate_sequence())
-    
+        gen_seq = vr.generate_sequence()
+        seqs.append(gen_seq)
+        if vr.reverse_complement:
+            seqs.append(gen_seq.reverse_complement())
     # Write sequences to output files
     write_sequence_list_to_output_files(seqs, output_fasta, output_tsv)
 

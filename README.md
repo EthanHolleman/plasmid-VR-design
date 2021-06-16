@@ -52,7 +52,8 @@ Create a csv file in the `variable_defs` directory with the fields listed below.
 | at_content                | AT content, float between 0 and 1. |
 | cluster_length            | If the variable region is to have clusters of nucleotides set to the length of each cluster in nucleotides. Also then requires specifying the cluster_nuc field. |
 | cluster_nuc               | Nucleotide that will compose clusters. |
-| clusering_mode            | Way in which clusters should be placed in the variable regions.  |
+| clustering_mode           | Way in which clusters should be placed in the variable regions.  |
+| reverse_complement        | Calculate sequence statistics for the reverse complement of the specified sequence. Set to 1 to trigger reverse complement calcs or 0 otherwise. |
 | role                      | Short description of role of variable region. This will appear in fasta headers generated from this region. No spaces!                                  |
 
 If a field is not specified is should be set to `NA`.

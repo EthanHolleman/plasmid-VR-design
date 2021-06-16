@@ -1,25 +1,54 @@
 import numpy as np
 
+from Bio.Seq import Seq
+
 from varmids.utils import *
 
 
+
+
 class Sequence():
+
     
-    def __init__(self, name, description, count_dict, variable_region, cluster_length=None, 
-                cluster_nuc=None, cluster_dist_func=None):
+    def __init__(self, name, description, cluster_length=None, 
+                cluster_nuc=None, cluster_dist_func=None, nuc_counts={}, 
+                nuc_seq=None):
         self.name = name
         self.description = description
-        self.count_dict = count_dict
-        self.variable_region = variable_region
         self.cluster_length = cluster_length
         self.cluster_nuc = cluster_nuc
         self.cluster_dist_func = cluster_dist_func
-        self.nuc_seq = self._make_sequence()
+        self.nuc_counts = nuc_counts
+        self.nuc_seq = nuc_seq
 
-        assert len(self.nuc_seq) == self.variable_region.length, f'Nuc seq: {len(self.nuc_seq)} VR: {self.variable_region.length}'
+        #assert len(self.nuc_seq) == self.variable_region.length, f'Nuc seq: {len(self.nuc_seq)} VR: {self.variable_region.length}'
 
         if self.cluster_length:
             assert cluster_nuc, 'Must specify cluster nuc if passing cluster len!'
+    
+    @property
+    def nuc_counts(self):
+        return self._nuc_counts
+    
+    @nuc_counts.setter
+    def nuc_counts(self, new_count):
+        if isinstance(new_count, dict):
+            self._nuc_counts = new_count
+        else:
+            raise TypeError('nuc_counts must be type dict!')
+    
+    @property
+    def nuc_seq(self):
+        return self._nuc_seq
+
+    @nuc_seq.setter
+    def nuc_seq(self, new_seq):
+        if new_seq == None:
+            self._nuc_seq = self._make_sequence()
+        elif isinstance(new_seq, str):
+            self._nuc_seq = new_seq
+        else:
+            raise TypeError
     
     @property
     def cluster_dist_func(self):
@@ -31,11 +60,51 @@ class Sequence():
             self._cluster_dist_func = new_func
         else:
             self._cluster_dist_func = find_available_random_range
+    
+    @property
+    def count_dict(self):
+        return {nuc: self.nuc_seq.count(nuc) for nuc in ('A', 'T', 'G', 'C')}
+
+    @property
+    def gc_skew(self):
+        return calculate_skew((self.count_dict['G'], self.count_dict['C']))
+    
+    @property
+    def at_skew(self):
+        return calculate_skew((self.count_dict['A'], self.count_dict['T']))
+    
+    @property
+    def gc_content(self):
+        return calculate_content((self.count_dict['G'], self.count_dict['C']), 
+                                len(self.nuc_seq)
+                                )
+    
+    @property
+    def at_content(self):
+        return calculate_content((self.count_dict['A'], self.count_dict['T']), 
+                                len(self.nuc_seq)
+                                )
+    
+    def reverse_complement(self):
+        rc = str(Seq(self.nuc_seq).reverse_complement())
+        rc_name = f'{self.name}-RC'
+        rc_description = self.description.replace(self.name, rc_name)
+        return Sequence(
+            rc_name, rc_description, self.cluster_length, self.cluster_nuc,
+            self.cluster_dist_func, nuc_seq=rc 
+        )
 
 
     def __len__(self):
-        return sum(self.count_dict.values())
-    
+        if self.nuc_counts:  # user has specified sequence indirectly by
+            # indicating the number of each nucleotide the generated
+            # sequence should contain
+            return sum(self.nuc_counts.values())
+        elif self.nuc_seq:
+            return len(self.nuc_seq)
+        else:
+            raise TypeError('No way to calculate length!')
+            
 
     def _make_sequence(self):
         '''Private method that actually generates the nucleotide string for
@@ -46,10 +115,14 @@ class Sequence():
             str: Nucleotide sequence as a string.
         '''
         bins = np.zeros(len(self))
+        # if this method is being called sequence needs to be generated and
+        # as not already been passed in via the nuc_seq parameter during
+        # initiation
         if self.cluster_length:
             bins = self._distribute_nucleotides_with_clustering(bins)
         else:
             bins = self._randomly_distribute_all_nucleotides(bins)
+        
         return ''.join(bins)
     
 
@@ -65,12 +138,12 @@ class Sequence():
             list: Bins populated with clusters of nucleotide specified by
             cluster_nuc.
         '''
-        number_clusters = int(self.count_dict[self.cluster_nuc] / self.cluster_length)
+        number_clusters = int(self.nuc_counts[self.cluster_nuc] / self.cluster_length)
         if number_clusters == 0:
             # if cluster length is less than nucleotide count reset
             # cluster length to number of available nucleotides
             number_clusters = 1
-            self.cluster_length = int(self.count_dict[self.cluster_nuc])
+            self.cluster_length = int(self.nuc_counts[self.cluster_nuc])
 
         seq_bins = [None for _ in range(len(bins))]
         for i in range(number_clusters):
@@ -96,10 +169,9 @@ class Sequence():
         return seq_list
 
 
-
     def _randomly_distribute_all_nucleotides(self, bins, ignore_nucs=[], seq_list=[]):
         '''Most basic form of sequence creation, uses the nucleotide symbols
-        and respective counts in count_dict to randomly fill in "bins"
+        and respective counts in nuc_counts to randomly fill in "bins"
         (empty slots where nucleotides go).
 
         Args:
@@ -120,7 +192,7 @@ class Sequence():
         
         if not seq_list:
             seq_list = [None for _ in range(len(bins))]
-        for nucleotide, count in self.count_dict.items():
+        for nucleotide, count in self.nuc_counts.items():
             if nucleotide not in ignore_nucs:
                 for _ in range(count):
                     seq_list[random_bins.pop()] = nucleotide
@@ -137,10 +209,10 @@ class Sequence():
         return {
             'name': self.name,
             'description': self.description,
-            'GC_content': self.variable_region.gc_content,
-            'GC_skew': self.variable_region.gc_skew,
-            'AT_content': self.variable_region.at_content,
-            'AT_skew': self.variable_region.at_skew,
+            'GC_content': self.gc_content,
+            'GC_skew': self.gc_skew,
+            'AT_content': self.at_content,
+            'AT_skew': self.at_skew,
             'Cluster_length': self.cluster_length,
             'Clustered_nucleotide': self.cluster_nuc,
             'Clustering method': self.cluster_dist_func.__name__,
@@ -160,7 +232,7 @@ class VariableRegion():
 
     def __init__(self, name, length, gc_content=None, gc_skew=None, at_skew=None, 
                 at_content=None, cluster_length=None, cluster_nuc=None,
-                cluster_dist_func=None, role=None, **kwargs):
+                cluster_dist_func=None, reverse_complement=False, role=None, **kwargs):
         
         self.gc_count = (0, 0)
         self.at_count = (0, 0)
@@ -175,6 +247,7 @@ class VariableRegion():
         self.cluster_nuc = cluster_nuc
         self.cluster_dist_func = cluster_dist_func
         self.role = role
+        self.reverse_complement = reverse_complement
 
         self._generated_sequences = 0
 
@@ -208,6 +281,19 @@ class VariableRegion():
             self.at_content = 1 - self.gc_content
         elif self.at_content and not self.gc_content:
             self.gc_content = 1 - self.at_content
+    
+    @property
+    def reverse_complement(self):
+        return self._reverse_complement
+    
+    @reverse_complement.setter
+    def reverse_complement(self, new_rc):
+        if isinstance(new_rc, str):
+            new_rc = int(new_rc)
+        if new_rc == True or new_rc == False:
+            self._reverse_complement = new_rc
+        else:
+            raise TypeError('reverse_complement must be int either 1 or 0!')
     
     @property
     def gc_skew(self):
@@ -304,11 +390,10 @@ class VariableRegion():
         return Sequence(
             self.name,
             self._sequence_name(),
-            self.nuc_dict,
-            self,
             self.cluster_length,
             self.cluster_nuc,
-            self.cluster_dist_func
+            self.cluster_dist_func,
+            nuc_counts=self.nuc_dict
             )
     
         

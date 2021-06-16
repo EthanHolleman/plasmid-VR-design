@@ -81,36 +81,49 @@ def test_all_gc_content(all_VRs):
     for each_vr in all_VRs:
         if each_vr.gc_content:
             seq = each_vr.generate_sequence()
-            calculated_gc_count = (seq.nuc_seq.count('G'), seq.nuc_seq.count('C'))
-            calculated_gc_content = calculate_content(calculated_gc_count, len(seq))
-            assert abs(calculated_gc_content - each_vr.gc_content) < 0.07
-
+            assert abs(each_vr.gc_content - seq.gc_content) <= 0.05
 
 def test_all_at_content(all_VRs):
     for each_vr in all_VRs:
         if each_vr.at_content:
             seq = each_vr.generate_sequence()
-            calculated_at_count = (seq.nuc_seq.count('A'), seq.nuc_seq.count('T'))
-            calculated_at_content = calculate_content(calculated_at_count, len(seq))
-            assert abs(calculated_at_content - each_vr.at_content) < 0.07
+            assert abs(each_vr.at_content - seq.at_content) <= 0.05
 
 
 def test_all_gc_skew(all_VRs):
     for each_vr in all_VRs:
         if each_vr.gc_skew:
             seq = each_vr.generate_sequence()
-            calculated_gc_count = (seq.nuc_seq.count('G'), seq.nuc_seq.count('C'))
-            calculated_gc_skew = calculate_skew(calculated_gc_count)
-            assert abs(calculated_gc_skew - each_vr.gc_skew) < 0.07
+            assert abs(each_vr.gc_skew - seq.gc_skew) <= 0.05
+
+
+def test_count_vs_nuc_dict(all_VRs):
+    for each_vr in all_VRs:
+        seq = each_vr.generate_sequence()
+        for each_nuc in seq.nuc_counts:
+            assert seq.count_dict[each_nuc] - seq.nuc_counts[each_nuc] <= 2
 
 
 def test_all_at_skew(all_VRs):
     for each_vr in all_VRs:
         if each_vr.at_skew:
             seq = each_vr.generate_sequence()
-            calculated_at_count = (seq.nuc_seq.count('A'), seq.nuc_seq.count('T'))
-            calculated_at_skew = calculate_skew(calculated_at_count)
-            assert abs(calculated_at_skew - each_vr.at_skew) < 0.07
+            assert abs(each_vr.at_skew - seq.at_skew) <= 0.05
+
+
+def test_reverse_complement(all_VRs):
+    for each_vr in all_VRs:
+        seq = each_vr.generate_sequence()
+        rc = seq.reverse_complement()
+        assert isinstance(rc, Sequence)
+        assert len(seq) == len(rc)
+        # gc and at content should not change
+        assert seq.gc_content == rc.gc_content
+        assert seq.at_content == rc.at_content
+
+        # gc and at skew should be same but opposite
+        assert seq.gc_skew == -rc.gc_skew
+        assert seq.at_skew == -rc.at_skew
 
 
 
