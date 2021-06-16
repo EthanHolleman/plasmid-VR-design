@@ -1,14 +1,16 @@
 
-rule download_and_compile_rlooper:
+rule download_rlooper_and_compile_rlooper:
     output:
         'submodules/rlooper/bin/rlooper'
     shell:'''
     mkdir -p submodules
     cd submodules
-    git submodule add https://github.com/chedinlab/rlooper.git
+    rm -rf rlooper
+    git clone https://github.com/chedinlab/rlooper.git
     cd rlooper
     make all
     '''
+
 
 
 rule seperate_VR_into_individual_fastas_format_header_for_rlooper:
