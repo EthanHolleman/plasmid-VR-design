@@ -59,4 +59,30 @@ rule rlooper_sequence:
     '''
 
 
+use rule rlooper_sequence as random_rlooper with:
+    input:
+        fasta='testing/rlooper_benchmarking/random_fasta/{rand_fasta}.fa',
+        rlooper='submodules/rlooper/bin/rlooper'
+    output:
+        expand(
+            'testing/rlooper_benchmarking/completed_runs/{rand_fasta}/{rand_fasta}_{rlooper_suffix}',
+            rlooper_suffix=RLOOPER_FILE_SUFFI, allow_missing=True
+            )
+    params:
+        superhelicity='-0.07',
+        domain_size='auto',
+        minlength='30',  # value used in R-looper paper
+        out_path=lambda wildcards: format(
+            'testing/rlooper_benchmarking/completed_runs/{}/{}'.format(
+                wildcards.rand_fasta, wildcards.rand_fasta
+            )
+        ),
+        out_dir=lambda wildcards: format(
+            'testing/rlooper_benchmarking/completed_runs/{}'.format(
+                wildcards.rand_fasta
+                )
+        )
+
+
+
 

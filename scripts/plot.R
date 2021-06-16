@@ -306,8 +306,11 @@ plot_average_local_energy <- function(df, i){
     
     file.path <- df[i, ]$rlooper_filepath
     ale.df <- read_average_local_energy_file(file.path)
+    seq <- df[i, ]$Sequence
+    labels = seq
+    names(seq) <- 1:length(seq)
     ggplot(ale.df, aes(x=position, y=ale)) + geom_point(color='#e32b17') + geom_line(color='#e32b17') +
-            theme_pubr() + scale_x_discrete(breaks = seq(1, max(ale.df$position), by = 10)) +
+            theme_pubr() + 
             labs(x='Nucleotide position', y='Average G rlooper')
 
 }

@@ -9,6 +9,12 @@ from varmids.utils import *
 
 class Sequence():
 
+    @staticmethod
+    def rename_seq_for_rc(og_name):
+        # create a name for a sequence's revesere complement
+        rc_name = f'{og_name}-RC'
+        return rc_name
+
     
     def __init__(self, name, description, cluster_length=None, 
                 cluster_nuc=None, cluster_dist_func=None, nuc_counts={}, 
@@ -87,7 +93,7 @@ class Sequence():
     
     def reverse_complement(self):
         rc = str(Seq(self.nuc_seq).reverse_complement())
-        rc_name = f'{self.name}-RC'
+        rc_name = Sequence.rename_seq_for_rc(self.name)
         rc_description = self.description.replace(self.name, rc_name)
         return Sequence(
             rc_name, rc_description, self.cluster_length, self.cluster_nuc,
