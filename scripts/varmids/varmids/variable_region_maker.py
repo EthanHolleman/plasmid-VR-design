@@ -5,9 +5,10 @@ from varmids.utils import *
 
 class Sequence():
     
-    def __init__(self, name, count_dict, variable_region, cluster_length=None, 
+    def __init__(self, name, description, count_dict, variable_region, cluster_length=None, 
                 cluster_nuc=None, cluster_dist_func=None):
         self.name = name
+        self.description = description
         self.count_dict = count_dict
         self.variable_region = variable_region
         self.cluster_length = cluster_length
@@ -129,12 +130,13 @@ class Sequence():
     def as_fasta_entry(self):
         '''Return sequence as fasta formated string.
         '''
-        return f'>{self.name}\n{fasta_seq_printer(self.nuc_seq)}\n'
+        return f'>{self.description}\n{fasta_seq_printer(self.nuc_seq)}\n'
     
 
     def to_dict(self):
         return {
             'name': self.name,
+            'description': self.description,
             'GC_content': self.variable_region.gc_content,
             'GC_skew': self.variable_region.gc_skew,
             'AT_content': self.variable_region.at_content,
@@ -300,6 +302,7 @@ class VariableRegion():
         
         self._generated_sequences += 1
         return Sequence(
+            self.name,
             self._sequence_name(),
             self.nuc_dict,
             self,

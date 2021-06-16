@@ -263,13 +263,65 @@ plot_seq <- function(df, i){
 
 # }
 
+extract_vr_name_from_rlooper_filepath <- function(file.path){
+    split <- unlist(strsplit(as.character(file.path), '/'))
+    split[length(split)-1]
+
+}
+
+
+merge_rlooper_calculations <- function(df, rlooper.filepaths){
+
+    # use the variable region names which act as IDs to get average local
+    # energy calculations in the same order as the
+    calc.filepaths <- list()
+    for (i in 1:length(rlooper.filepaths)){
+        name <- extract_vr_name_from_rlooper_filepath(rlooper.filepaths[[i]])
+        calc.filepaths[[i]] <- c(name, rlooper.filepaths[[i]])
+    }
+    calc.df <- as.data.frame(do.call(rbind, calc.filepaths))
+    colnames(calc.df) <- c('name', 'rlooper_filepath')
+    # merge rlooper filepaths into the dataframe
+    df.merge <- merge(df, calc.df, by='name')
+    
+    df.merge
+
+}
+
+
+read_average_local_energy_file <- function(rlooper.filepath){
+
+    print('Reacing File')
+    print(rlooper.filepath)
+    ale.df <- as.data.frame(read.table(as.character(rlooper.filepath), skip=4, header=FALSE))
+    colnames(ale.df) <- c('ale')
+    ale.df$position <- 1:nrow(ale.df)
+    ale.df$ale <- as.numeric(ale.df$ale)
+
+    ale.df
+}
+
+
+plot_average_local_energy <- function(df, i){
+    
+    file.path <- df[i, ]$rlooper_filepath
+    ale.df <- read_average_local_energy_file(file.path)
+    ggplot(ale.df, aes(x=position, y=ale)) + geom_point(color='#e32b17') + geom_line(color='#e32b17') +
+            theme_pubr() + scale_x_discrete(breaks = seq(1, max(ale.df$position), by = 10)) +
+            labs(x='Nucleotide position', y='Average G rlooper')
+
+}
+
+
 
 main <- function(){
 
-    input.path <- as.character(snakemake@input)
+    input.path <- as.character(snakemake@input['variable_regions'])
     output.path <- as.character(snakemake@output)
     #save.image('plot.RData')
     df <- read_variable_region_tsv(input.path)
+    df <- merge_rlooper_calculations(df, 
+    snakemake@input['rlooper_calculations']$rlooper_calculations)
     
     pdf(output.path, width=18, height=14)
     for (i in 1:nrow(df)){
@@ -279,6 +331,12 @@ main <- function(){
         nuc_props <- nucleotide_proportions(df, i)
         sequence <- plot_seq(df, i)
         clustering <- plot_distance_to_next_same_nucleotide(df, i)
+        rlooper <- plot_average_local_energy(df, i)
+
+        skew_and_rlooper <- ggarrange(
+            skew_content_plot, rlooper, nrow=2, ncol=1, heights=c(1, 0.75)
+        )
+
         seq_and_table <- ggarrange(
             vr_table,
             nuc_props,
@@ -290,7 +348,7 @@ main <- function(){
         #figure_text <- plot_text(df, i, WINDOW_SIZE)
 
         aranged <- ggarrange(
-            skew_content_plot, seq_and_table, diffs_barplot,
+            skew_and_rlooper, seq_and_table, diffs_barplot,
             nrow=3, ncol=1)
         print(aranged)
     }
