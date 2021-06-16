@@ -11,7 +11,7 @@ plots = expand(
 )
 
 RNA_ss = expand(
-    'output/RNA_sec_struct/{var_name}',
+    'output/RNA_sec_struct/viennaRNA/{var_name}.out',
     var_name=variable_regions.keys()
 )
 
