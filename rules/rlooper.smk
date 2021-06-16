@@ -38,6 +38,7 @@ rule rlooper_sequence:
     params:
         superhelicity='-0.07',
         domain_size='auto',
+        minlength='30',  # value used in R-looper paper
         out_path=lambda wildcards: format(
             'output/rlooper/{}/completed_runs/{}/{}'.format(
                 wildcards.var_name, wildcards.record, 
@@ -54,7 +55,7 @@ rule rlooper_sequence:
     mkdir -p {params.out_dir}
     chmod 777 {input.rlooper}
     ./{input.rlooper} {input.fasta} {params.out_path} --N {params.domain_size} \
-    --sigma {params.superhelicity} --localaverageenergy
+    --sigma {params.superhelicity} --localaverageenergy --minlength {params.minlength}
     '''
 
 

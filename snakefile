@@ -27,27 +27,27 @@ RLOOPER_FILE_SUFFI = [
     'mfe.wig'
 ]
 
-def seperated_fasta_files(*args, **kwargs):
-    output_files = []
-    for vr in vr_tables:
-        table = vr_tables[vr]
-        output_files += expand(
-            'output/rlooper/{var_name}/fasta/{record}.fa',
-            var_name=vr, record=table['name']
-        )
+# def seperated_fasta_files(*args, **kwargs):
+#     output_files = []
+#     for vr in vr_tables:
+#         table = vr_tables[vr]
+#         output_files += expand(
+#             'output/rlooper/{var_name}/fasta/{record}.fa',
+#             var_name=vr, record=table['name']
+#         )
 
-    return output_files
+#     return output_files
 
-def rlooper_output(*args, **kwargs):
-    output_files = []
-    for vr in vr_tables:
-        table = vr_tables[vr]
-        output_files += expand(
-            'output/rlooper/{var_name}/completed_runs/{record}/{record}_{rlooper_suffix}',
-            var_name=vr, record=table['name'], rlooper_suffix=RLOOPER_FILE_SUFFI
-        )
+# def rlooper_output(*args, **kwargs):
+#     output_files = []
+#     for vr in vr_tables:
+#         table = vr_tables[vr]
+#         output_files += expand(
+#             'output/rlooper/{var_name}/completed_runs/{record}/{record}_{rlooper_suffix}',
+#             var_name=vr, record=table['name'], rlooper_suffix=RLOOPER_FILE_SUFFI
+#         )
 
-    return output_files
+#     return output_files
 
 
 include: 'rules/make_variable_regions.smk'
@@ -59,5 +59,5 @@ include: 'rules/rlooper.smk'
 
 rule all:
     input:
-        RNA_ss=rlooper_output()
+        plots=plots
 
