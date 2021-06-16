@@ -54,7 +54,7 @@ rule rlooper_sequence:
     mkdir -p {params.out_dir}
     chmod 777 {input.rlooper}
     ./{input.rlooper} {input.fasta} {params.out_path} --N {params.domain_size} \
-    --sigma {params.superhelicity}
+    --sigma {params.superhelicity} --localaverageenergy
     '''
 
 
