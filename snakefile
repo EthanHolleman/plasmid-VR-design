@@ -27,6 +27,17 @@ RLOOPER_FILE_SUFFI = [
     'mfe.wig'
 ]
 
+def seperated_fasta_files(*args, **kwargs):
+    output_files = []
+    for vr in vr_tables:
+        table = vr_tables[vr]
+        output_files += expand(
+            'output/rlooper/{var_name}/fasta/{record}.fa',
+            var_name=vr, record=table['name']
+        )
+
+    return output_files
+
 def rlooper_output(*args, **kwargs):
     output_files = []
     for vr in vr_tables:

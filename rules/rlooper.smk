@@ -20,7 +20,7 @@ rule seperate_VR_into_individual_fastas_format_header_for_rlooper:
         fasta='output/{var_name}/files/{var_name}.fasta',
         rlooper='submodules/rlooper/bin/rlooper'
     output:
-        directory('output/rlooper/{var_name}/fasta')
+        'output/rlooper/{var_name}/fasta/{record}.fa'
     script: '../scripts/split_fasta.py'
 
 
@@ -29,21 +29,31 @@ rule rlooper_sequence:
         fasta='output/rlooper/{var_name}/fasta/{record}.fa',
         rlooper='submodules/rlooper/bin/rlooper'
     output:
-        'output/rlooper/{var_name}/completed_runs/{record}/{record}_{rlooper_suffix}'
+        expand(
+            'output/rlooper/{var_name}/completed_runs/{record}/{record}_{rlooper_suffix}',
+            rlooper_suffix=RLOOPER_FILE_SUFFI, allow_missing=True
+            )
+        # snakemake thinks this output is a directory for some reason
+        # throws error if not marked as such
     params:
         superhelicity='-0.07',
         domain_size='auto',
-        out_dir=lambda wildcards: format(
+        out_path=lambda wildcards: format(
             'output/rlooper/{}/completed_runs/{}/{}'.format(
                 wildcards.var_name, wildcards.record, 
                 wildcards.record
                 )
+        ),
+        out_dir=lambda wildcards: format(
+            'output/rlooper/{}/completed_runs/{}'.format(
+                wildcards.var_name, wildcards.record, 
+                )
         )
 
     shell:'''
-    mkdir -p {output}
+    mkdir -p {params.out_dir}
     chmod 777 {input.rlooper}
-    ./{input.rlooper} {input.fasta} {params.out_dir} --N {params.domain_size} \
+    ./{input.rlooper} {input.fasta} {params.out_path} --N {params.domain_size} \
     --sigma {params.superhelicity}
     '''
 

@@ -44,7 +44,7 @@ Then make `run.sh` executable and run the workflow by calling `./run.sh`.
 Create a csv file in the `variable_defs` directory with the fields listed below.
 | Field name                |       Description                                                                                                                                       |
 | ------------------------- | -----------------------------------------------------------------------------------------------------------------------------------------------------   |
-| name                      | Name of the variable region, no spaces!                                                                                                                 |
+| name                      | Name of the variable region, no spaces and not underscores!                                                                                                                 |
 | length                    | Length ofregion in nucleotides.  |
 | gc_content                | GC content, float between 0 and 1. |
 | gc_skew                   | GC skew, float between -1 and 1. |
