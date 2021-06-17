@@ -14,6 +14,18 @@ rule download_SPOT_RNA:
     '''
 
 
+rule download_rna_tools:
+    output:
+        directory('submodules/rna-tools')
+    params:
+        url='https://github.com/mmagnus/rna-tools'
+    shell:'''
+    cd submodules
+    git clone {params.url}
+    '''
+
+
+
 rule transcribe_dna:
     conda:
         '../envs/biopython.yml'

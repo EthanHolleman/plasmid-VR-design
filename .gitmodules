@@ -1,6 +1,6 @@
 [submodule "submodules/SPOT-RNA"]
 	path = submodules/SPOT-RNA
 	url = https://github.com/jaswindersingh2/SPOT-RNA
-[submodule "submodules/rlooper"]
-	path = submodules/rlooper
-	url = https://github.com/chedinlab/rlooper.git
+[submodule "submodules/rna-tools"]
+	path = submodules/rna-tools
+	url = https://github.com/mmagnus/rna-tools
