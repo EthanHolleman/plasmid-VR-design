@@ -10,7 +10,8 @@ RLOOPER_FILE_SUFFI = [
     'mfe.wig'
 ]
 
-RAND_SEQ_NAMES = [f'RAND_{i}' for i in range(0, 1000)]
+RAND_SEQ_NAMES = [f'RAND_{i}' for i in range(0, 500)]
+RAND_SEQ_LENS = [50, 75, 100, 200, 300, 500, 1000, 1500, 2000, 2500]
 
 
 include: 'rules/make_variable_regions.smk'
