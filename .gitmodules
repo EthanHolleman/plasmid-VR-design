@@ -9,4 +9,4 @@
 	url = https://github.com/chedinlab/rlooper
 [submodule "submodules/bpRNA"]
 	path = submodules/bpRNA
-	url = https://github.com/hendrixlab/bpRNA
+	url = https://github.com/EthanHolleman/bpRNA
