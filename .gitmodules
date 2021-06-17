@@ -7,3 +7,6 @@
 [submodule "submodules/rlooper"]
 	path = submodules/rlooper
 	url = https://github.com/chedinlab/rlooper
+[submodule "submodules/bpRNA"]
+	path = submodules/bpRNA
+	url = https://github.com/hendrixlab/bpRNA
