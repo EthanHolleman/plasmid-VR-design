@@ -4,4 +4,6 @@ output/
 logs/
 .RData
 testing/
+*.err
+batch/*.out
 
