@@ -61,11 +61,11 @@ rule rlooper_sequence:
 
 use rule rlooper_sequence as random_rlooper with:
     input:
-        fasta='testing/rlooper_benchmarking/random_fasta/{rand_fasta}.fa',
+        fasta='testing/rlooper_benchmarking/random_fasta/{rand_fasta}.{length}.fa',
         rlooper='submodules/rlooper/bin/rlooper'
     output:
         expand(
-            'testing/rlooper_benchmarking/completed_runs/{rand_fasta}/{rand_fasta}_{rlooper_suffix}',
+            'testing/rlooper_benchmarking/completed_runs/{rand_fasta}.{length}/{rand_fasta}.{length}_{rlooper_suffix}',
             rlooper_suffix=RLOOPER_FILE_SUFFI, allow_missing=True
             )
     params:
@@ -73,13 +73,14 @@ use rule rlooper_sequence as random_rlooper with:
         domain_size='auto',
         minlength='30',  # value used in R-looper paper
         out_path=lambda wildcards: format(
-            'testing/rlooper_benchmarking/completed_runs/{}/{}'.format(
-                wildcards.rand_fasta, wildcards.rand_fasta
+            'testing/rlooper_benchmarking/completed_runs/{}.{}/{}.{}'.format(
+                wildcards.rand_fasta, wildcards.length, wildcards.rand_fasta,
+                wildcards.length
             )
         ),
         out_dir=lambda wildcards: format(
-            'testing/rlooper_benchmarking/completed_runs/{}'.format(
-                wildcards.rand_fasta
+            'testing/rlooper_benchmarking/completed_runs/{}.{}'.format(
+                wildcards.rand_fasta, wildcards.length
                 )
         )
 
