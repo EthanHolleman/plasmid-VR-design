@@ -4,6 +4,6 @@
 [submodule "submodules/rna-tools"]
 	path = submodules/rna-tools
 	url = https://github.com/mmagnus/rna-tools
-[submodule "submodules/rna-tools"]
+[submodule "submodules/rlooper"]
 	path = submodules/rlooper
 	url = https://github.com/chedinlab/rlooper
