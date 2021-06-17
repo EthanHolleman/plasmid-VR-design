@@ -6,4 +6,5 @@ logs/
 testing/
 *.err
 batch/*.out
+*.snakemake_timestamp
 
