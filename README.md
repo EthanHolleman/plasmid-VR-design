@@ -2,6 +2,21 @@
 
 ![example workflow](https://github.com/ethanholleman/plasmid-design/actions/workflows/tests.yml/badge.svg)
 
+
+## Dependencies
+
+Not handled by snakemake
+- snakemake
+- conda 
+- Perl stuff
+  - Perl
+  - cpanm
+- [Graph.pm](https://metacpan.org/dist/Graph/view/lib/Graph.pod) perl package.
+Install with command `cpanm Graph`. 
+
+Everything else should be handled as long as `--use-conda` flag is added to
+snakemake call. 
+
 ## Grant language
 
 Language taken directly from grant describing the work.
