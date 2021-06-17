@@ -1,4 +1,3 @@
-
 #!/bin/bash -login
 #SBATCH -p high                      # partition, or queue, to assign to
 #SBATCH -J VR                # name for job
