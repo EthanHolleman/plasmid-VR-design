@@ -3,4 +3,5 @@ output/
 .snakemake/
 logs/
 .RData
+testing/
 

@@ -1,4 +1,4 @@
-
+import pandas as pd
 
 variable_regions = {
     'initiation_regions': 'variable_defs/initiation_plamids.tsv',
@@ -15,9 +15,11 @@ RNA_ss = expand(
     var_name=variable_regions.keys()
 )
 
-import pandas as pd
 
-vr_tables = {vr_name: pd.read_table(variable_regions[vr_name]).set_index('name', drop=False) for vr_name in variable_regions}
+vr_tables = {
+    vr_name: pd.read_table(variable_regions[vr_name]).set_index(
+        'name', drop=False) for vr_name in variable_regions
+    }
 
 RLOOPER_FILE_SUFFI = [
     'avgG.wig',
