@@ -1,8 +1,7 @@
 import pandas as pd
 
 variable_regions = {
-    'initiation_regions': 'variable_defs/initiation_plamids.tsv',
-    'termination_regions': 'variable_defs/termination_plasmids.tsv',
+    'initiation_regions': 'variable_defs/initiation_plamids_short.tsv',
 }
 
 plots = expand(
@@ -66,5 +65,6 @@ include: 'rules/rlooper.smk'
 
 rule all:
     input:
-        brRNA=brRNA
+        brRNA=brRNA,
+        plots=plots
 
