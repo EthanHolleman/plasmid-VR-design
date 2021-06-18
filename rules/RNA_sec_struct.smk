@@ -82,7 +82,9 @@ rule run_bpRNA:
     params:
         bp_script='submodules/bpRNA/bpRNA.pl'
     shell:'''
-    perl {params.bp_script} {input.bpseq} > {output}
+    echo "PERL"
+    which perl
+    perl -I /usr/share/perl5 {params.bp_script} {input.bpseq} > {output}
     '''
 
 
