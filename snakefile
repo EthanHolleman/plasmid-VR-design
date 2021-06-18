@@ -1,7 +1,7 @@
 import pandas as pd
 
 variable_regions = {
-    'initiation_regions': 'variable_defs/initiation_plamids_short.tsv',
+    'initiation_regions': 'variable_defs/initiation_plamids.tsv',
 }
 
 plots = expand(
@@ -30,7 +30,7 @@ brRNA = []
 for name, table in vr_tables.items():
     for index, row in table.iterrows():
         brRNA.append(
-            f'output/RNA_sec_struct/{name}/{row["name"]}.sc'
+            f'output/RNA_sec_struct/bpRNA/{name}/{row["name"]}.st'
         )
 
 
@@ -65,6 +65,6 @@ include: 'rules/rlooper.smk'
 
 rule all:
     input:
-        brRNA=brRNA,
-        plots=plots
+        brRNA=brRNA
+        #plots=plots
 
