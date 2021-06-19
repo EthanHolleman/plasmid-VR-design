@@ -6,10 +6,10 @@ library(RColorBrewer)
 
 read_rlooper_wig <- function(rlooper.filepath){
 
-    print(rlooper.filepath)
+
     df <- as.data.frame(read.table(as.character(rlooper.filepath), skip=4, header=FALSE))
     colnames(df) <- c('value')
-    c(mean(df$value), nrow(df))
+    c(mean(df$value), sd(df$value), nrow(df))
 
 }
 
@@ -23,7 +23,8 @@ read_all_wig_means <- function(wig.paths){
 
     }
     means.df <- as.data.frame(do.call(rbind, means))
-    colnames(means.df) <- c('mean', 'length')
+    colnames(means.df) <- c('mean', 'sd', 'length')
+    means.df$se <- means.df$sd / (sqrt(means.df$length))
     means.df
 
 }
@@ -32,10 +33,18 @@ read_all_wig_means <- function(wig.paths){
 plot_means <- function(means.df, stat_name, palette='Blues'){
 
     num_seqs <- nrow(means.df)
-    ggplot(means.df, aes(x=mean, y=as.factor(length), fill=length)) +
+    dists <- ggplot(means.df, aes(x=mean, y=as.factor(length), fill=length)) +
         theme_pubr() + geom_density_ridges(alpha=0.7) + 
-        labs(title=paste('Mean', stat_name), x=stat_name, y='Sequence length') +
+        labs(title=paste('Mean', stat_name), x=paste('Mean', stat_name), y='Sequence length') +
         theme(legend.position = "none")
+    
+
+    means <- ggplot(means.df, aes(x=as.numeric(length), y=mean)) +
+             geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=0.1) +
+             geom_line(color='dodgerblue') + geom_point(color='black') +
+             theme_pubr() + labs(x='Mean local average energy', y='Sequence length')
+    
+    dists
     
 }
 
@@ -47,7 +56,7 @@ main <- function(){
 
     ale.means.df <- read_all_wig_means(ale.files)
     plot.ale <- plot_means(
-        ale.means.df, 'Average local energy (G)'
+        ale.means.df, 'local average energy'
         )
 
     bpprob.means.df <- read_all_wig_means(bpprob.files)
