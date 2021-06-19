@@ -14,7 +14,7 @@ run_bpRNA:
 
 run_random_bpRNA:
   time: "00:05:00"
-  mem: "3000"
+  mem: "7000"
 
 parse_bpRNA_st_files:
   time: "00:05:00"
