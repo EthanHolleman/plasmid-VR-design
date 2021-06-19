@@ -5,17 +5,21 @@
 
 ## Dependencies
 
-Not handled by snakemake
-- snakemake
-- conda 
-- Perl stuff
-  - Perl
-  - cpanm
-- [Graph.pm](https://metacpan.org/dist/Graph/view/lib/Graph.pod) perl package.
-Install with command `cpanm Graph`. 
+The workflow is intended to be run on a unix system, I ran on a Ubuntu server.
+The vast majority of software dependencies for the workflow are handled by
+snakemake and conda. That being said you will need both snakemake and conda
+installed.
 
-Everything else should be handled as long as `--use-conda` flag is added to
-snakemake call. 
+However there are some programs that will need to be configured / installed
+before running. 
+
+### Perl and required libraries
+
+The workflow currently assumes you have the perl language installed and that
+the `Graph.pm` module is available for local import using `local::lib`. You can
+install [Graph.pm](https://metacpan.org/dist/Graph/view/lib/Graph.pod)
+using the command `cpanm Graph`. 
+
 
 ## Grant language
 
