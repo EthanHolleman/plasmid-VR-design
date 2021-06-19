@@ -8,6 +8,14 @@ __default__:
   email: 'etholleman@ucdavis.edu'
   mem: "10000"
 
-
 run_bpRNA:
   time: "00:05:00"
+  mem: "3000"
+
+run_random_bpRNA:
+  time: "00:05:00"
+  mem: "3000"
+
+parse_bpRNA_st_files:
+  time: "00:05:00"
+  mem: "2000"
