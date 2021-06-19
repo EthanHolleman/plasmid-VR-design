@@ -78,13 +78,13 @@ rule run_bpRNA:
         bpseq='output/RNA_sec_struct/SPOT-RNA/{var_name}/{record}/{record}.bpseq',
         bpRNA='submodules/bpRNA'
     output:
-        'output/RNA_sec_struct/{var_name}/{record}.sc'
+        'output/RNA_sec_struct/bpRNA/{var_name}/{record}.st'
     params:
-        bp_script='submodules/bpRNA/bpRNA.pl'
+        bp_script='submodules/bpRNA/bpRNA.pl',
+        script_output=lambda wildcards: f'{wildcards.record}.st'  # script just spews into CWD 
     shell:'''
-    echo "PERL"
-    which perl
-    perl -I /usr/share/perl5 {params.bp_script} {input.bpseq} > {output}
+    perl {params.bp_script} {input.bpseq}
+    mv {params.script_output} {output} && [[ -s {output} ]]
     '''
 
 

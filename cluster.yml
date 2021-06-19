@@ -1,12 +1,12 @@
 __default__:
-  partition: "high"
+  partition: "med"
   nodes: 1
   cpus: "{threads}"
   name: "{rule}.{wildcards}"
   output: "logs/{rule}.{wildcards}.out"
-  time: "01:00:00"
+  time: "01:30:00"
   email: 'etholleman@ucdavis.edu'
-  mem: "8000"
+  mem: "10000"
 
 
 run_bpRNA:

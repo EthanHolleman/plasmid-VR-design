@@ -11,12 +11,9 @@ RLOOPER_FILE_SUFFI = [
 ]
 
 RAND_SEQ_NAMES = [f'RAND_{i}' for i in range(0, 500)]
-RAND_SEQ_LENS = [50, 75, 100, 200, 300, 500, 1000, 1500, 2000, 2500]
+RAND_SEQ_LENS = [50, 75, 100, 150, 200, 300, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500]
 
 
-include: 'rules/make_variable_regions.smk'
-include: 'rules/plot_variable_regions.smk'
-include: 'rules/RNA_sec_struct.smk'
 include: 'rules/rlooper.smk'
 include: 'rules/misc_testing.smk'
 
