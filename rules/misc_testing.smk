@@ -36,5 +36,5 @@ rule plot_spot_rna_rand_seq:
         )
     output:
         'testing/RNA_sec_struct/plots/plot.png'
-    script:'gelloththt/thth'
+    script:'../scripts/plot_rna_struct_expect.R'
 
