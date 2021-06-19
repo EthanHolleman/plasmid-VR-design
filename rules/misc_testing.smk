@@ -26,3 +26,15 @@ rule plot_rlooper_rand_seq_distrabution:
         'testing/rlooper_benchmarking/plots/rand_seq_LAE_dist.png'
     script:'../scripts/plot_rlooper_expect.R'
 
+
+rule plot_spot_rna_rand_seq:
+    conda:
+        '../envs/R.yml'
+    input:
+        expand('testing/RNA_sec_struct/bpRNA/tsv/{rand_fasta}.{length}.tsv',
+        rand_fasta=RAND_SEQ_NAMES, length=RAND_SEQ_LENS
+        )
+    output:
+        'testing/RNA_sec_struct/plots/plot.png'
+    script:'gelloththt/thth'
+

@@ -10,13 +10,25 @@ RLOOPER_FILE_SUFFI = [
     'mfe.wig'
 ]
 
+SPOT_RNA_EXTS = [
+    'bpseq',
+    'ct',
+    'prob'
+]
+
 RAND_SEQ_NAMES = [f'RAND_{i}' for i in range(0, 500)]
 RAND_SEQ_LENS = [50, 75, 100, 150, 200, 300, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500]
+
+RAND_SEQ_NAMES = [f'RAND_{i}' for i in range(0, 10)]
+RAND_SEQ_LENS = [50, 75, 100, 150, 200, 300, 500]
+
 
 
 include: 'rules/rlooper.smk'
 include: 'rules/misc_testing.smk'
+include: 'rules/RNA_sec_struct.smk'
 
 rule all:
     input:
-        'testing/rlooper_benchmarking/plots/rand_seq_LAE_dist.png'
+        #'testing/rlooper_benchmarking/plots/rand_seq_LAE_dist.png',
+        'testing/RNA_sec_struct/plots/plot.png'

@@ -14,6 +14,17 @@ rule download_SPOT_RNA:
     '''
 
 
+rule download_bpRNA:
+    output:
+        directory('submodules/bpRNA')
+    params:
+        url='https://github.com/EthanHolleman/bpRNA.git'
+    shell:'''
+    cd submodules
+    git clone {params.url}
+    '''
+
+
 rule download_rna_tools:
     output:
         directory('submodules/rna-tools')
@@ -78,7 +89,7 @@ rule run_bpRNA:
         bpseq='output/RNA_sec_struct/SPOT-RNA/{var_name}/{record}/{record}.bpseq',
         bpRNA='submodules/bpRNA'
     output:
-        'output/RNA_sec_struct/bpRNA/{var_name}/{record}.st'
+        'output/RNA_sec_struct/bpRNA/{var_name}/st/{record}.st'
     params:
         bp_script='submodules/bpRNA/bpRNA.pl',
         script_output=lambda wildcards: f'{wildcards.record}.st'  # script just spews into CWD 
@@ -87,39 +98,61 @@ rule run_bpRNA:
     mv {params.script_output} {output} && [[ -s {output} ]]
     '''
 
-
-rule download_bpRNA:
+rule parse_bpRNA_st_files:
+    input:
+        'output/RNA_sec_struct/bpRNA/{var_name}/{record}.st'
     output:
-        directory('submodules/bpRNA')
+        'output/RNA_sec_struct/bpRNA/{var_name}/tsv/{record}.tsv'
+    script:'../scripts/bpRNA_parser.py'
+
+
+# Run SPOT-RNA program on random nucleotide sequences of various lengths 
+# in order to establish expectations about what "good" sequences might
+# look like. This is also done for rlooper, same idea here.
+rule run_random_SPOT_RNA_prediction:
+    conda:
+        '../envs/SPOT-RNA.yml'
+    input:
+        fasta='testing/rlooper_benchmarking/random_fasta/{rand_fasta}.{length}.fa',
+        spot='submodules/SPOT-RNA/SPOT-RNA-models'
+    output:
+        expand(
+            'testing/RNA_sec_struct/SPOT-RNA/{rand_fasta}.{length}/{rand_fasta}.{length}.{SPOT_EXT}',
+            SPOT_EXT=SPOT_RNA_EXTS, allow_missing=True
+        )
     params:
-        url='https://github.com/EthanHolleman/bpRNA.git'
+        spot_exe=lambda wildcards: os.path.join('submodules/SPOT-RNA', 'SPOT-RNA.py'),
+        output_dir=lambda wildcards: f'testing/RNA_sec_struct/SPOT-RNA/{wildcards.rand_fasta}.{wildcards.length}',
+        rename_script='scripts/truncate_rename.py',
+        stem=lambda wildcards: f'{wildcards.rand_fasta}.{wildcards.length}'
     shell:'''
-    cd submodules
-    git clone {params.url}
+    mkdir -p {params.output_dir}
+    python3 {params.spot_exe} --inputs {input.fasta} --outputs {params.output_dir}
+    python {params.rename_script} {params.output_dir} --constant_stem {params.stem}
     '''
 
+use rule run_bpRNA as run_random_bpRNA with:
+    input:
+        bpseq='testing/RNA_sec_struct/SPOT-RNA/{rand_fasta}.{length}/{rand_fasta}.{length}.bpseq',
+        bpRNA='submodules/bpRNA'
+    output:
+        'testing/RNA_sec_struct/bpRNA/st/{rand_fasta}.{length}.st'
+    params:
+        bp_script='submodules/bpRNA/bpRNA.pl',
+        script_output=lambda wildcards: f'{wildcards.rand_fasta}.{wildcards.length}.st'  # script just spews into CWD 
 
-# rule download_graph:
-#     conda:
-#         '../envs/bpRNA.yml'
-#     # perl graph dependency
-#     output:
-#         'software/Chart-Graph-1/Graph.pm'
-#     params:
-#         url='https://cpan.metacpan.org/authors/id/E/ET/ETJ/Graph-0.9721.tar.gz'
-#         tarname='Graph-0.9721.tar.gz',
-#         dirnamne='Graph-0.9721',
-#         dirpath_abs = lambda wildcards: os.path.abspath('Chart-Graph-1')
-#     shell:'''
-#     mkdir -p software
-#     cd software
-#     wget {url}
-#     tar -xvf {params.tarname}
-#     cd {params.dirname}
-#     perl Makefile.PL
-#     make
-#     export PERL5LIB="$PERL5LIB:{params.dirpath_abs}"
-#     '''
+
+use rule parse_bpRNA_st_files as parse_random_bpRNA with:
+    input:
+        'testing/RNA_sec_struct/bpRNA/st/{rand_fasta}.{length}.st'
+    output:
+        'testing/RNA_sec_struct/bpRNA/tsv/{rand_fasta}.{length}.tsv'
+
+
+
+    
+
+
     
 
 
