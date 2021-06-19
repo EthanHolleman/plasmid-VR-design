@@ -138,4 +138,15 @@ class StructureFile():
                 self.num_hairpins, self.prop_hairpin]])
             )
         return output_path
+
+
+def main():
+    input_st = str(snakemake.input)
+    output_tsv = str(snakemake.output)
+    sf = StructureFile(input_st)
+    sf.to_tsv(output_tsv)
+
+
+if __name__ == '__main__':
+    main()
         
