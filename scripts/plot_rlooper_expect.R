@@ -48,11 +48,34 @@ plot_means <- function(means.df, stat_name, palette='Blues'){
     
 }
 
+agg_variable_mean_sd <- function(big.df, var_name, group_name){
+
+    means <- aggregate(big.df[, 'mean'], list(big.df[, group_name]), mean)
+    sds <- aggregate(big.df[, 'mean'], list(big.df[, group_name]), sd)
+    merge.df <- merge(means, sds, by='Group.1')
+    merge.df$attribute <- var_name
+    colnames(merge.df) <- c(group_name, 'mean', 'sd', 'attribute')
+    merge.df
+
+}
+
+
+write_expectation_table <- function(means.prob, means.energy, output.path){
+
+    means.energy <- agg_variable_mean_sd(big.energy, 'local_average_energy', 'length')
+    means.prob <- agg_variable_mean_sd(big.prob, 'bp_prob', 'length')
+    all.means <- rbind(means.hairpin, means.prop_unpaired)
+    write.table(all.means, file=output.path, sep='\t', quote=FALSE, row.names=FALSE)
+
+}
+
+
 main <- function(){
 
     ale.files <- snakemake@input$ale
     bpprob.files <- snakemake@input$bpprob
-    output.path <- as.character(snakemake@output)
+    output.path.plot <- as.character(snakemake@output$plot)
+    output.path.expect <- as.character(snakemake@output$expect)
 
     ale.means.df <- read_all_wig_means(ale.files)
     plot.ale <- plot_means(
@@ -66,6 +89,7 @@ main <- function(){
         )
 
     all.plots <- ggarrange(plot.ale, plot.bprpob, nrow=2, ncol=1)
+    write_expectation_table(bpprob.means.df, ale.means.df, output.path.expect)
     ggsave(output.path, all.plots, dpi=500)
 
 }

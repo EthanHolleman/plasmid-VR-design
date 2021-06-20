@@ -23,7 +23,8 @@ rule plot_rlooper_rand_seq_distrabution:
             rand_fasta=RAND_SEQ_NAMES, length=RAND_SEQ_LENS
         )
     output:
-        'testing/rlooper_benchmarking/plots/rand_seq_LAE_dist.png'
+        plot='testing/rlooper_benchmarking/plots/rand_seq_LAE_dist.png',
+        expect='testing/rlooper_benchmarking/plots/expectations.tsv'
     script:'../scripts/plot_rlooper_expect.R'
 
 
