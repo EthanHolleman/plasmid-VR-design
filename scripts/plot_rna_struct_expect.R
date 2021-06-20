@@ -50,14 +50,35 @@ plot_rna_struct <- function(big.df){
 }
 
 
+agg_variable_mean_sd <- function(big.df, var_name, group_name){
+
+    means <- aggregate(big.df[, var_name], list(big.df[, group_name]), mean)
+    sds <- aggregate(big.df[, var_name], list(big.df[, group_name]), sd)
+    merge.df <- merge(means, sds, by='Group.1')
+    merge.df$attribute <- var_name
+    colnames(merge.df) <- c(group_name, 'mean', 'sd', 'attribute')
+    merge.df
+
+}
+
+write_expectation_table <- function(big.df, output.path){
+
+    means.hairpin <- agg_variable_mean_sd(big.df, 'prop_hairpin', 'length')
+    means.prop_unpaired <- agg_variable_mean_sd(big.df, 'prop_unpaired', 'length')
+    all.means <- rbind(means.hairpin, means.prop_unpaired)
+    write.table(all.means, file=output.path, sep='\t', quote=FALSE, row.names=FALSE)
+
+}
+
 main <- function(){
 
     input.files.list <- snakemake@input
-    output.path <- as.character(snakemake@output)
+    output.path.plot <- as.character(snakemake@output$plot)
+    output.path.expect <- as.character(snakemake@output$expect)
     big.df <- read_all_rna_struct_tsvs(input.files.list)
     plot <- plot_rna_struct(big.df)
-    print(output.path)
-    ggsave(output.path, plot, dpi=500, width=10, height=10)
+    expect_table <- write_expectation_table(big.df, output.path.expect)
+    ggsave(output.path.plot, plot, dpi=500, width=10, height=10)
 
 
 }

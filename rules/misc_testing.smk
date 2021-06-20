@@ -35,6 +35,7 @@ rule plot_spot_rna_rand_seq:
         rand_fasta=RAND_SEQ_NAMES, length=RAND_SEQ_LENS
         )
     output:
-        'testing/RNA_sec_struct/plots/plot.png'
+        plot='testing/RNA_sec_struct/plots/plot.png',
+        expect='testing/RNA_sec_struct/plots/expectations.tsv'
     script:'../scripts/plot_rna_struct_expect.R'
 
