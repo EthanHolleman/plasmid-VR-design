@@ -131,9 +131,6 @@ VR_Init_1_initiation_region_1_GCskew:0.1_GCcontent:0.4_ATskew:0.1_ATcontent:0.6_
 VR_Init_2_initiation_region_2_GCskew:0.4_GCcontent:0.7_ATskew:0.4_ATcontent:0.30000000000000004_Clustered:False	0.7	0.4	0.30000000000000004	0.4	NA	NA	find_available_random_range	CACCGCCCCCCCCGCTGCTCGACCGAAGTATCGCCTGCGCTCCCCCTGCTACGCACCTTCCCACCTTCCGTGCGCAATCGCTCCGCCTTGTACGCTCGCCCATGCCGGAGTGCCTCGTCCCACCGCATTCCGTCCCACCCCGCTCCGTTGGGCTCGCCACCCCTCCCCTGCCTCTTTACCTTCTGGGGTTCCGGCGCCTG
 ```
 
-![](resources/rnass_expect.png)
-
-
 #### Plots
 
 Plots produced for one variable region.
@@ -174,6 +171,8 @@ for what a "good" or "bad" variable region might look like with respect to
 secondary structure was formed by generating 500 random sequences of various
 lengths, predicting RNA secondary structure using SPOT-RNA and plotting
 results as distributions shown below. 
+
+![](resources/rnass_expect.png)
 
 ##### Max local average energy and min R-loop probability
 
