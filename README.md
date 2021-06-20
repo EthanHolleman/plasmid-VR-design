@@ -131,6 +131,9 @@ VR_Init_1_initiation_region_1_GCskew:0.1_GCcontent:0.4_ATskew:0.1_ATcontent:0.6_
 VR_Init_2_initiation_region_2_GCskew:0.4_GCcontent:0.7_ATskew:0.4_ATcontent:0.30000000000000004_Clustered:False	0.7	0.4	0.30000000000000004	0.4	NA	NA	find_available_random_range	CACCGCCCCCCCCGCTGCTCGACCGAAGTATCGCCTGCGCTCCCCCTGCTACGCACCTTCCCACCTTCCGTGCGCAATCGCTCCGCCTTGTACGCTCGCCCATGCCGGAGTGCCTCGTCCCACCGCATTCCGTCCCACCCCGCTCCGTTGGGCTCGCCACCCCTCCCCTGCCTCTTTACCTTCTGGGGTTCCGGCGCCTG
 ```
 
+![](resources/rnass_expect.png)
+
+
 #### Plots
 
 Plots produced for one variable region.
@@ -141,6 +144,51 @@ There is currently a bug that prints sequence text twice. Not sure what is
 causing this as the double printing is not limited to sequence
 but any string that is passed to `ggparagraph` and then plotted
 in that position.
+
+
+#### Plasmid selection
+
+The sequences generated are random nucleotide sequences that satisfy user
+defined parameters. This can lead to significant variation in local sequence
+properties between two variable regions specified with the same global parameters.
+In order to pick the "best" possible variable regions, regions can be further
+selected based on the attributes described below.
+
+##### Min and max standard deviation in skew and content
+
+
+##### Number of standard deviations from RNA secondary structure expectations
+
+It is likely that significant RNA secondary structure would decrease the likelihood
+of R-loop formation by sterically preventing hybridization to the DNA template.
+Therefore it is desirable to try and reduce the degree of secondary structure
+that might form over a given variable region. To do this the workflow uses
+[SPOT-RNA](https://github.com/jaswindersingh2/SPOT-RNA) to predict RNA secondary
+structure and a modified version of [bpRNA](https://github.com/EthanHolleman/bpRNA)
+to translate those predictions into secondary structure annotations. 
+
+A variable region's secondary structure is accessed with two basic metrics. The
+proportion of unpaired ribonucleotides (unpaired ribos / all ribos) and proportion
+of sequence in hairpin structures (hairpin ribos / all ribos). An expectation
+for what a "good" or "bad" variable region might look like with respect to
+secondary structure was formed by generating 500 random sequences of various
+lengths, predicting RNA secondary structure using SPOT-RNA and plotting
+results as distributions shown below. 
+
+##### Max local average energy and min R-loop probability
+
+Ideally, we would like to know that sequences used in variable regions
+will be capable of forming R-loops. [Rlooper](https://github.com/chedinlab/rlooper), 
+a physics based model of R-loop formation can help answer this question. Rlooper
+calculates both the probability of R-loop formation and the sequence energetics
+for a given nucleotide sequence. Again, in order to determine what values might
+separate "good" from "bad" variable region sequences 500 random sequences of 
+various lengths were generated and then accessed using Rlooper to build an
+expectation. The results of the simulations are shown below.
+
+![](resources/rand_seq_LAE_dist.png)
+
+
 
 ## Known bugs
 
