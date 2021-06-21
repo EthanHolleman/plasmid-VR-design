@@ -87,7 +87,47 @@ rule parse_bpRNA_annotations:
     script:'../scripts/bpRNA_parser.py'
 
 
-rule agg_seqs:
+rule rlooper_variable_region:
+    input:
+        fasta='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.fasta',
+        rlooper='submodules/rlooper/bin/rlooper'
+    output:
+        expand(
+            'output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.{rlooper_suffix}',
+            rlooper_suffix=RLOOPER_FILE_SUFFI, allow_missing=True
+            )
+    params:
+        superhelicity='-0.07',
+        domain_size='auto',
+        minlength='30',  # value used in R-looper paper
+        out_path=lambda wildcards: 
+            f'output/{wildcards.var_name}/files/{wildcards.p_name}/{wildcards.id_num}/{wildcards.p_name}.{wildcards.id_num}'
+        ),
+        out_dir=lambda wildcards:
+            f'output/{wildcards.var_name}/files/{wildcards.p_name}/{wildcards.id_num}'
+        )
+    shell:'''
+    mkdir -p {params.out_dir}
+    chmod 777 {input.rlooper}
+    ./{input.rlooper} {input.fasta} {params.out_path} --N {params.domain_size} \
+    --sigma {params.superhelicity} --localaverageenergy --minlength {params.minlength}
+    '''
+
+
+rule predict_Rlooper_statistics:
+    input:
+        expand(
+            'output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.{rlooper_suffix}',
+            id_num=CASE_RANGE, allow_missing=True, rlooper_suffix=RLOOPER_FILE_SUFFI
+            )
+    output:
+        'output/{var_name}/{p_name}.predict_rlooper.done'
+    shell:'''
+    touch {output}
+    '''
+
+
+rule predict_RNA_secondary_structure:
     input:
         expand(
             'output/{var_name}/files/{p_name}/{id_num}/parsedRNA/{p_name}.tsv',
@@ -95,25 +135,46 @@ rule agg_seqs:
             allow_missing=True
             )
     output:
-        'output/test/{var_name}.{p_name}.done'
+        'output/{var_name}/{p_name}.predict_RNAss.done'
     shell:'''
     touch {output}
     '''
+
+
 # then need a script to rank all tested sequences and get the best
 # ones back out
 
 def sequece_length(wildcards):
+    # calculate variable region sequence length from wilcard input
     table = vr_tables[wildcards.var_name]
     length = table.loc[table['name'] == wildcards.p_name]['length']
     return length
 
 
+rule aggregate_sequence_metrics:
+    input:
+        rlooper_bpprop='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.avgG.wig',
+        rlooper_lae='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.avgG.wig',
+        RNAss='output/{var_name}/files/{p_name}/{id_num}/parsedRNA/{p_name}.tsv'
+    output:
+        'output/{var_name}/files/{p_name}/{id_num}/aggregatedMetrics/{p_name}.tsv'
+    script:''
+
+
+rule combine_aggregated_sequence_metrics:
+    input:
+        expand(
+            'output/{var_name}/files/{p_name}/{id_num}/aggregatedMetrics/{p_name}.tsv',
+             id_num=CASE_RANGE, allow_missing=True
+        ),
+    output:
+        'output/{var_name}/files/{p_name}/aggregations/{p_name}.all_aggregated_metrics.tsv'
+    script:''
+
+
 rule rank_sequences:
     input:
-        
-    output:
-        ranked='output/{var_name}/files/{p_name}/{id_num}/ranked/{p_name}.fasta',
-        #best='output/{var_name}/files/{p_name}/{id_num}/ranked/{p_name}.fasta'
+        'output/{var_name}/files/{p_name}/aggregations/{p_name}.all_aggregated_metrics.tsv'
     params:
         # length from pandas dataframe
         rlooper= lambda wildcards: f'output/expectations/rlooper/rlooper_expect.{sequence_length(wildcards)}.tsv',
