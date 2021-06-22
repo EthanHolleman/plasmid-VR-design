@@ -270,6 +270,12 @@ extract_vr_name_from_rlooper_filepath <- function(file.path){
 
 }
 
+extract_vr_id_num_from_rlooper_filepath <- function(file.path){
+    split <- unlist(strsplit(as.character(file.path), '/'))
+    split[length(split)-1]
+
+}
+
 
 merge_rlooper_calculations <- function(df, rlooper.filepaths){
 
@@ -278,12 +284,13 @@ merge_rlooper_calculations <- function(df, rlooper.filepaths){
     calc.filepaths <- list()
     for (i in 1:length(rlooper.filepaths)){
         name <- extract_vr_name_from_rlooper_filepath(rlooper.filepaths[[i]])
-        calc.filepaths[[i]] <- c(name, rlooper.filepaths[[i]])
+        id <- extract_vr_id_num_from_rlooper_filepath(rlooper.filepaths[[i]])
+        calc.filepaths[[i]] <- c(name, as.numeric(id), rlooper.filepaths[[i]])
     }
     calc.df <- as.data.frame(do.call(rbind, calc.filepaths))
-    colnames(calc.df) <- c('name', 'rlooper_filepath')
+    colnames(calc.df) <- c('name', 'id_num', 'rlooper_filepath')
     # merge rlooper filepaths into the dataframe
-    df.merge <- merge(df, calc.df, by='name')
+    df.merge <- merge(df, calc.df, by=c('name', 'id_num'))
     
     df.merge
 
