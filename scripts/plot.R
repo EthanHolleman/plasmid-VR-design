@@ -39,6 +39,7 @@ get_nucleotide_counts <- function(seq){
 ## Calculate skew and content metrics for a given character vector
 ## using a specific window size.
 seq_skew_content_sliding_window <- function(seq, window_size=30){
+    print(seq)
     windows <- list()
     k <- 1
     for (i in 1:(nchar(seq)-window_size))
@@ -265,7 +266,7 @@ plot_seq <- function(df, i){
 
 extract_vr_name_from_rlooper_filepath <- function(file.path){
     split <- unlist(strsplit(as.character(file.path), '/'))
-    split[length(split)-1]
+    split[length(split)-2]
 
 }
 
@@ -323,8 +324,10 @@ main <- function(){
     output.path <- as.character(snakemake@output)
     #save.image('plot.RData')
     df <- read_variable_region_tsv(input.path)
+    print(head(df))
     df <- merge_rlooper_calculations(df, 
     snakemake@input['rlooper_calculations']$rlooper_calculations)
+    print(head(df))
     
     pdf(output.path, width=18, height=14)
     for (i in 1:nrow(df)){
