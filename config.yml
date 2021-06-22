@@ -2,13 +2,28 @@
 # User defined parameters, these can and should be change to specify input
 # inputs to the workflow
 # =============================================================================
-
 variable_region_definitions:
   initiation_regions: 'variable_defs/initiation_plamids.RC.tsv'
 
+
+
 # =============================================================================
-# Program constants and parameters do not change unless
-# you have a good reason. 
+# Program constants and parameters you can but probably don't need to
+# change
+
+# number of different sequence to generate for each variable region definition
+# increasing this value will increase run time but generally increase
+# quality of final sequence
+EXPECTATION_SAMPLES: 25
+
+# Number of random sequences used to calculate sequence metric expectations.
+# Increasing this value will increase run time but produce a more accurate
+# expectation for each metric
+EXPECT_SAMPLES: 250
+
+# =============================================================================
+# Important parameter definitions that will definitely impact the workflow if
+# changed. Avoid changing without good reason. 
 
 RLOOPER_FILE_SUFFI:
   - 'avgG.wig'
@@ -22,7 +37,6 @@ SPOT_RNA_EXTS:
   - 'ct'
   - 'prob'
 
-EXPECTATION_SAMPLES: 100
 
 EXPECTATION_DEFS:
   # defines what a "good" value for each sequence metric looks like.
