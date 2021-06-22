@@ -1,10 +1,5 @@
 
 
-
-NUM_CASES = 10
-CASE_RANGE = range(1, NUM_CASES+1)
-
-
 def get_p_record(wildcards):
     return vr_tables[wildcards.var_name].loc[
         vr_tables[wildcards.var_name]['name'] == wildcards.p_name]
@@ -102,36 +97,6 @@ rule rlooper_variable_region:
     '''
 
 
-# rule predict_Rlooper_statistics:
-#     input:
-#         expand(
-#             'output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}_{rlooper_suffix}',
-#             id_num=CASE_RANGE, allow_missing=True, rlooper_suffix=RLOOPER_FILE_SUFFI
-#             )
-#     output:
-#         'output/{var_name}/{p_name}.predict_rlooper.done'
-#     shell:'''
-#     touch {output}
-#     '''
-
-
-# rule predict_RNA_secondary_structure:
-#     input:
-#         expand(
-#             'output/{var_name}/files/{p_name}/{id_num}/parsedRNA/{p_name}.tsv',
-#             id_num=CASE_RANGE,
-#             allow_missing=True
-#             )
-#     output:
-#         'output/{var_name}/{p_name}.predict_RNAss.done'
-#     shell:'''
-#     touch {output}
-#     '''
-
-
-# then need a script to rank all tested sequences and get the best
-# ones back out
-
 def sequence_length(wildcards):
     # calculate variable region sequence length from wilcard input
     table = vr_tables[wildcards.var_name]
@@ -154,7 +119,38 @@ rule aggregate_sequence_metrics:
         'output/{var_name}/files/{p_name}/{id_num}/aggregatedMetrics/{p_name}.tsv'
     params:
         length = lambda wildcards: sequence_length(wildcards),
+        p_name = lambda wildcards: wildcards.p_name,
+        id_num = lambda wildcards: wildcards.id_num,
+        config_dict = config
     script:'../scripts/agg_seq_metrics.py'
+
+
+rule concatenate_seq_metrics:
+    conda:
+        '../envs/python.yml'
+    input:
+        expand(
+            'output/{var_name}/files/{p_name}/{id_num}/aggregatedMetrics/{p_name}.tsv',
+            id_num=CASE_RANGE, allow_missing=True
+        )
+    output:
+        'output/{var_name}/files/{p_name}/concatAggMetrics/{p_name}.tsv'
+    script:'../scripts/merge_all_agg_seq_metrics.py'
+
+
+rule rank_and_select_sampled_sequences:
+    conda:
+        '../envs/python.yml'
+    input:
+        'output/{var_name}/files/{p_name}/concatAggMetrics/{p_name}.tsv'
+    output:
+        fasta='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.fasta',
+        tsv='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.tsv',
+        ranked_seqs='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.all_ranked.tsv'
+    script:'plya.py'
+    
+
+
 
 
 # rule combine_aggregated_sequence_metrics:

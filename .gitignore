@@ -7,4 +7,5 @@ testing/
 *.err
 batch/*.out
 *.snakemake_timestamp
+*.tfrecords
 
