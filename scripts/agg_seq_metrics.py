@@ -21,6 +21,7 @@ class Expectation():
         for index, row in len_rows.iterrows():
             attribute, mean, sd = str(row['attribute']), float(row['mean']), float(row['sd'])
             cls.expectations[attribute] = cls(attribute, mean, sd)
+            print(cls(attribute, mean, sd))
 
 
     def __init__(self, name, expect_mean, expect_sd):
@@ -137,8 +138,8 @@ class localAverageEnergy(rlooperMetric):
 
 class rnaMetric(Metric):
 
-    NAMES_DICT = {'prop_hairpin': 1, 
-                  'prop_unpaired': 4
+    NAMES_DICT = {'prop_hairpin': 4, 
+                  'prop_unpaired': 1
                 }
 
     def __init__(self, filepath, expectation, direction, divergence):
