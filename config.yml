@@ -1,0 +1,27 @@
+
+# User defined parameters, these can and should be change to specify input
+# inputs to the workflow
+# =============================================================================
+
+variable_region_definitions:
+  initiation_regions: 'variable_defs/initiation_plamids_short.tsv'
+
+# =============================================================================
+# Program constants and parameters do not change unless
+# you have a good reason. 
+
+RLOOPER_FILE_SUFFI:
+  - 'avgG.wig'
+  - 'bpprob.wig'
+  - 'bpprob.bed'
+  - 'mfe.bed'
+  - 'mfe.wig'
+
+SPOT_RNA_EXTS:
+  - 'bpseq'
+  - 'ct'
+  - 'prob'
+
+EXPECTATION_SAMPLES: 100
+
+
