@@ -5,6 +5,13 @@ def get_p_record(wildcards):
         vr_tables[wildcards.var_name]['name'] == wildcards.p_name]
 
 
+def get_all_p_names(wildcards):
+    return list(vr_tables[wildcards.var_name]['name'])
+
+# this is where snakemake needs to become aware of revsere somplement files 
+# currently I do not think they are being produced. 
+# one option would be to just expand the user input to include reverse
+# complemented seqs. Maybe better because slighly more visible in this way
 rule generate_random_seq:
     conda:
         '../envs/python.yml'
@@ -22,7 +29,6 @@ rule generate_random_seq:
         num_cases=NUM_CASES  # change to config param
     script:
         '../scripts/varmids/varmids/variable_region_maker.py'
-
 
 
 rule run_SPOT_RNA_prediction_on_variable_regions:
@@ -74,9 +80,19 @@ rule parse_bpRNA_annotations:
     script:'../scripts/bpRNA_parser.py'
 
 
+rule format_fasta_header_for_rlooper:
+    input:
+        'output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.fasta'
+    output:
+        'output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.rlooper_ready.fasta'
+    params:
+        record_name = lambda wildcards: f'{wildcards.p_name}.{wildcards.id_num}'
+    script:'../scripts/format_fa_header_for_rlooper.py'
+
+
 rule rlooper_variable_region:
     input:
-        fasta='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.fasta',
+        fasta='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.rlooper_ready.fasta',
         rlooper='submodules/rlooper/bin/rlooper'
     output:
         expand(
@@ -135,7 +151,7 @@ rule concatenate_seq_metrics:
         )
     output:
         'output/{var_name}/files/{p_name}/concatAggMetrics/{p_name}.tsv'
-    script:'../scripts/merge_all_agg_seq_metrics.py'
+    script:'../scripts/concate_tsvs.py'
 
 
 rule rank_and_select_sampled_sequences:
@@ -146,37 +162,36 @@ rule rank_and_select_sampled_sequences:
     output:
         fasta='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.fasta',
         tsv='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.tsv',
-        ranked_seqs='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.all_ranked.tsv'
-    script:'plya.py'
+        ranked='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.all_ranked.tsv'
+    script:'../scripts/rank_seqs.py'
+
+
+rule concatenate_top_ranked_sequences_fasta:
+    input:
+        lambda wildcards: expand(
+            'output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.fasta',
+            p_name=get_all_p_names(wildcards), allow_missing=True
+        )      
+    output:
+        'output/{var_name}/sequences/plasmid_sequences.fasta'
+    shell:'''
+    cat {input} > {output}
+    '''
+
+
+rule concatenate_to_ranked_sequences_tsv:
+    conda:
+        '../envs/python.yml'
+    input:
+        lambda wildcards: expand(
+            'output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.tsv',
+            p_name=get_all_p_names(wildcards), allow_missing=True
+        )
+    output:
+        'output/{var_name}/sequences/plasmid_sequences.tsv'
+    script:'../scripts/concate_tsvs.py'
+
     
-
-
-
-
-# rule combine_aggregated_sequence_metrics:
-#     input:
-#         expand(
-#             'output/{var_name}/files/{p_name}/{id_num}/aggregatedMetrics/{p_name}.tsv',
-#              id_num=CASE_RANGE, allow_missing=True
-#         ),
-#     output:
-#         'output/{var_name}/files/{p_name}/aggregations/{p_name}.all_aggregated_metrics.tsv'
-#     script:''
-
-
-# rule rank_sequences:
-#     input:
-#         'output/{var_name}/files/{p_name}/aggregations/{p_name}.all_aggregated_metrics.tsv'
-#     params:
-#         # length from pandas dataframe
-#         rlooper= lambda wildcards: f'output/expectations/rlooper/rlooper_expect.{sequence_length(wildcards)}.tsv',
-#         SPOTRNA=lambda wildcards: f'output/expectations/SPOTRNA/spotRNA_expect.{sequece_length(wildcards)}.tsv'
-#     script:'tello.py'
-
-
-
-
-
 
 
 
