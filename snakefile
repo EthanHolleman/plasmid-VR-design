@@ -1,37 +1,18 @@
 import pandas as pd
 
 
-# plots = expand(
-#     'output/{var_name}/plots/{var_name}.pdf',
-#     var_name=variable_regions.keys()
-# )
-
-
-
-variable_regions = {
-    'initiation_regions': 'variable_defs/initiation_plamids_short.tsv',
-}
+variable_regions = config['variable_region_definitions']
 
 vr_tables = {
     vr_name: pd.read_table(variable_regions[vr_name]).set_index(
         'name', drop=False) for vr_name in variable_regions
     }
 
+RLOOPER_FILE_SUFFI = config['RLOOPER_FILE_SUFFI']
+SPOT_RNA_EXTS = config['SPOT_RNA_EXTS']
 
-RLOOPER_FILE_SUFFI = [
-    'avgG.wig',
-    'bpprob.wig',
-    'bpprob.bed',
-    'mfe.bed',
-    'mfe.wig'
-]
-
-
-SPOT_RNA_EXTS = [
-    'bpseq',
-    'ct',
-    'prob'
-]
+NUM_CASES = config['EXPECTATION_SAMPLES']
+CASE_RANGE = range(1, NUM_CASES+1)
 
 wildcard_constraints:
    var_name = '\w+'
