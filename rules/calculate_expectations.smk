@@ -1,5 +1,17 @@
-EXPECT_SAMPLES=100
-RAND_SEQ_NAMES = ['RAND-SEQ:{i}' for i in EXPECT_SAMPLES]
+EXPECT_SAMPLES=10
+RAND_SEQ_NAMES = [f'RAND-SEQ:{i}' for i in range(0, EXPECT_SAMPLES)]
+
+
+rule random_fasta_record_file:
+    conda:
+        '../envs/python.yml'
+    output:
+        'testing/rlooper_benchmarking/random_fasta/{rand_fasta}.{length}.fa'
+    params:
+        record_name=lambda wildcards: wildcards.rand_fasta,
+        length=lambda wildcards: wildcards.length
+    script:'../scripts/random_seq_gen.py'
+
 
 rule plot_rlooper_rand_seq_distrabution:
     conda:
@@ -24,7 +36,7 @@ rule plot_spot_rna_rand_seq:
         '../envs/R.yml'
     input:
         expand('testing/RNA_sec_struct/bpRNA/tsv/{rand_fasta}.{length}.tsv',
-        rand_fasta=RAND_SEQ_NAMES, length=UNIQUE_LENGTH
+        rand_fasta=RAND_SEQ_NAMES, allow_missing=True
         )
     output:
         plot='output/expectations/SPOTRNA/spotRNA_expect.{length}.png',

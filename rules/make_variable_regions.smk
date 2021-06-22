@@ -1,14 +1,6 @@
 
 
-# rule generate_variable_regions:
-#     conda:
-#         '../envs/python.yml'
-#     output:
-#         fasta='output/{var_name}/files/{var_name}.fasta',
-#         tsv='output/{var_name}/files/{var_name}.tsv'
-#     params:
-#         input_file = lambda wildcards: variable_regions[wildcards.var_name]
-#     script:'../scripts/varmids/varmids.py'
+
 NUM_CASES = 10
 CASE_RANGE = range(1, NUM_CASES+1)
 
@@ -93,19 +85,15 @@ rule rlooper_variable_region:
         rlooper='submodules/rlooper/bin/rlooper'
     output:
         expand(
-            'output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.{rlooper_suffix}',
+            'output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}_{rlooper_suffix}',
             rlooper_suffix=RLOOPER_FILE_SUFFI, allow_missing=True
             )
     params:
         superhelicity='-0.07',
         domain_size='auto',
         minlength='30',  # value used in R-looper paper
-        out_path=lambda wildcards: 
-            f'output/{wildcards.var_name}/files/{wildcards.p_name}/{wildcards.id_num}/{wildcards.p_name}.{wildcards.id_num}'
-        ),
-        out_dir=lambda wildcards:
-            f'output/{wildcards.var_name}/files/{wildcards.p_name}/{wildcards.id_num}'
-        )
+        out_path=lambda wildcards: f'output/{wildcards.var_name}/files/{wildcards.p_name}/{wildcards.id_num}/{wildcards.p_name}.{wildcards.id_num}',
+        out_dir=lambda wildcards: f'output/{wildcards.var_name}/files/{wildcards.p_name}/{wildcards.id_num}'
     shell:'''
     mkdir -p {params.out_dir}
     chmod 777 {input.rlooper}
@@ -114,72 +102,80 @@ rule rlooper_variable_region:
     '''
 
 
-rule predict_Rlooper_statistics:
-    input:
-        expand(
-            'output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.{rlooper_suffix}',
-            id_num=CASE_RANGE, allow_missing=True, rlooper_suffix=RLOOPER_FILE_SUFFI
-            )
-    output:
-        'output/{var_name}/{p_name}.predict_rlooper.done'
-    shell:'''
-    touch {output}
-    '''
+# rule predict_Rlooper_statistics:
+#     input:
+#         expand(
+#             'output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}_{rlooper_suffix}',
+#             id_num=CASE_RANGE, allow_missing=True, rlooper_suffix=RLOOPER_FILE_SUFFI
+#             )
+#     output:
+#         'output/{var_name}/{p_name}.predict_rlooper.done'
+#     shell:'''
+#     touch {output}
+#     '''
 
 
-rule predict_RNA_secondary_structure:
-    input:
-        expand(
-            'output/{var_name}/files/{p_name}/{id_num}/parsedRNA/{p_name}.tsv',
-            id_num=CASE_RANGE,
-            allow_missing=True
-            )
-    output:
-        'output/{var_name}/{p_name}.predict_RNAss.done'
-    shell:'''
-    touch {output}
-    '''
+# rule predict_RNA_secondary_structure:
+#     input:
+#         expand(
+#             'output/{var_name}/files/{p_name}/{id_num}/parsedRNA/{p_name}.tsv',
+#             id_num=CASE_RANGE,
+#             allow_missing=True
+#             )
+#     output:
+#         'output/{var_name}/{p_name}.predict_RNAss.done'
+#     shell:'''
+#     touch {output}
+#     '''
 
 
 # then need a script to rank all tested sequences and get the best
 # ones back out
 
-def sequece_length(wildcards):
+def sequence_length(wildcards):
     # calculate variable region sequence length from wilcard input
     table = vr_tables[wildcards.var_name]
-    length = table.loc[table['name'] == wildcards.p_name]['length']
+    length = int(table.loc[table['name'] == wildcards.p_name]['length'])
     return length
 
 
 rule aggregate_sequence_metrics:
+    conda:
+        '../envs/python.yml'
     input:
-        rlooper_bpprop='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.avgG.wig',
-        rlooper_lae='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.avgG.wig',
-        RNAss='output/{var_name}/files/{p_name}/{id_num}/parsedRNA/{p_name}.tsv'
+        bp_prob='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}_bpprob.wig',
+        lae='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}_avgG.wig',
+        RNAss='output/{var_name}/files/{p_name}/{id_num}/parsedRNA/{p_name}.tsv',
+        fasta='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.fasta',
+        tsv='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.tsv',
+        rlooper_expect = lambda wildcards: f'output/expectations/rlooper/rlooper_expect.{sequence_length(wildcards)}.tsv',
+        RNAss_expect =lambda wildcards: f'output/expectations/SPOTRNA/spotRNA_expect.{sequence_length(wildcards)}.tsv'
     output:
         'output/{var_name}/files/{p_name}/{id_num}/aggregatedMetrics/{p_name}.tsv'
-    script:''
-
-
-rule combine_aggregated_sequence_metrics:
-    input:
-        expand(
-            'output/{var_name}/files/{p_name}/{id_num}/aggregatedMetrics/{p_name}.tsv',
-             id_num=CASE_RANGE, allow_missing=True
-        ),
-    output:
-        'output/{var_name}/files/{p_name}/aggregations/{p_name}.all_aggregated_metrics.tsv'
-    script:''
-
-
-rule rank_sequences:
-    input:
-        'output/{var_name}/files/{p_name}/aggregations/{p_name}.all_aggregated_metrics.tsv'
     params:
-        # length from pandas dataframe
-        rlooper= lambda wildcards: f'output/expectations/rlooper/rlooper_expect.{sequence_length(wildcards)}.tsv',
-        SPOTRNA=lambda wildcards: f'output/expectations/SPOTRNA/spotRNA_expect.{sequece_length(wildcards)}.tsv'
-    script:'tello.py'
+        length = lambda wildcards: sequence_length(wildcards),
+    script:'../scripts/agg_seq_metrics.py'
+
+
+# rule combine_aggregated_sequence_metrics:
+#     input:
+#         expand(
+#             'output/{var_name}/files/{p_name}/{id_num}/aggregatedMetrics/{p_name}.tsv',
+#              id_num=CASE_RANGE, allow_missing=True
+#         ),
+#     output:
+#         'output/{var_name}/files/{p_name}/aggregations/{p_name}.all_aggregated_metrics.tsv'
+#     script:''
+
+
+# rule rank_sequences:
+#     input:
+#         'output/{var_name}/files/{p_name}/aggregations/{p_name}.all_aggregated_metrics.tsv'
+#     params:
+#         # length from pandas dataframe
+#         rlooper= lambda wildcards: f'output/expectations/rlooper/rlooper_expect.{sequence_length(wildcards)}.tsv',
+#         SPOTRNA=lambda wildcards: f'output/expectations/SPOTRNA/spotRNA_expect.{sequece_length(wildcards)}.tsv'
+#     script:'tello.py'
 
 
 
