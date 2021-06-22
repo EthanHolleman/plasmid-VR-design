@@ -1,6 +1,6 @@
 import pandas as pd
 
-print(config['EXPECTATION_DEFS']['bp_prob']['direction'])
+from scripts.expand_RC_seqs import add_reverse_complement_definitions
 
 variable_regions = config['variable_region_definitions']
 
@@ -22,13 +22,16 @@ include: 'rules/make_variable_regions.smk'
 include: 'rules/calculate_expectations.smk'
 include: 'rules/RNA_sec_struct.smk'
 include: 'rules/rlooper.smk'
-
+include: 'rules/plot_variable_regions.smk'
 
 
 rule all:
     input:
         expand(
-            'output/initiation_regions/files/init-1/{id_num}/aggregatedMetrics/init-1.tsv',
-            id_num=CASE_RANGE
+            'output/{var_regions}/sequences/plasmid_sequences.fasta',
+            var_regions=variable_regions.keys()
         ),
-        'output/initiation_regions/files/init-1/concatAggMetrics/init-1.tsv'
+        expand(
+            'output/{var_regions}/plots/{var_regions}.pdf',
+            var_regions=variable_regions.keys()
+        )
