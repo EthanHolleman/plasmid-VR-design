@@ -1,5 +1,6 @@
 import pandas as pd
 
+print(config['EXPECTATION_DEFS']['bp_prob']['direction'])
 
 variable_regions = config['variable_region_definitions']
 
@@ -29,4 +30,5 @@ rule all:
         expand(
             'output/initiation_regions/files/init-1/{id_num}/aggregatedMetrics/init-1.tsv',
             id_num=CASE_RANGE
-        )
+        ),
+        'output/initiation_regions/files/init-1/concatAggMetrics/init-1.tsv'
