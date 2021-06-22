@@ -22,6 +22,28 @@ SPOT_RNA_EXTS:
   - 'ct'
   - 'prob'
 
-EXPECTATION_SAMPLES: 100
+EXPECTATION_SAMPLES: 10
+
+EXPECTATION_DEFS:
+  # defines what a "good" value for each sequence metric looks like.
+  # direction and divergence should either be 1 or -1.
+  # direction: defines if metric value should be to the right (1) or left (-1)
+  # of the metric expectation. Is only really important if divergence = 1.
+  # divergence: defines if the distance (in standard deviations) from the
+  # metric expectation should minimized (-1) or maximized (1).
+  bp_prob:
+    direction: 1  
+    divergence: 1
+  local_average_energy:
+    direction: -1
+    divergence: 1
+  prop_hairpin:
+    direction: -1
+    divergence: 1
+  prop_unpaired:
+    direction: -1
+    divergence: 1
+
+
 
 
