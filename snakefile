@@ -15,6 +15,10 @@ SPOT_RNA_EXTS = config['SPOT_RNA_EXTS']
 NUM_CASES = config['EXPECTATION_SAMPLES']
 CASE_RANGE = range(1, NUM_CASES+1)
 
+EXPECTATION_SAMPLES = config['EXPECTATION_SAMPLES']
+EXPECT_SAMPLES = config['EXPECT_SAMPLES']
+RAND_SEQ_NAMES = [f'RAND-SEQ:{i}' for i in range(0, EXPECT_SAMPLES)]
+
 wildcard_constraints:
    var_name = '\w+'
 

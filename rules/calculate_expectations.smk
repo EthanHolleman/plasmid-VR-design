@@ -1,5 +1,3 @@
-EXPECT_SAMPLES=10
-RAND_SEQ_NAMES = [f'RAND-SEQ:{i}' for i in range(0, EXPECT_SAMPLES)]
 
 
 rule random_fasta_record_file:
