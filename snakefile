@@ -1,41 +1,21 @@
 import pandas as pd
 
+
+# plots = expand(
+#     'output/{var_name}/plots/{var_name}.pdf',
+#     var_name=variable_regions.keys()
+# )
+
+
+
 variable_regions = {
-    'initiation_regions': 'variable_defs/initiation_plamids.tsv',
+    'initiation_regions': 'variable_defs/initiation_plamids_short.tsv',
 }
-
-plots = expand(
-    'output/{var_name}/plots/{var_name}.pdf',
-    var_name=variable_regions.keys()
-)
-
-RNA_ss_rnaFold = expand(
-    'output/RNA_sec_struct/viennaRNA/{var_name}.out',
-    var_name=variable_regions.keys()
-)
-
-
-RNA_ss_SPOTRNA = expand(
-    'output/RNA_sec_struct/SPOT-RNA-motifs/{var_name}',
-    var_name=variable_regions.keys()
-)
-
 
 vr_tables = {
     vr_name: pd.read_table(variable_regions[vr_name]).set_index(
         'name', drop=False) for vr_name in variable_regions
     }
-
-brRNA = []
-for name, table in vr_tables.items():
-    for index, row in table.iterrows():
-        brRNA.append(
-            f'output/RNA_sec_struct/bpRNA/{name}/{row["name"]}.st'
-        )
-
-
-
-
 
 
 RLOOPER_FILE_SUFFI = [
@@ -57,7 +37,7 @@ wildcard_constraints:
    var_name = '\w+'
 
 include: 'rules/make_variable_regions.smk'
-include: 'rules/plot_variable_regions.smk'
+include: 'rules/calculate_expectations.smk'
 include: 'rules/RNA_sec_struct.smk'
 include: 'rules/rlooper.smk'
 
@@ -65,6 +45,7 @@ include: 'rules/rlooper.smk'
 
 rule all:
     input:
-        brRNA=brRNA
-        #plots=plots
-
+        expand(
+            'output/initiation_regions/files/init-1/{id_num}/aggregatedMetrics/init-1.tsv',
+            id_num=CASE_RANGE
+        )
