@@ -4,7 +4,7 @@
 # =============================================================================
 
 variable_region_definitions:
-  initiation_regions: 'variable_defs/initiation_plamids_short.tsv'
+  initiation_regions: 'variable_defs/initiation_plamids.RC.tsv'
 
 # =============================================================================
 # Program constants and parameters do not change unless
@@ -22,7 +22,7 @@ SPOT_RNA_EXTS:
   - 'ct'
   - 'prob'
 
-EXPECTATION_SAMPLES: 10
+EXPECTATION_SAMPLES: 100
 
 EXPECTATION_DEFS:
   # defines what a "good" value for each sequence metric looks like.
@@ -41,7 +41,7 @@ EXPECTATION_DEFS:
     direction: -1
     divergence: 1
   prop_unpaired:
-    direction: -1
+    direction: 1
     divergence: 1
 
 
