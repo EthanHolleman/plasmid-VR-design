@@ -10,6 +10,7 @@ class Expectation():
 
     expectations = {}
 
+
     @classmethod
     def extend_expect_dict_from_table(cls, filepath, length):
         # create list of expectation instances from expectation tsv
@@ -26,52 +27,82 @@ class Expectation():
         self.name = str(name)
         self.expect_mean = float(expect_mean)
         self.expect_sd = float(expect_sd)
-    
 
     def distance(self, metric):
         # distance in standard deviations from the mean
-        print(type(metric))
+        print(metric, self.expect_mean, 'EXPECTED MEAN')
         z = (metric.value - self.expect_mean) / self.expect_sd
+        print(metric.value, self.expect_mean, z, 'VAL, MEAN, Z')
         assert isinstance(z, float)
-        return {
-            f'distance_{self.name}': z
-        }
-    
+        
+        return f'distance_{self.name}',  z
+        
     def __repr__(self):
-        return ' '.join([f'{str(key)}:{str(val)}' for key, val in self.__dict__])
+        return ' '.join([f'{str(key)}:{str(val)}' for key, val in self.__dict__.items()])
     
 
 class Metric():
 
     NAME = 'metric'
 
-    def __init__(self, filepath, expectation):
+    def __init__(self, filepath, expectation, direction, divergence):
         self.filepath = filepath
         self.expectation= expectation
+        self.direction = direction
+        self.divergence = divergence
 
         assert os.path.isfile(filepath)
         assert isinstance(expectation, Expectation)
 
+        print(self, expectation)
+
     @property
     def distance(self):
-        return self.expectation.distance(self)
+        dist_name, val = self.expectation.distance(self)
+        val = self._apply_scaling(val)
+        return {dist_name: val}
     
     @property
     def value(self):
         return None
     
+    @property
+    def direction(self):
+        return self._direction
+    
+    @direction.setter
+    def direction(self, new_dir):
+        if new_dir == 1 or new_dir == -1:
+            self._direction = new_dir
+        else:
+            raise TypeError('Direction must be -1 or 1!')
+    
+    @property
+    def divergence(self):
+        return self._divergence
+    
+    @direction.setter
+    def divergence(self, new_dir):
+        if new_dir == 1 or new_dir == -1:
+            self._divergence = new_dir
+        else:
+            raise TypeError('Divergence must be -1 or 1!')
+    
     def parse(self):
         d = {
-            type(self).NAME: self.value,
+            type(self).NAME: self.value,  # original value
         }
         d.update(self.distance)
         return d
+    
+    def _apply_scaling(self, z):
+        return (z * self.direction) ** self.divergence
 
 
 class rlooperMetric(Metric):
 
-    def __init__(self, filepath, expectation):
-        super().__init__(filepath, expectation)
+    def __init__(self, filepath, expectation, direction, divergence):
+        super().__init__(filepath, expectation, direction, divergence)
     
     def _parse_rlooper_wig(self):
         values = []
@@ -84,9 +115,8 @@ class bpProb(rlooperMetric):
     # basepair probability from rlooper
     NAME = 'bp_prob'
 
-    def __init__(self, filepath, expectation):
-        super().__init__(filepath, expectation)
-
+    def __init__(self, filepath, expectation, direction, divergence):
+        super().__init__(filepath, expectation, direction, divergence)
 
     @property
     def value(self):
@@ -97,9 +127,8 @@ class localAverageEnergy(rlooperMetric):
 
     NAME = 'local_average_energy'
 
-    def __init__(self, filepath, expectation):
-        super().__init__(filepath, expectation)
-
+    def __init__(self, filepath, expectation, direction, divergence):
+        super().__init__(filepath, expectation, direction, divergence)
 
     @property
     def value(self):
@@ -112,8 +141,8 @@ class rnaMetric(Metric):
                   'prop_unpaired': 4
                 }
 
-    def __init__(self, filepath, expectation):
-        super().__init__(filepath, expectation)
+    def __init__(self, filepath, expectation, direction, divergence):
+        super().__init__(filepath, expectation, direction, divergence)
     
 
     def _parse_rna_file(self):
@@ -130,8 +159,8 @@ class propHairpin(rnaMetric):
 
     NAME = 'prop_hairpin'
 
-    def __init__(self, filepath, expectation):
-        super().__init__(filepath, expectation)
+    def __init__(self, filepath, expectation, direction, divergence):
+        super().__init__(filepath, expectation, direction, divergence)
 
     @property
     def value(self):
@@ -143,8 +172,8 @@ class propUnpaired(rnaMetric):
     NAME = 'prop_unpaired'
 
 
-    def __init__(self, filepath, expectation):
-        super().__init__(filepath, expectation)
+    def __init__(self, filepath, expectation, direction, divergence):
+        super().__init__(filepath, expectation, direction, divergence)
     
     @property
     def value(self):
@@ -155,6 +184,8 @@ def add_inputs_to_out_dict(out_dict, snakemake):
     out_dict['fasta'] = snakemake.input['fasta']
     out_dict['tsv'] = snakemake.input['tsv']
     out_dict['length'] = snakemake.params['length']
+    out_dict['p_name'] = snakemake.params['p_name']
+    out_dict['id_num'] = snakemake.params['id_num']
 
     # out_dict['fasta'] = 'output/initiation_regions/files/init-1/10/init-1.10.fasta'
     # out_dict['tsv'] = 'output/initiation_regions/files/init-1/10/init-1.10.tsv'
@@ -187,10 +218,11 @@ def main():
 
     output_path = str(snakemake.output)
 
+    expect_def_dict = snakemake.params['config_dict']['EXPECTATION_DEFS']
 
-    # input_bp_prob = 'output/initiation_regions/files/init-1/10/init-1.10_bpprob.wig'
-    # input_lae = 'output/initiation_regions/files/init-1/10/init-1.10_avgG.wig'
-    # input_rna = 'output/initiation_regions/files/init-1/10/parsedRNA/init-1.tsv'
+    # input_bp_prob = 'output/initiation_regions/files/init-1/10/init-1.1_bpprob.wig'
+    # input_lae = 'output/initiation_regions/files/init-1/1/init-1.1_avgG.wig'
+    # input_rna = 'output/initiation_regions/files/init-1/1/parsedRNA/init-1.tsv'
 
     # length = 200  # length of sequence
 
@@ -205,10 +237,18 @@ def main():
 
     
     metrics = [
-        bpProb(input_bp_prob, Expectation.expectations[bpProb.NAME]),
-        localAverageEnergy(input_lae, Expectation.expectations[localAverageEnergy.NAME]),
-        propHairpin(input_rna, Expectation.expectations[propHairpin.NAME]),
-        propUnpaired(input_rna, Expectation.expectations[propUnpaired.NAME])
+        bpProb(
+            input_bp_prob, Expectation.expectations[bpProb.NAME],
+            **expect_def_dict[bpProb.NAME]),
+        localAverageEnergy(
+            input_lae, Expectation.expectations[localAverageEnergy.NAME],
+            **expect_def_dict[localAverageEnergy.NAME]),
+        propHairpin(
+            input_rna, Expectation.expectations[propHairpin.NAME],
+            **expect_def_dict[propHairpin.NAME]),
+        propUnpaired(
+            input_rna, Expectation.expectations[propUnpaired.NAME],
+            **expect_def_dict[propUnpaired.NAME])
     ]
 
 
