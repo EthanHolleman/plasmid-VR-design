@@ -4,9 +4,9 @@ __default__:
   cpus: "{threads}"
   name: "{rule}.{wildcards}"
   output: "logs/{rule}.{wildcards}.out"
-  time: "01:30:00"
+  time: "00:30:00"
   email: 'etholleman@ucdavis.edu'
-  mem: "10000"
+  mem: "8000"
 
 run_bpRNA:
   time: "00:05:00"
@@ -21,4 +21,25 @@ parse_bpRNA_st_files:
   mem: "2000"
 
 run_random_SPOT_RNA_prediction:
-  mem: "14000"
+  mem: "8000"
+
+random_fasta_record_file:
+  mem: "2000"
+  time: "00:05:00"
+
+generate_random_seq:
+  mem: "2000"
+  time: "00:05:00"
+
+annotate_RNAss_predictions:
+  mem: "4000"
+  time: "00:05:00"
+
+parse_bpRNA_annotations:
+  mem: "2000"
+  time: "00:05:00"
+
+format_fasta_header_for_rlooper:
+  mem: "2000"
+  time: "00:05:00"
+
