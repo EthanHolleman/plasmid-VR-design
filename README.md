@@ -135,7 +135,7 @@ VR_Init_2_initiation_region_2_GCskew:0.4_GCcontent:0.7_ATskew:0.4_ATcontent:0.30
 
 Plots produced for one variable region.
 
-![](resources/plot.png)
+![](resources/images/plot.png)
 
 There is currently a bug that prints sequence text twice. Not sure what is
 causing this as the double printing is not limited to sequence
