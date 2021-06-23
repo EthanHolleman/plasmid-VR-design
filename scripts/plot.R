@@ -40,7 +40,6 @@ get_nucleotide_counts <- function(seq){
 ## Calculate skew and content metrics for a given character vector
 ## using a specific window size.
 seq_skew_content_sliding_window <- function(seq, window_size=30){
-    print(seq)
     windows <- list()
     k <- 1
     for (i in 1:(nchar(seq)-window_size))
@@ -75,13 +74,14 @@ seq_skew_content_sliding_window <- function(seq, window_size=30){
 }
 
 
-read_name_and_id_num_from_parsed_RNA <- function(parsed.RNA.filepath)
+read_name_and_id_num_from_parsed_RNA <- function(parsed.RNA.filepath){
 
-    split <- unlist(strsplit(as.character(file.path), '/'))
-    id_num <- as.numeric(split[length(split)-2])
+    split <- unlist(strsplit(as.character(parsed.RNA.filepath), '/'))  
+    id.num <- split[length(split)-2]
     name <-  split[length(split)-3]
 
-    c(name, id_num)
+    c(name, id.num)
+}
 
 
 
@@ -104,8 +104,8 @@ merge_SPOT_RNA_predictions <- function(parsed.RNA.filepaths, df){
         parsed.rna.list[[i]] <- row
     }
 
-    parsed.rna.df <- as.data.frame(parsed.rna.list)
-    df.merge <- merge(df, calc.df, by=c('name', 'id_num'))
+    parsed.rna.df <- as.data.frame(do.call(rbind, parsed.rna.list))
+    df.merge <- merge(df, parsed.rna.df, by=c('name', 'id_num'))
 
     df.merge
 
@@ -117,23 +117,25 @@ read_expectation_files <- function(expectations.paths){
     expect.list <- list()
     for (i in 1:length(expectations.paths)){
 
-        df <- as.data.frame(read.table(expectations.path, sep='\t'))
+        df <- as.data.frame(read.table(expectations.paths[[i]], sep='\t', header=T))
         expect.list[[i]] <- df
 
     }
 
-    do.call(rbind, expect.list)
+    df <- as.data.frame(do.call(rbind, expect.list))
+    df
 
 }
 
 
 distrabution_from_exectation_parameters <- function(expectation.df, nsamples=1000){
 
+    print(expectation.df)
     dists.list <- list()
     for (i in 1:nrow(expectation.df)){
         expect.mean <- expectation.df[i, ]$mean
         expect.sd <- expectation.df[i, ]$sd
-        samples <- abs(rnorm(nsamples, expect.mean, expect.sd))  # for now assume no neg values
+        samples <- rnorm(nsamples, m=as.numeric(expect.mean), sd=as.numeric(expect.sd))  # for now assume no neg values
         df <- data.frame(
             value=samples,
             mean=expect.mean,
@@ -152,22 +154,38 @@ plot_deviation_from_expectation_metrics <- function(expectations.filepaths, df, 
 
     expect.df <- read_expectation_files(expectations.filepaths)
     expect.dists <- distrabution_from_exectation_parameters(expect.df)
+    expect.dists <- subset(expect.dists, length=df[i, 'length'])
     plots <- list()
     metrics <- unique(expect.df$attribute)
     colors <- brewer.pal(length(metrics), 'Dark2')
-    for (i in 1:length(metrics)){
-        metric <- metrics[[i]]
+    for (j in 1:length(metrics)){
+        metric <- metrics[[j]]
         var.region.metric_value <- df[i, metric]
         expect.dists.metric <- subset(expect.dists, attribute==metric)
-        plot.metric <- ggplot(expect.dists, x=value) + 
-                        geom_density(color=colors[[i]], alpha=0.7) +
+        
+        plot.metric <- ggplot(expect.dists.metric, aes(x=as.numeric(value))) + 
+                        geom_density(color=colors[[j]], alpha=0.7) +
                         theme_pubr() + 
                         geom_vline(
-                            xintercept=var.region.metric_value, 
+                            xintercept=as.numeric(var.region.metric_value), 
                             linetype='dashed'
                         ) +
-                        labs(x=metric)
-        plots[[i]] <- plot.metric
+                         geom_vline(
+                            xintercept=as.numeric(expect.dists.metric[, 'mean']),
+                            linetype='dashed',
+                            color=colors[[j]]
+                        ) +
+                        labs(x=metric) +
+                        theme(
+                            axis.text.y=element_blank(),
+                            axis.ticks.y=element_blank()
+                        ) +
+                        + theme(
+                            axis.text.x = element_text(
+                                angle = 90, vjust = 0.5, hjust=1
+                                )
+                            )
+        plots[[j]] <- plot.metric
     }
 
     ggarrange(plotlist=plots)
@@ -378,7 +396,7 @@ extract_vr_id_num_from_rlooper_filepath <- function(file.path){
 }
 
 
-merge_rlooper_calculations <- function(df, rlooper.filepaths){
+merge_rlooper_calculations <- function(df, rlooper.filepaths, attribute){
 
     # use the variable region names which act as IDs to get average local
     # energy calculations in the same order as the
@@ -386,10 +404,13 @@ merge_rlooper_calculations <- function(df, rlooper.filepaths){
     for (i in 1:length(rlooper.filepaths)){
         name <- extract_vr_name_from_rlooper_filepath(rlooper.filepaths[[i]])
         id <- extract_vr_id_num_from_rlooper_filepath(rlooper.filepaths[[i]])
-        calc.filepaths[[i]] <- c(name, as.numeric(id), rlooper.filepaths[[i]])
+        mean.attribute <- mean(read_rlooper_wig_file(rlooper.filepaths[[i]])$value)
+        calc.filepaths[[i]] <- c(name, as.numeric(id), rlooper.filepaths[[i]], mean.attribute)
+        
     }
+
     calc.df <- as.data.frame(do.call(rbind, calc.filepaths))
-    colnames(calc.df) <- c('name', 'id_num', 'rlooper_filepath')
+    colnames(calc.df) <- c('name', 'id_num', paste(attribute, 'path', sep='_'), attribute)
     # merge rlooper filepaths into the dataframe
     df.merge <- merge(df, calc.df, by=c('name', 'id_num'))
     
@@ -398,50 +419,71 @@ merge_rlooper_calculations <- function(df, rlooper.filepaths){
 }
 
 
-read_average_local_energy_file <- function(rlooper.filepath){
+read_rlooper_wig_file <- function(rlooper.filepath){
 
-    print('Reacing File')
-    print(rlooper.filepath)
-    ale.df <- as.data.frame(read.table(as.character(rlooper.filepath), skip=4, header=FALSE))
-    colnames(ale.df) <- c('ale')
-    ale.df$position <- 1:nrow(ale.df)
-    ale.df$ale <- as.numeric(ale.df$ale)
+    df <- as.data.frame(read.table(as.character(rlooper.filepath), skip=4, header=FALSE))
+    colnames(df) <- c('value')
+    df$position <- 1:nrow(df)
+    df$value <- as.numeric(df$value)
 
-    ale.df
+    df
 }
 
 
-plot_average_local_energy <- function(df, i){
+plot_rlooper_calcs <- function(df, i, rlooper_attributes){
     
-    file.path <- df[i, ]$rlooper_filepath
-    ale.df <- read_average_local_energy_file(file.path)
-    seq <- df[i, ]$Sequence
-    labels = seq
-    names(seq) <- 1:length(seq)
-    ggplot(ale.df, aes(x=position, y=ale)) + geom_point(color='#e32b17') + geom_line(color='#e32b17') +
-            theme_pubr() + 
-            labs(x='Nucleotide position', y='Average G rlooper')
+    plots <- list()
+    colors <- brewer.pal(length(rlooper_attributes), 'Dark2')
+    for (i in 1:length(rlooper_attributes)){
+        attribute <- rlooper_attributes[[i]]
+        message(attribute)
+        cn <- paste(attribute, 'path', sep='_')
+        message(cn)
+        file.path <- df[i, c(cn)]
+        message(file.path)
 
+        df.seq <- read_rlooper_wig_file(file.path)
+        seq <- df[i, ]$Sequence
+        p <- ggplot(df.seq, aes(x=position, y=value)) + 
+                geom_point(color=colors[[i]]) + 
+                geom_line(color=colors[[i]]) +
+                theme_pubr() + 
+                labs(x='Nucleotide position', y=attribute)
+        plots[[i]] <- p
+    }
+
+    ggarrange(plotlist=plots, nrow=length(plots), ncol=1)
+    
 }
 
 
 
 main <- function(){
-
+    save.image('plot.image.RData')
+    print('================================')
+    print('Reading / parsing inputs')
+    print('================================')
     input.path <- as.character(snakemake@input['variable_regions'])
     output.path <- as.character(snakemake@output)
     #save.image('plot.RData')
     df <- read_variable_region_tsv(input.path)
     df <- merge_rlooper_calculations(
         df, 
-        snakemake@input['rlooper_calculations']$rlooper_calculations
+        snakemake@input['rlooper_lae']$rlooper_lae,
+        'local_average_energy'
     )
-    df <- merge_SPOT_RNA_predictions(snakemake@input['parsed_RNA'], df)
-    print(head(df))
+    df <- merge_rlooper_calculations(
+        df, 
+        snakemake@input['rlooper_bprob']$rlooper_bprob,
+        'bp_prob'
+    )
+    df <- merge_SPOT_RNA_predictions(snakemake@input['parsed_RNA']$parsed_RNA, df)
 
-    expectation.filepaths <- snakemake@input['expectation_files']
+    expectation.filepaths <- unique(snakemake@input['expectation_files']$expectation_files)
 
-    
+    print('================================')
+    print('Making plots')
+    print('================================')
     pdf(output.path, width=18, height=14)
     for (i in 1:nrow(df)){
         skew_content_plot <- skew_content_plot_from_df_row(df, i, WINDOW_SIZE)
@@ -450,7 +492,7 @@ main <- function(){
         nuc_props <- nucleotide_proportions(df, i)
         sequence <- plot_seq(df, i)
         clustering <- plot_distance_to_next_same_nucleotide(df, i)
-        rlooper <- plot_average_local_energy(df, i)
+        rlooper <- plot_rlooper_calcs(df, i, c('local_average_energy', 'bp_prob'))
         expectations <- plot_deviation_from_expectation_metrics(expectation.filepaths, df, i)
 
         skew_and_rlooper <- ggarrange(
@@ -459,9 +501,10 @@ main <- function(){
 
         seq_and_table <- ggarrange(
             vr_table,
+            expectations,
             nuc_props,
             ggarrange(clustering, sequence, nrow=2, ncol=1, heights=c(1, 0.5)),
-            nrow=1, ncol=3
+            nrow=1, ncol=4
         )
 
         
