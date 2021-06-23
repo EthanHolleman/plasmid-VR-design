@@ -1,14 +1,17 @@
 import pytest
 import os
+import sys
 from pathlib import Path
 
-from scripts.bpRNA_parser import *
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from bpRNA_parser import *
 
 cur_dir = os.path.dirname(os.path.realpath(__file__))
 
 @pytest.fixture
 def st_path():
-    return os.path.join(cur_dir, 'test_files/init-1.st')
+    return os.path.join(cur_dir, '../test_files/init-1.st')
 
 @pytest.fixture
 def sf_instance(st_path):
