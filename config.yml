@@ -11,6 +11,13 @@ variable_region_definitions:
 # Program constants and parameters you can but probably don't need to
 # change
 
+# Path to default primer3 template file. This file is formatted from a python
+# script so it is not recommended to change the actual path but if you want
+# to change primer3 parameters that can be easily done by adjusting the
+# default file's contents. Just watch out for "{}" those get filled by python
+# with sequence specific info.
+PRIMER3_TEMPLATE: 'resources/files/primer3_settings_template.txt'
+
 # number of different sequence to generate for each variable region definition
 # increasing this value will increase run time but generally increase
 # quality of final sequence
