@@ -1,4 +1,24 @@
 
+def get_all_sequence_lengths(wildcards):
+    table = vr_tables[wildcards.var_name]
+    return list(table['length'])
+
+
+def all_expectations_by_length(wildcards, expectation_path):
+    lengths = get_all_sequence_lengths(wildcards)
+    return expand(expectation_path, length=lengths)
+
+
+def all_expectations(wildcards):
+    rna = all_expectations_by_length(
+        wildcards, 'output/expectations/SPOTRNA/spotRNA_expect.{length}.tsv'
+        )
+    rlooper = all_expectations_by_length(
+        wildcards, 'output/expectations/rlooper/rlooper_expect.{length}.tsv'
+    )
+    return rna + rlooper
+
+
 
 rule random_fasta_record_file:
     conda:
