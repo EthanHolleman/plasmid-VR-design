@@ -28,7 +28,7 @@ rule generate_random_seq:
         p_record=lambda wildcards: get_p_record(wildcards),
         num_cases=NUM_CASES  # change to config param
     script:
-        '../scripts/varmids/varmids/variable_region_maker.py'
+        '../scripts/varmids/varmids.py'
 
 
 rule run_SPOT_RNA_prediction_on_variable_regions:
