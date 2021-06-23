@@ -1,7 +1,7 @@
 import numpy as np
 from Bio.Seq import Seq
 
-from utils import *
+from varmids.utils import *
 
 
 class Sequence():
