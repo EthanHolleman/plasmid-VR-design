@@ -39,6 +39,7 @@ get_nucleotide_counts <- function(seq){
 ## Calculate skew and content metrics for a given character vector
 ## using a specific window size.
 seq_skew_content_sliding_window <- function(seq, window_size=30){
+    print(seq)
     windows <- list()
     k <- 1
     for (i in 1:(nchar(seq)-window_size))
@@ -265,6 +266,12 @@ plot_seq <- function(df, i){
 
 extract_vr_name_from_rlooper_filepath <- function(file.path){
     split <- unlist(strsplit(as.character(file.path), '/'))
+    split[length(split)-2]
+
+}
+
+extract_vr_id_num_from_rlooper_filepath <- function(file.path){
+    split <- unlist(strsplit(as.character(file.path), '/'))
     split[length(split)-1]
 
 }
@@ -277,12 +284,13 @@ merge_rlooper_calculations <- function(df, rlooper.filepaths){
     calc.filepaths <- list()
     for (i in 1:length(rlooper.filepaths)){
         name <- extract_vr_name_from_rlooper_filepath(rlooper.filepaths[[i]])
-        calc.filepaths[[i]] <- c(name, rlooper.filepaths[[i]])
+        id <- extract_vr_id_num_from_rlooper_filepath(rlooper.filepaths[[i]])
+        calc.filepaths[[i]] <- c(name, as.numeric(id), rlooper.filepaths[[i]])
     }
     calc.df <- as.data.frame(do.call(rbind, calc.filepaths))
-    colnames(calc.df) <- c('name', 'rlooper_filepath')
+    colnames(calc.df) <- c('name', 'id_num', 'rlooper_filepath')
     # merge rlooper filepaths into the dataframe
-    df.merge <- merge(df, calc.df, by='name')
+    df.merge <- merge(df, calc.df, by=c('name', 'id_num'))
     
     df.merge
 
@@ -323,8 +331,10 @@ main <- function(){
     output.path <- as.character(snakemake@output)
     #save.image('plot.RData')
     df <- read_variable_region_tsv(input.path)
+    print(head(df))
     df <- merge_rlooper_calculations(df, 
     snakemake@input['rlooper_calculations']$rlooper_calculations)
+    print(head(df))
     
     pdf(output.path, width=18, height=14)
     for (i in 1:nrow(df)){

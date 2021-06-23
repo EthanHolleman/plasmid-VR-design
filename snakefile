@@ -1,70 +1,41 @@
 import pandas as pd
 
-variable_regions = {
-    'initiation_regions': 'variable_defs/initiation_plamids.tsv',
-}
+from scripts.expand_RC_seqs import add_reverse_complement_definitions
 
-plots = expand(
-    'output/{var_name}/plots/{var_name}.pdf',
-    var_name=variable_regions.keys()
-)
-
-RNA_ss_rnaFold = expand(
-    'output/RNA_sec_struct/viennaRNA/{var_name}.out',
-    var_name=variable_regions.keys()
-)
-
-
-RNA_ss_SPOTRNA = expand(
-    'output/RNA_sec_struct/SPOT-RNA-motifs/{var_name}',
-    var_name=variable_regions.keys()
-)
-
+variable_regions = config['variable_region_definitions']
 
 vr_tables = {
     vr_name: pd.read_table(variable_regions[vr_name]).set_index(
         'name', drop=False) for vr_name in variable_regions
     }
 
-brRNA = []
-for name, table in vr_tables.items():
-    for index, row in table.iterrows():
-        brRNA.append(
-            f'output/RNA_sec_struct/bpRNA/{name}/{row["name"]}.st'
-        )
+RLOOPER_FILE_SUFFI = config['RLOOPER_FILE_SUFFI']
+SPOT_RNA_EXTS = config['SPOT_RNA_EXTS']
 
+NUM_CASES = config['EXPECTATION_SAMPLES']
+CASE_RANGE = range(1, NUM_CASES+1)
 
-
-
-
-
-RLOOPER_FILE_SUFFI = [
-    'avgG.wig',
-    'bpprob.wig',
-    'bpprob.bed',
-    'mfe.bed',
-    'mfe.wig'
-]
-
-
-SPOT_RNA_EXTS = [
-    'bpseq',
-    'ct',
-    'prob'
-]
+EXPECTATION_SAMPLES = config['EXPECTATION_SAMPLES']
+EXPECT_SAMPLES = config['EXPECT_SAMPLES']
+RAND_SEQ_NAMES = [f'RAND-SEQ:{i}' for i in range(0, EXPECT_SAMPLES)]
 
 wildcard_constraints:
    var_name = '\w+'
 
 include: 'rules/make_variable_regions.smk'
-include: 'rules/plot_variable_regions.smk'
+include: 'rules/calculate_expectations.smk'
 include: 'rules/RNA_sec_struct.smk'
 include: 'rules/rlooper.smk'
-
+include: 'rules/plot_variable_regions.smk'
 
 
 rule all:
     input:
-        brRNA=brRNA
-        #plots=plots
-
+        expand(
+            'output/{var_regions}/sequences/plasmid_sequences.fasta',
+            var_regions=variable_regions.keys()
+        ),
+        expand(
+            'output/{var_regions}/plots/{var_regions}.pdf',
+            var_regions=variable_regions.keys()
+        )

@@ -1,8 +1,3 @@
-import numpy as np
-from Bio.Seq import Seq
-
-from varmids.utils import *
-
 
 class Sequence():
 
@@ -13,11 +8,10 @@ class Sequence():
         return rc_name
 
     
-    def __init__(self, name, id_num, description, cluster_length=None, 
+    def __init__(self, name, description, cluster_length=None, 
                 cluster_nuc=None, cluster_dist_func=None, nuc_counts={}, 
                 nuc_seq=None):
         self.name = name
-        self.id_num = id_num
         self.description = description
         self.cluster_length = cluster_length
         self.cluster_nuc = cluster_nuc
@@ -212,7 +206,6 @@ class Sequence():
     def to_dict(self):
         return {
             'name': self.name,
-            'id_num': self.id_num,
             'description': self.description,
             'GC_content': self.gc_content,
             'GC_skew': self.gc_skew,
@@ -394,7 +387,6 @@ class VariableRegion():
         self._generated_sequences += 1
         return Sequence(
             self.name,
-            self._generated_sequences,
             self._sequence_name(),
             self.cluster_length,
             self.cluster_nuc,
@@ -408,24 +400,4 @@ class VariableRegion():
             cluster = self.cluster_nuc
         else:
             cluster=False
-        return f'{VariableRegion.name_prefix}_{self.name}-{self._generated_sequences}_{self.role}_GCskew:{round(self.gc_skew, 2)}_GCcontent:{round(self.gc_content, 2)}_ATskew:{round(self.at_skew, 2)}_ATcontent:{round(self.at_content, 2)}_Clustered:{cluster}'
-
-
-def main():
-    # should only be one record
-    p_record = read_variable_region_dataframe(
-        snakemake.params['p_record']).pop()
-
-    vr = VariableRegion.init_from_csv_row(p_record)
-    
-    for i in range(0, int(snakemake.params.num_cases)):
-        output_fasta = str(snakemake.output['fasta'][i])
-        output_tsv = str(snakemake.output['tsv'][i])
-        seq = vr.generate_sequence()
-        write_sequence_list_to_output_files([seq], output_fasta, output_tsv)
-
-
-if __name__ == '__main__':
-    main()
-
-
+        return f'{VariableRegion.name_prefix}_{self.name}_{self.role}_GCskew:{round(self.gc_skew, 2)}_GCcontent:{round(self.gc_content, 2)}_ATskew:{round(self.at_skew, 2)}_ATcontent:{round(self.at_content, 2)}_Clustered:{cluster}'

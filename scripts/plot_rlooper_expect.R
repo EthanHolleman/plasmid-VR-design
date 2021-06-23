@@ -62,9 +62,9 @@ agg_variable_mean_sd <- function(big.df, var_name, group_name){
 
 write_expectation_table <- function(means.prob, means.energy, output.path){
 
-    means.energy <- agg_variable_mean_sd(big.energy, 'local_average_energy', 'length')
-    means.prob <- agg_variable_mean_sd(big.prob, 'bp_prob', 'length')
-    all.means <- rbind(means.hairpin, means.prop_unpaired)
+    means.energy <- agg_variable_mean_sd(means.energy, 'local_average_energy', 'length')
+    means.prob <- agg_variable_mean_sd(means.prob, 'bp_prob', 'length')
+    all.means <- rbind(means.energy, means.prob)
     write.table(all.means, file=output.path, sep='\t', quote=FALSE, row.names=FALSE)
 
 }
@@ -90,7 +90,7 @@ main <- function(){
 
     all.plots <- ggarrange(plot.ale, plot.bprpob, nrow=2, ncol=1)
     write_expectation_table(bpprob.means.df, ale.means.df, output.path.expect)
-    ggsave(output.path, all.plots, dpi=500)
+    ggsave(output.path.plot, all.plots, dpi=500)
 
 }
 

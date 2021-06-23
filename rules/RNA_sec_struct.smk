@@ -7,7 +7,8 @@ rule download_SPOT_RNA:
         url='https://github.com/jaswindersingh2/SPOT-RNA'
     shell:'''
     cd submodules
-    git submodule add {params.url}
+    rm -rf SPOT-RNA
+    git clone {params.url}
     cd SPOT-RNA
     wget 'https://www.dropbox.com/s/dsrcf460nbjqpxa/SPOT-RNA-models.tar.gz' || wget -O SPOT-RNA-models.tar.gz 'https://app.nihaocloud.com/f/fbf3315a91d542c0bdc2/?dl=1'
     tar -xvzf SPOT-RNA-models.tar.gz && rm SPOT-RNA-models.tar.gz
@@ -21,6 +22,7 @@ rule download_bpRNA:
         url='https://github.com/EthanHolleman/bpRNA.git'
     shell:'''
     cd submodules
+    rm -rf bpRNA
     git clone {params.url}
     '''
 
