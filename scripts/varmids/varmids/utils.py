@@ -2,7 +2,9 @@ import numpy as np
 import pandas as pd
 import csv
 
-from varmids import RAND_GEN
+SEED = 12311997  # turn this into a parameter in snakemake somewhere in future
+
+RAND_GEN =  np.random.default_rng(SEED)
 
 nuc_cache = {}
 
@@ -91,6 +93,16 @@ def get_int_half_length(length):
     other_half = length - half_len
     return half_len, other_half
 
+
+def read_variable_region_dataframe(dataframe):
+    # convert pandas input to clean dictionary 
+    table = dataframe.to_dict(orient='records')
+    for row in table:
+        for key, val in row.items():
+            if val == 'NA' or pd.isna(val):
+                row[key] = None
+
+    return table
 
 def read_variable_region_config_file(file_path):
     table = pd.read_table(file_path)

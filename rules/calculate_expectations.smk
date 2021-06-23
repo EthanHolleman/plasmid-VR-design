@@ -1,4 +1,5 @@
 
+
 rule random_fasta_record_file:
     conda:
         '../envs/python.yml'
@@ -16,15 +17,15 @@ rule plot_rlooper_rand_seq_distrabution:
     input:
         ale=expand(
             'testing/rlooper_benchmarking/completed_runs/{rand_fasta}.{length}/{rand_fasta}.{length}_avgG.wig',
-            rand_fasta=RAND_SEQ_NAMES, length=RAND_SEQ_LENS
+            rand_fasta=RAND_SEQ_NAMES, allow_missing=True
         ),
         bpprob=expand(
             'testing/rlooper_benchmarking/completed_runs/{rand_fasta}.{length}/{rand_fasta}.{length}_bpprob.wig',
-            rand_fasta=RAND_SEQ_NAMES, length=RAND_SEQ_LENS
+            rand_fasta=RAND_SEQ_NAMES, allow_missing=True
         )
     output:
-        plot='testing/rlooper_benchmarking/plots/rand_seq_LAE_dist.png',
-        expect='testing/rlooper_benchmarking/plots/expectations.tsv'
+        plot='output/expectations/rlooper/rlooper_expect.{length}.png',
+        expect='output/expectations/rlooper/rlooper_expect.{length}.tsv'
     script:'../scripts/plot_rlooper_expect.R'
 
 
@@ -33,10 +34,10 @@ rule plot_spot_rna_rand_seq:
         '../envs/R.yml'
     input:
         expand('testing/RNA_sec_struct/bpRNA/tsv/{rand_fasta}.{length}.tsv',
-        rand_fasta=RAND_SEQ_NAMES, length=RAND_SEQ_LENS
+        rand_fasta=RAND_SEQ_NAMES, allow_missing=True
         )
     output:
-        plot='testing/RNA_sec_struct/plots/plot.png',
-        expect='testing/RNA_sec_struct/plots/expectations.tsv'
+        plot='output/expectations/SPOTRNA/spotRNA_expect.{length}.png',
+        expect='output/expectations/SPOTRNA/spotRNA_expect.{length}.tsv'
     script:'../scripts/plot_rna_struct_expect.R'
 

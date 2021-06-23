@@ -1,8 +1,27 @@
 from varmids.utils import *
 
+import pandas as pd
+
+class AttributeExpectation():
+
+    def __init__(self, expectation_path):
+        self.expectation_path = expectation_path
+        self.expect_table = self._read_expect_tsv()
+    
+    def _read_expect_tsv(self):
+        return pd.read_table(self.expectation_path)
+    
+
+    def _access_rlooper(self):
+        pass
+
+
 class SeqSelector():
 
-    def __init__(self, variable_region, global_skew_thres, global_content_thres, 
+
+    def __init__(self, variable_region, global_skew_thres, global_content_thres,
+                bprpob_max_dist=None, lae_max_dist=None, prop_unpaired_max_dist=None,
+                prop_hairpin_max_dist=None, 
                 local_skew_thres, local_content_thres, max_attempts=1000):
         '''When sequence objects are generated there is a fair bit of
     randomness that comes into play in terms of where each nucleotide

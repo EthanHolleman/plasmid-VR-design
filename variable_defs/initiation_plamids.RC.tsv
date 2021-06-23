@@ -1,0 +1,65 @@
+name	gc_skew	gc_content	length	at_skew	at_content	cluster_length	cluster_nuc	clustering_method	reverse_complement	role
+init-1	0.1	0.4	200						1	initiation_region_1
+init-2	0.4	0.7	200						1	initiation_region_2
+init-3	0.6	0.6	200						1	initiation_region_3
+init-4	0.1	0.7	200						1	initiation_region_4
+init-5	0.0	0.6	200						1	initiation_region_5
+init-6	0.2	0.4	200						1	initiation_region_6
+init-7	0.4	0.6	200						1	initiation_region_7
+init-8	0.6	0.5	200						1	initiation_region_8
+init-9	0.1	0.6	200						1	initiation_region_9
+init-10	0.0	0.5	200						1	initiation_region_10
+init-11	0.2	0.7	200						1	initiation_region_11
+init-12	0.4	0.5	200						1	initiation_region_12
+init-13	0.2	0.6	200						1	initiation_region_13
+init-14	0.1	0.5	200						1	initiation_region_14
+init-15	0.0	0.4	200						1	initiation_region_15
+init-16	0.6	0.4	200						1	initiation_region_16
+init-17	0.6	0.7	200						1	initiation_region_17
+init-18	0.0	0.7	200						1	initiation_region_18
+init-19	0.4	0.4	200						1	initiation_region_19
+init-20	0.2	0.5	200						1	initiation_region_20
+init-21	0.4	0.6	200	0.0		1.0	G	find_available_random_range	1	init-G_clustered
+init-22	0.4	0.6	200	0.0		2.0	G	find_available_random_range	1	init-G_clustered
+init-23	0.4	0.6	200	0.0		3.0	G	find_available_random_range	1	init-G_clustered
+init-24	0.4	0.6	200	0.0		4.0	G	find_available_random_range	1	init-G_clustered
+init-25	0.4	0.6	200	0.2		1.0	G	find_available_random_range	1	init-G_clustered
+init-26	0.4	0.6	200	0.2		2.0	G	find_available_random_range	1	init-G_clustered
+init-27	0.4	0.6	200	0.2		3.0	G	find_available_random_range	1	init-G_clustered
+init-28	0.4	0.6	200	0.2		4.0	G	find_available_random_range	1	init-G_clustered
+init-29	0.4	0.6	200	0.4		1.0	G	find_available_random_range	1	init-G_clustered
+init-30	0.4	0.6	200	0.4		2.0	G	find_available_random_range	1	init-G_clustered
+init-31	0.4	0.6	200	0.4		3.0	G	find_available_random_range	1	init-G_clustered
+init-32	0.4	0.6	200	0.4		4.0	G	find_available_random_range	1	init-G_clustered
+init-1-RC	-0.1	0.4	200						1	initiation_region_1
+init-2-RC	-0.4	0.7	200						1	initiation_region_2
+init-3-RC	-0.6	0.6	200						1	initiation_region_3
+init-4-RC	-0.1	0.7	200						1	initiation_region_4
+init-5-RC	-0.0	0.6	200						1	initiation_region_5
+init-6-RC	-0.2	0.4	200						1	initiation_region_6
+init-7-RC	-0.4	0.6	200						1	initiation_region_7
+init-8-RC	-0.6	0.5	200						1	initiation_region_8
+init-9-RC	-0.1	0.6	200						1	initiation_region_9
+init-10-RC	-0.0	0.5	200						1	initiation_region_10
+init-11-RC	-0.2	0.7	200						1	initiation_region_11
+init-12-RC	-0.4	0.5	200						1	initiation_region_12
+init-13-RC	-0.2	0.6	200						1	initiation_region_13
+init-14-RC	-0.1	0.5	200						1	initiation_region_14
+init-15-RC	-0.0	0.4	200						1	initiation_region_15
+init-16-RC	-0.6	0.4	200						1	initiation_region_16
+init-17-RC	-0.6	0.7	200						1	initiation_region_17
+init-18-RC	-0.0	0.7	200						1	initiation_region_18
+init-19-RC	-0.4	0.4	200						1	initiation_region_19
+init-20-RC	-0.2	0.5	200						1	initiation_region_20
+init-21-RC	-0.4	0.6	200	-0.0		1.0	G	find_available_random_range	1	init-G_clustered
+init-22-RC	-0.4	0.6	200	-0.0		2.0	G	find_available_random_range	1	init-G_clustered
+init-23-RC	-0.4	0.6	200	-0.0		3.0	G	find_available_random_range	1	init-G_clustered
+init-24-RC	-0.4	0.6	200	-0.0		4.0	G	find_available_random_range	1	init-G_clustered
+init-25-RC	-0.4	0.6	200	-0.2		1.0	G	find_available_random_range	1	init-G_clustered
+init-26-RC	-0.4	0.6	200	-0.2		2.0	G	find_available_random_range	1	init-G_clustered
+init-27-RC	-0.4	0.6	200	-0.2		3.0	G	find_available_random_range	1	init-G_clustered
+init-28-RC	-0.4	0.6	200	-0.2		4.0	G	find_available_random_range	1	init-G_clustered
+init-29-RC	-0.4	0.6	200	-0.4		1.0	G	find_available_random_range	1	init-G_clustered
+init-30-RC	-0.4	0.6	200	-0.4		2.0	G	find_available_random_range	1	init-G_clustered
+init-31-RC	-0.4	0.6	200	-0.4		3.0	G	find_available_random_range	1	init-G_clustered
+init-32-RC	-0.4	0.6	200	-0.4		4.0	G	find_available_random_range	1	init-G_clustered

@@ -26,4 +26,4 @@ jobs:
           pip install biopython
       - name: Test with pytest
         run: |
-          pytest
+          pytest scripts/

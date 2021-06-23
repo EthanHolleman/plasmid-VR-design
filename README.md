@@ -5,17 +5,21 @@
 
 ## Dependencies
 
-Not handled by snakemake
-- snakemake
-- conda 
-- Perl stuff
-  - Perl
-  - cpanm
-- [Graph.pm](https://metacpan.org/dist/Graph/view/lib/Graph.pod) perl package.
-Install with command `cpanm Graph`. 
+The workflow is intended to be run on a unix system, I ran on a Ubuntu server.
+The vast majority of software dependencies for the workflow are handled by
+snakemake and conda. That being said you will need both snakemake and conda
+installed.
 
-Everything else should be handled as long as `--use-conda` flag is added to
-snakemake call. 
+However there are some programs that will need to be configured / installed
+before running. 
+
+### Perl and required libraries
+
+The workflow currently assumes you have the perl language installed and that
+the `Graph.pm` module is available for local import using `local::lib`. You can
+install [Graph.pm](https://metacpan.org/dist/Graph/view/lib/Graph.pod)
+using the command `cpanm Graph`. 
+
 
 ## Grant language
 
@@ -137,6 +141,53 @@ There is currently a bug that prints sequence text twice. Not sure what is
 causing this as the double printing is not limited to sequence
 but any string that is passed to `ggparagraph` and then plotted
 in that position.
+
+
+#### Plasmid selection
+
+The sequences generated are random nucleotide sequences that satisfy user
+defined parameters. This can lead to significant variation in local sequence
+properties between two variable regions specified with the same global parameters.
+In order to pick the "best" possible variable regions, regions can be further
+selected based on the attributes described below.
+
+##### Min and max standard deviation in skew and content
+
+
+##### Number of standard deviations from RNA secondary structure expectations
+
+It is likely that significant RNA secondary structure would decrease the likelihood
+of R-loop formation by sterically preventing hybridization to the DNA template.
+Therefore it is desirable to try and reduce the degree of secondary structure
+that might form over a given variable region. To do this the workflow uses
+[SPOT-RNA](https://github.com/jaswindersingh2/SPOT-RNA) to predict RNA secondary
+structure and a modified version of [bpRNA](https://github.com/EthanHolleman/bpRNA)
+to translate those predictions into secondary structure annotations. 
+
+A variable region's secondary structure is accessed with two basic metrics. The
+proportion of unpaired ribonucleotides (unpaired ribos / all ribos) and proportion
+of sequence in hairpin structures (hairpin ribos / all ribos). An expectation
+for what a "good" or "bad" variable region might look like with respect to
+secondary structure was formed by generating 500 random sequences of various
+lengths, predicting RNA secondary structure using SPOT-RNA and plotting
+results as distributions shown below. 
+
+![](resources/rnass_expect.png)
+
+##### Max local average energy and min R-loop probability
+
+Ideally, we would like to know that sequences used in variable regions
+will be capable of forming R-loops. [Rlooper](https://github.com/chedinlab/rlooper), 
+a physics based model of R-loop formation can help answer this question. Rlooper
+calculates both the probability of R-loop formation and the sequence energetics
+for a given nucleotide sequence. Again, in order to determine what values might
+separate "good" from "bad" variable region sequences 500 random sequences of 
+various lengths were generated and then accessed using Rlooper to build an
+expectation. The results of the simulations are shown below.
+
+![](resources/rand_seq_LAE_dist.png)
+
+
 
 ## Known bugs
 

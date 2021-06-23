@@ -1,9 +1,45 @@
 __default__:
-  partition: "med"
+  partition: "high"
   nodes: 1
   cpus: "{threads}"
   name: "{rule}.{wildcards}"
   output: "logs/{rule}.{wildcards}.out"
-  time: "04:00:00"
+  time: "00:30:00"
   email: 'etholleman@ucdavis.edu'
   mem: "8000"
+
+run_bpRNA:
+  time: "00:05:00"
+  mem: "3000"
+
+run_random_bpRNA:
+  time: "00:05:00"
+  mem: "3000"
+
+parse_bpRNA_st_files:
+  time: "00:05:00"
+  mem: "2000"
+
+run_random_SPOT_RNA_prediction:
+  mem: "8000"
+
+random_fasta_record_file:
+  mem: "2000"
+  time: "00:05:00"
+
+generate_random_seq:
+  mem: "2000"
+  time: "00:05:00"
+
+annotate_RNAss_predictions:
+  mem: "4000"
+  time: "00:05:00"
+
+parse_bpRNA_annotations:
+  mem: "2000"
+  time: "00:05:00"
+
+format_fasta_header_for_rlooper:
+  mem: "2000"
+  time: "00:05:00"
+
