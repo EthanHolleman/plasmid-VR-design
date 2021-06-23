@@ -17,10 +17,12 @@ def get_args():
     return parser.parse_args()
 
 
+
 def main():
     args = get_args()
     for each_file in Path(args.DIR).iterdir():
         ext = each_file.suffix
+
         if args.constant_stem:
             new_stem = args.constant_stem
         else:
