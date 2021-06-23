@@ -3,7 +3,7 @@
 # inputs to the workflow
 # =============================================================================
 variable_region_definitions:
-  initiation_regions: 'variable_defs/initiation_plamids.RC.tsv'
+  initiation_regions: 'variable_defs/initiation_plamids_short.RC.tsv'
 
 
 
