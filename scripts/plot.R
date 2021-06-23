@@ -484,7 +484,7 @@ main <- function(){
     print('================================')
     print('Making plots')
     print('================================')
-    pdf(output.path, width=18, height=14)
+    pdf(output.path, width=26, height=26)
     for (i in 1:nrow(df)){
         skew_content_plot <- skew_content_plot_from_df_row(df, i, WINDOW_SIZE)
         vr_table <- variable_region_table(df, i)
