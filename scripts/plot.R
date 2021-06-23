@@ -180,7 +180,7 @@ plot_deviation_from_expectation_metrics <- function(expectations.filepaths, df, 
                             axis.text.y=element_blank(),
                             axis.ticks.y=element_blank()
                         ) +
-                        + theme(
+                        theme(
                             axis.text.x = element_text(
                                 angle = 90, vjust = 0.5, hjust=1
                                 )
