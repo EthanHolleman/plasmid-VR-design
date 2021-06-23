@@ -221,17 +221,6 @@ def main():
 
     expect_def_dict = snakemake.params['config_dict']['EXPECTATION_DEFS']
 
-    # input_bp_prob = 'output/initiation_regions/files/init-1/10/init-1.1_bpprob.wig'
-    # input_lae = 'output/initiation_regions/files/init-1/1/init-1.1_avgG.wig'
-    # input_rna = 'output/initiation_regions/files/init-1/1/parsedRNA/init-1.tsv'
-
-    # length = 200  # length of sequence
-
-    # # read metric expectation files 
-    # rlooper_expect_path = 'output/expectations/rlooper/rlooper_expect.200.tsv'
-    # rna_expect_path = 'output/expectations/SPOTRNA/spotRNA_expect.200.tsv'
-
-
     # initialize expectation instances from expect files
     Expectation.extend_expect_dict_from_table(rlooper_expect_path, length)
     Expectation.extend_expect_dict_from_table(rna_expect_path, length)
