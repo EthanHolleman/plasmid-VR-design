@@ -38,4 +38,6 @@ rule all:
         expand(
             'output/{var_regions}/plots/{var_regions}.pdf',
             var_regions=variable_regions.keys()
-        )
+        ),
+        'output/initiation_regions/files/init-1/rankedSeqs/init-1.all_ranked.tsv'
+        
