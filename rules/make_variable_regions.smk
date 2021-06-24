@@ -137,7 +137,6 @@ rule aggregate_sequence_metrics:
         length = lambda wildcards: sequence_length(wildcards),
         p_name = lambda wildcards: wildcards.p_name,
         id_num = lambda wildcards: wildcards.id_num,
-        config_dict = config
     script:'../scripts/agg_seq_metrics.py'
 
 
@@ -163,6 +162,8 @@ rule rank_and_select_sampled_sequences:
         fasta='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.fasta',
         tsv='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.tsv',
         ranked='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.all_ranked.tsv'
+    params:
+        config_dict = config
     script:'../scripts/rank_seqs.py'
 
 
