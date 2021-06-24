@@ -26,7 +26,7 @@ EXPECTATION_SAMPLES: 25
 # Number of random sequences used to calculate sequence metric expectations.
 # Increasing this value will increase run time but produce a more accurate
 # expectation for each metric
-EXPECT_SAMPLES: 250
+EXPECT_SAMPLES: 20
 
 # =============================================================================
 # Important parameter definitions that will definitely impact the workflow if
