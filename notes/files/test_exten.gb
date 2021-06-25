@@ -6,10 +6,7 @@ SOURCE      .
   ORGANISM  .
 COMMENT     
 COMMENT     ApEinfo:methylated:1
-FEATURES             Location/Qualifiers
-     CDS             1..330
-                     /label="- M13 ori +"
-                     /label="-\M13\ori\+"
+
 ORIGIN
         1 TGAAAAAAGC CTGTGAGTAA TTCTGCTAAG AAAGGTGCTA CACTTTTCAA GACTAGATGT
        61 CTACAATGCC ACACCGTGGA AAAGGGTGGC CCACATAAGG TTGGTCCAAA CTTGCATGGT

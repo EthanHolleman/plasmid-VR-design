@@ -19,35 +19,35 @@ FEATURES             Location/Qualifiers
      CDS             complement(2609..3589)
                      /vntifkey="4"
                      /label="SNRPN"
-     primer_bind     3594..3606
+     primer_bind     3594..3611
                      /label="f330"
                      /ApEinfo_fwdcolor="#baffa3"
                      /ApEinfo_revcolor="#ffbaba"
-     primer_bind     complement(3838..3868)
+     primer_bind     complement(3851..3868)
                      /label="r330"
                      /ApEinfo_fwdcolor="#baffa3"
                      /ApEinfo_revcolor="#ffbaba"
-     primer_bind     3594..3606
+     primer_bind     3594..3611
                      /label="f330"
                      /ApEinfo_fwdcolor="#baffa3"
                      /ApEinfo_revcolor="#ffbaba"
-     primer_bind     complement(3838..3868)
+     primer_bind     complement(3851..3868)
                      /label="r330"
                      /ApEinfo_fwdcolor="#baffa3"
                      /ApEinfo_revcolor="#ffbaba"
-     primer_bind     3924..3941
+     primer_bind     3924..3936
                      /label="f330"
                      /ApEinfo_fwdcolor="#baffa3"
                      /ApEinfo_revcolor="#ffbaba"
-     primer_bind     complement(4198..4215)
+     primer_bind     complement(4185..4215)
                      /label="r330"
                      /ApEinfo_fwdcolor="#baffa3"
                      /ApEinfo_revcolor="#ffbaba"
-     primer_bind     3924..3941
+     primer_bind     3924..3936
                      /label="f330"
                      /ApEinfo_fwdcolor="#baffa3"
                      /ApEinfo_revcolor="#ffbaba"
-     primer_bind     complement(4198..4215)
+     primer_bind     complement(4185..4215)
                      /label="r330"
                      /ApEinfo_fwdcolor="#baffa3"
                      /ApEinfo_revcolor="#ffbaba"
@@ -111,16 +111,16 @@ ORIGIN
      3361 ccagtcacca ccgcccttcc caccgcagac acccgcaata ggacctgtcg cgacaccaca
      3421 gttgggggcg gatgggggac gcgccccaat gcgagcggac aggataccat cggggcagaa
      3481 cggcacaaca gcaagcctct gaacattccg gatctggttc tccagaacaa aggactttag
-     3541 ggcccaaatt ccgtttattc agtactccaa gacctcgagg gggggcccgg tacctcgagg
-     3601 gggggcccgg tacttctgct aagaaaggtg ctacactttt caagactaga tgtctacaat
+     3541 ggcccaaatt ccgtttattc agtactccaa gacctcgagg gggggcccgg tactgaaaaa
+     3601 agcctgtgag taattctgct aagaaaggtg ctacactttt caagactaga tgtctacaat
      3661 gccacaccgt ggaaaagggt ggcccacata aggttggtcc aaacttgcat ggtatctttg
      3721 gcagacactc tggtcaagct gaagggtatt cgtacacaga tgccaatatc aagaaaaacg
      3781 tgttgtggga cgaaaataac atgtcagagt acttgactaa cccaaagaaa tatattcctg
      3841 gtaccaagat ggcctttggt gggttgaaga aggaaaaaga cagaaacgac ttaattacct
-     3901 acttgaaaaa agcctgtgag taatgaaaaa agcctgtgag taattctgct aagaaaggtg
+     3901 actccagctt ttgttccctt tagctcgagg gggggcccgg tacttctgct aagaaaggtg
      3961 ctacactttt caagactaga tgtctacaat gccacaccgt ggaaaagggt ggcccacata
      4021 aggttggtcc aaacttgcat ggtatctttg gcagacactc tggtcaagct gaagggtatt
      4081 cgtacacaga tgccaatatc aagaaaaacg tgttgtggga cgaaaataac atgtcagagt
      4141 acttgactaa cccaaagaaa tatattcctg gtaccaagat ggcctttggt gggttgaaga
-     4201 aggaaaaaga cagaaacgac ttaattacct actccagctt ttgttccctt tag
+     4201 aggaaaaaga cagaaacgac ttaattacct acttgaaaaa agcctgtgag taa
 //

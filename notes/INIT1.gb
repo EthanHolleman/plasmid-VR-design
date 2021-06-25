@@ -10,7 +10,7 @@ COMMENT
             ApEinfo:methylated:1
 FEATURES             Location/Qualifiers
      CDS             1..330
-                     /label="hello"
+                     /label="INIT-1"
 ORIGIN
         1 ctcgaggggg ggcccggtac ttctgctaag aaaggtgcta cacttttcaa gactagatgt
        61 ctacaatgcc acaccgtgga aaagggtggc ccacataagg ttggtccaaa cttgcatggt
