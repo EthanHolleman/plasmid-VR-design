@@ -1,0 +1,21 @@
+LOCUS       INIT1                    330 bp    DNA     linear   UNK 07-FEB-2017
+DEFINITION  .
+ACCESSION   INIT1
+VERSION     INIT1
+KEYWORDS    .
+SOURCE      
+  ORGANISM  .
+            .
+COMMENT     
+            ApEinfo:methylated:1
+FEATURES             Location/Qualifiers
+     CDS             1..330
+                     /label="INIT-1"
+ORIGIN
+        1 ctcgaggggg ggcccggtac ttctgctaag aaaggtgcta cacttttcaa gactagatgt
+       61 ctacaatgcc acaccgtgga aaagggtggc ccacataagg ttggtccaaa cttgcatggt
+      121 atctttggca gacactctgg tcaagctgaa gggtattcgt acacagatgc caatatcaag
+      181 aaaaacgtgt tgtgggacga aaataacatg tcagagtact tgactaaccc aaagaaatat
+      241 attcctggta ccaagatggc ctttggtggg ttgaagaagg aaaaagacag aaacgactta
+      301 attacctact tgaaaaaagc ctgtgagtaa
+//
