@@ -172,7 +172,7 @@ secondary structure was formed by generating 500 random sequences of various
 lengths, predicting RNA secondary structure using SPOT-RNA and plotting
 results as distributions shown below. 
 
-![](resources/rnass_expect.png)
+![](resources/images/rnass_expect.png)
 
 ##### Max local average energy and min R-loop probability
 
@@ -185,8 +185,7 @@ separate "good" from "bad" variable region sequences 500 random sequences of
 various lengths were generated and then accessed using Rlooper to build an
 expectation. The results of the simulations are shown below.
 
-![](resources/rand_seq_LAE_dist.png)
-
+![](resources/images/rand_seq_LAE_dist.png)
 
 
 ## Known bugs
