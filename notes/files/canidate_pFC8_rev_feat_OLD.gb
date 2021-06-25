@@ -19,6 +19,8 @@ FEATURES             Location/Qualifiers
      CDS             complement(2609..3589)
                      /vntifkey="4"
                      /label="SNRPN"
+     CDS             complement(3594..3923)
+                     /label="EXTEN-1"
      primer_bind     3594..3611
                      /label="f330"
                      /ApEinfo_fwdcolor="#baffa3"
@@ -35,6 +37,8 @@ FEATURES             Location/Qualifiers
                      /label="r330"
                      /ApEinfo_fwdcolor="#baffa3"
                      /ApEinfo_revcolor="#ffbaba"
+     CDS             complement(3924..4253)
+                     /label="INIT-1"
      primer_bind     3924..3936
                      /label="f330"
                      /ApEinfo_fwdcolor="#baffa3"

@@ -1,0 +1,59 @@
+LOCUS       Test-init-1               79 bp    DNA     linear   UNK 01-JAN-1980
+DEFINITION  hello!.
+ACCESSION   
+VERSION     
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     CDS             1..79
+                     /label="Test-init-1"
+                     /title="Test Init Record"
+                     /authors="Donald Duck"
+     CDS             1..79
+                     /label="Test-init-1"
+                     /title="Test Init Record"
+                     /authors="Donald Duck"
+                     /definition="Teset definition"
+     CDS             1..79
+                     /label="Test-init-1"
+                     /title="Test Init Record"
+                     /authors="Donald Duck"
+                     /definition="Teset definition"
+     CDS             1..79
+                     /label="Test-init-1"
+                     /title="Test Init Record"
+                     /authors="Donald Duck"
+                     /definition="Teset definition"
+     CDS             1..79
+                     /label="Test-init-1"
+                     /title="Test Init Record"
+                     /authors="Donald Duck"
+                     /definition="Teset definition"
+     CDS             1..79
+                     /label="Test-init-1"
+                     /title="Test Init Record"
+                     /authors="Donald Duck"
+     CDS             1..79
+                     /label="Test-init-1"
+                     /title="Test Init Record"
+                     /authors="Donald Duck"
+     CDS             1..79
+                     /label="Test-init-1"
+                     /title="Test Init Record"
+                     /authors="Donald Duck"
+     CDS             1..79
+                     /label="Test-init-1"
+                     /title="Test Init Record"
+                     /authors="Donald Duck"
+                     /modification_date="06/25/2021"
+     CDS             1..79
+                     /label="Test-init-1"
+                     /title="Test Init Record"
+                     /authors="Donald Duck"
+                     /modification_date="06/25/2021"
+ORIGIN
+        1 agagaggggg gcagacgaaa gcagatagac agatgagaca gatgacacag gggacaaaag
+       61 atagatgaga gaacagata
+//

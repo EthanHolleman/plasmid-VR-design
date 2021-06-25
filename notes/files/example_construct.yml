@@ -1,0 +1,7 @@
+construct_a:
+    backbone: "backbone.gb"  # path to genback record describing plamid backbone
+    insert_downstream_of: "promotor_a"  # label of feature in backbone file to insert downstream of
+    contents:
+        - "VAR_REGION"  # variable region keyword. Insert variable region here.
+        - "extension_region.gb"  # 
+        - "UNIQUE_CUTTER"  # restriction site keyword, insert a uniquely cutting RE here
