@@ -1,8 +1,10 @@
-from pathlib import Path
 import datetime
+from pathlib import Path
+
+from Bio import SeqIO
 from pydna.genbankrecord import GenbankRecord
 from pydna.readers import read
-from Bio import SeqIO
+
 
 def safe_dict_access(d, key):
     if key in d:
