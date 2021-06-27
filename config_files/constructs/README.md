@@ -39,6 +39,9 @@ promotor. The workflow will identify this feature from the `backbone` record
 and select the closest downstream restriction site to linearize the backbone
 and insert the fragments. 
 
+**Note**: If the feature has a label containing `\` characters then the `\` in
+`insert_downstream_of` should be escaped as `\\`. 
+
 #### `contents`
 
 This is an ordered list of the fragments to be included in the insert. The
