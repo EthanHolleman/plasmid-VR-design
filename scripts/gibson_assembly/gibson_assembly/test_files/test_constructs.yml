@@ -1,0 +1,15 @@
+# Example / testing construct definition config yaml file
+
+initiation_construct:
+  backbone: "scripts/gibson_assembly/gibson_assembly/test_files/pFC8_test.gb"
+  insert_downstream_of: "T7\\promoter"  # insert downstream of existing T3 promotor
+  contents:
+    - 'VAR_REGION'
+    - 'scripts/gibson_assembly/gibson_assembly/test_files/test_gb.gb'  # example constant extension region
+
+termination_construct :
+  backbone: "scripts/gibson_assembly/gibson_assembly/test_files/pFC8_test.gb"
+  insert_downstream_of: "T7\\promoter"
+  contents:  # since termination region, insert extension region first
+    - 'scripts/gibson_assembly/gibson_assembly/test_files/test_gb.gb'
+    - 'VAR_REGION'
