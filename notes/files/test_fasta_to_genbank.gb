@@ -1,7 +1,7 @@
 LOCUS       Test-init-1               79 bp    DNA     linear   UNK 01-JAN-1980
-DEFINITION  hello!.
-ACCESSION   
-VERSION     
+DEFINITION  MYRECORDID_This is my record stay away!.
+ACCESSION   MYRECORDID_This
+VERSION     MYRECORDID_This
 KEYWORDS    .
 SOURCE      .
   ORGANISM  .
@@ -11,48 +11,13 @@ FEATURES             Location/Qualifiers
                      /label="Test-init-1"
                      /title="Test Init Record"
                      /authors="Donald Duck"
+                     /modification_date="06/27/2021"
      CDS             1..79
                      /label="Test-init-1"
                      /title="Test Init Record"
                      /authors="Donald Duck"
-                     /definition="Teset definition"
-     CDS             1..79
-                     /label="Test-init-1"
-                     /title="Test Init Record"
-                     /authors="Donald Duck"
-                     /definition="Teset definition"
-     CDS             1..79
-                     /label="Test-init-1"
-                     /title="Test Init Record"
-                     /authors="Donald Duck"
-                     /definition="Teset definition"
-     CDS             1..79
-                     /label="Test-init-1"
-                     /title="Test Init Record"
-                     /authors="Donald Duck"
-                     /definition="Teset definition"
-     CDS             1..79
-                     /label="Test-init-1"
-                     /title="Test Init Record"
-                     /authors="Donald Duck"
-     CDS             1..79
-                     /label="Test-init-1"
-                     /title="Test Init Record"
-                     /authors="Donald Duck"
-     CDS             1..79
-                     /label="Test-init-1"
-                     /title="Test Init Record"
-                     /authors="Donald Duck"
-     CDS             1..79
-                     /label="Test-init-1"
-                     /title="Test Init Record"
-                     /authors="Donald Duck"
-                     /modification_date="06/25/2021"
-     CDS             1..79
-                     /label="Test-init-1"
-                     /title="Test Init Record"
-                     /authors="Donald Duck"
-                     /modification_date="06/25/2021"
+                     /modification_date="06/27/2021"
+                     /id="test-id1"
 ORIGIN
         1 agagaggggg gcagacgaaa gcagatagac agatgagaca gatgacacag gggacaaaag
        61 atagatgaga gaacagata
