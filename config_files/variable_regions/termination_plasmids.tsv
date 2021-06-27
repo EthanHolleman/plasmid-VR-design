@@ -1,0 +1,10 @@
+name	gc_skew	gc_content	length	at_skew	at_content	cluster_length	cluster_nuc	clustering_method	reverse_complement	role
+term-1	0	0.5	200	0	NA	NA	NA	NA	1	Terminator_1
+term-2	-0.2	0.4	200	0	NA	NA	NA	NA	1	Terminator_2
+term-3	-0.4	0.3	200	0	NA	NA	NA	NA	1	Terminator_3
+term-4	0	0.5	200	0.2	NA	2	G	find_available_random_range	1	Terminator_4
+term-5	-0.2	0.4	200	0.2	NA	3	G	find_available_random_range	1	Terminator_5
+term-6	-0.4	0.3	200	0.2	NA	4	G	find_available_random_range	1	Terminator_6
+term-7	0	0.5	200	0.4	NA	2	G	find_available_random_range	1	Terminator_7
+term-8	-0.2	0.4	200	0.4	NA	3	G	find_available_random_range	1	Terminator_8
+term-9	-0.4	0.3	200	0.4	NA	4	G	find_available_random_range	1	Terminator_9
