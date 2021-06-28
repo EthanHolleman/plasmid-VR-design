@@ -7,7 +7,7 @@ rule make_assembly:
         vr_genbank='output/{var_name}/files/{p_name}/constructs/{p_name}.gb',
         assembly_dir=directory('output/{var_name}/files/{p_name}/constructs')
     params:
-        vr_row_def = lambda wildcards: get_p_record(wilcards),
+        vr_row_def = lambda wildcards: get_p_record(wildcards),
         constructs = config['construct_definitions']
     script:'../scripts/gibson_assembly/gibson_assembly.py'
 
