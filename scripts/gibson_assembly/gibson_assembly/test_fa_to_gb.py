@@ -1,5 +1,6 @@
 import pytest
 from pathlib import Path
+import pandas as pd
 import os
 import sys
 
@@ -9,13 +10,16 @@ sys.path.append(CUR_DIR)
 
 from gibson_assembly.fa_to_gb import *
 
+
 @pytest.fixture
 def genbank_record():
     return str(Path(CUR_DIR).joinpath('test_files/test_gb.gb'))
 
+
 @pytest.fixture
 def fasta_record():
     return str(Path(CUR_DIR).joinpath('test_files/fasta.fa'))
+
 
 @pytest.fixture
 def record_data():
@@ -25,6 +29,29 @@ def record_data():
         'definition': 'testDef',
         'misc': 'This locus can fit 2 cats'
     }
+
+
+@pytest.fixture
+def vr_def_row():
+    df = pd.read_csv(
+        'scripts/gibson_assembly/gibson_assembly/test_files/initiation_plamids_short.RC.tsv',
+        sep='\t')
+    for i, row in df.iterrows():
+        return row
+
+
+@pytest.fixture
+def vr_genbank_file(fasta_record, vr_def_row, genbank_record):
+    return convert_variable_region_fasta_to_genbank(
+        fasta_record, vr_def_row, genbank_record, 
+    )
+
+
+def test_convert_variable_region_fasta_to_genbank(vr_genbank_file):
+    assert os.path.isfile(vr_genbank_file)
+    content = open(vr_genbank_file).read()
+    assert len(content) > 1
+
 
 @pytest.fixture
 def ftgb(fasta_record):
