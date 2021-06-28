@@ -3,9 +3,9 @@
 # inputs to the workflow
 # =============================================================================
 variable_region_definitions:
-  initiation_regions: 'variable_defs/initiation_plamids_short.RC.tsv'
+  initiation_regions: 'config_files/variable_regions/initiation_plamids_short.RC.tsv'
 
-
+construct_definitions: 'config_files/constructs/test_constructs.yml'
 
 # =============================================================================
 # Program constants and parameters you can but probably don't need to
