@@ -13,13 +13,13 @@ def safe_dict_access(d, key):
         return None
 
 
-def convert_variable_region_fasta_to_genbank(vr_fasta_path, vr_def_row, genbank_path):
+def convert_variable_region_fasta_to_genbank(vr_fasta_path, vr_row_def, genbank_path):
     '''Convert a fasta file containting the sequence for a variable region to
     a Genbank formated file. Along the way add a labeling feature.
 
     Args:
         vr_fasta_path (str): Filepath of variable region fasta.
-        vr_def_row (Series): Pandas series (row) instance derived from variable
+        vr_row_def (Series): Pandas series (row) instance derived from variable
         region's definition tsv file.
         genbank_path (str): Path to write output genbank file to.
     Returns:
@@ -27,13 +27,13 @@ def convert_variable_region_fasta_to_genbank(vr_fasta_path, vr_def_row, genbank_
         str: Path to genbank file.
     '''
     data = {
-        'locus': vr_def_row['name'],
-        'label': vr_def_row['name'],
-        'definition': vr_def_row['role']
+        'locus': vr_row_def['name'],
+        'label': vr_row_def['name'],
+        'definition': vr_row_def['role']
     }
 
     to_genbank = fastaToGenbank(vr_fasta_path, data)
-    to_genbank.add_label_feature(label=vr_def_row['name'], **dict(vr_def_row))
+    to_genbank.add_label_feature(label=vr_row_def['name'], **dict(vr_row_def))
     to_genbank.write_record(genbank_path)
 
     return genbank_path
