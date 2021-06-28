@@ -1,0 +1,29 @@
+LOCUS       extension_region-1                   200 bp    DNA     linear   UNK 01-JAN-1980
+DEFINITION  initiation_region_1.
+ACCESSION   VR_init-1-1_initiation_region_1_GCskew:0.1_GCcontent:0.4_ATskew:0_ATcontent:0.6_Clustered:False
+VERSION     VR_init-1-1_initiation_region_1_GCskew:0.1_GCcontent:0.4_ATskew:0_ATcontent:0.6_Clustered:False
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     CDS             1..200
+                     /label="init-1"
+                     /modification date="06/28/2021"
+                     /name="init-1"
+                     /gc_skew="0.1"
+                     /gc_content="0.4"
+                     /length=200
+                     /at_skew="nan"
+                     /at_content="nan"
+                     /cluster_length="nan"
+                     /cluster_nuc="nan"
+                     /clustering_method="nan"
+                     /reverse_complement=1
+                     /role="initiation_region_1"
+ORIGIN
+        1 ccaactccta aatttaatcg tggcagtttc cttatacaaa ccgaatattt acaagtgacg
+       61 actccgcatt actcttggaa tgaattaata cgacagagtc gctgctatct gttttcgtat
+      121 tcaacgagta aactactaca atgactatac tctcatgggt tctaaacact gtggggttta
+      181 tgcaacatag atcggaggcc
+//
