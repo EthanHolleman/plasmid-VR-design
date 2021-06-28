@@ -1,4 +1,5 @@
 import os
+from pandas.core.reshape.tile import cut
 import yaml
 
 from pydna.readers import read
@@ -37,30 +38,13 @@ class Construct():
         self.inserts = inserts
 
     @property
-    def backbone_labels(self):
-        '''Get labels of all features in the backbone as dictionary; keys are
-        labels values are features.
-
-        Returns:
-            set: Labels of all backbone features
-        '''
-        features_by_labels = {}
-        for feature in self.backbone.features:
-            label = feature.qualifiers['label']
-            if label:
-                assert len(label) == 1
-                label = label.pop()
-                features_by_labels[label] = feature
-        return features_by_labels
-
-    @property
     def backbone(self):
         return self._backbone
 
     @backbone.setter
     def backbone(self, new_bone):
         assert os.path.isfile(new_bone)
-        self._backbone = read(new_bone)
+        self._backbone = Backbone(new_bone)
 
     @property
     def downstream_of(self):
@@ -68,9 +52,6 @@ class Construct():
 
     @downstream_of.setter
     def downstream_of(self, new_label):
-        print(repr(new_label))
-        s = set(self.backbone_labels.keys())
-        assert new_label in s
         self._downstream_of = new_label
 
     @property
@@ -92,12 +73,12 @@ class Construct():
 
 class Backbone():
 
-    def __init__(filepath):
+    def __init__(self, filepath):
         self.filepath = filepath
         self.genbank = read(filepath)
     
     @property
-    def feature_labels(self):
+    def feature_labels_dict(self):
         # labels of all features
         features_by_labels = {}
         for feature in self.genbank.features:
@@ -108,9 +89,20 @@ class Backbone():
                 features_by_labels[label] = feature
         return features_by_labels
     
+    @property
+    def feature_labels(self):
+        feat_labs = set([])
+        for feature in self.genbank.features:
+                label = feature.qualifiers['label']
+                if label:
+                    assert len(label) == 1
+                    label = label.pop()
+                    feat_labs.add(label)
+        return feat_labs
+    
 
     def get_closest_downstream_unique_RS(self, feature_label):
-        seqFeature = self.feature_labels[feature_label]
+        seqFeature = self.feature_labels_dict[feature_label]
         rb = RestrictionBatch([], ['C'])
         cut_analysis = Analysis(rb, self.genbank.seq, linear=False)
         unique_cutters = {
@@ -123,11 +115,13 @@ class Backbone():
     
         # get enzyme with RS min distance from seqFeature
         best_enzyme = min(distances, key=lambda e: abs(distances.get(e)))
-        return {best_enzyme: 
-                    {'distance': distances[best_enzyme], 
-                    'cut_site': unique_cutters[best_enzyme]
+        cut_details = {
+                    'distance': distances[best_enzyme], 
+                    'cut_site': unique_cutters[best_enzyme].pop()
                     }
-            }
+        print(cut_details)
+        return best_enzyme, cut_details, seqFeature
+        
     
     def insert_fragments(self, inserts, insert_downstream_of):
         cutter = self.get_closest_downstream_unique_RS(insert_downstream_of)
@@ -140,8 +134,6 @@ class Backbone():
         assembly_final = Assembly(frag_list[:-1])
 
         return assembly_final
-
-
 
     def _inserts_to_amplicons(inserts):
         return [primer_design(each_insert) for each_insert in inserts]
