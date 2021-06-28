@@ -9,12 +9,19 @@ def main():
     construct_yaml= snakemake.params['constructs']
 
     vr_region_genbank = str(snakemake.output['vr_genbank'])
+    assembly_dir = str(snakemake.output['assembly_dir'])
 
     vr_genbank_file = convert_variable_region_fasta_to_genbank(
         vr_region_fasta
     )
     constructs = Construct.init_from_yaml(construct_yaml)
+
+    construct = constructs[vr_row_def['construct']]  # get the construct this VR uses
     
+    # insert the variable region creating new construct
+    vr_construct = construct.specify_variable_region(vr_genbank_file)
+    vr_construct.write_assembly()
+
 
 
 

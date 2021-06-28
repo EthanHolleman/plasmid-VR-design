@@ -1,6 +1,8 @@
 import pytest
 import os
 import pandas as pd
+from pathlib import Path
+import shutil
 
 from gibson_assembly.construct import *
 from gibson_assembly.test_fa_to_gb import vr_genbank_file, fasta_record, vr_def_row
@@ -20,10 +22,22 @@ def genbank_record():
 def construct_yaml():
     return 'scripts/gibson_assembly/gibson_assembly/test_files/test_constructs.yml'
 
+@pytest.fixture
+def assembly_dir():
+    return 'scripts/gibson_assembly/gibson_assembly/test_files/test_assembly'
 
 @pytest.fixture
 def constructs(construct_yaml):
     return Construct.init_from_yaml(construct_yaml)
+
+
+@pytest.fixture
+def vr_constructs(constructs, vr_genbank_file):
+    vr_constructs = []
+    for construct in constructs:
+        vr_constructs.append(
+            construct.specify_variable_region(vr_genbank_file))
+    return vr_constructs
 
 
 def test_init_from_yaml(construct_yaml):
@@ -84,3 +98,20 @@ def test_insert_fragments(vr_genbank_file, constructs):
         assert isinstance(assembly['assembly'], Assembly)
         assert isinstance(assembly, dict)
         assert len(assembly['fragments']) == 2 + len(vr_construct.inserts)
+
+
+def test_write_assembly(vr_constructs, assembly_dir):
+
+    if os.path.isdir(assembly_dir):
+        shutil.rmtree(str(assembly_dir))
+    os.mkdir(assembly_dir)
+    for each_construct in vr_constructs:
+        each_construct.write_assembly(str(assembly_dir))
+        files = []
+        for each_file in Path(assembly_dir).iterdir():
+            files.append(each_file)
+        
+        assert len(files) > 1, files
+    
+
+

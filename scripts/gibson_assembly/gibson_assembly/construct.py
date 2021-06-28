@@ -81,8 +81,17 @@ class Construct():
             )
         self._inserts = insert_instances
 
-    def make_assembly(self, variable_region):
-        pass
+    def write_assembly(self, output_dir):
+        assembly = self.backbone.insert_fragments(
+            self.inserts, self.downstream_of)
+
+        loci = '_'.join(set([self.backbone.genbank.locus] +
+                        [insert.locus for insert in self.inserts]))
+
+        assembly['candidate'].locus = loci
+
+        write_assembly_dir(output_dir, assembly)
+        return output_dir
 
     def specify_variable_region(self, vr_genbank_path):
         assert os.path.isfile(vr_genbank_path)
@@ -175,4 +184,22 @@ class Backbone():
         return [primer_design(each_insert) for each_insert in inserts]
 
 
-def write_assembly_dir(output_dir, construct, assembly_dict):
+def write_primer_list(primers, output_path):
+    with open(str(output_path), 'w') as handle:
+        for pair in primers:
+            handle.write(pair[0].format("fasta"))
+            handle.write(pair[1].format("fasta"))
+    return output_path
+
+
+def write_assembly_dir(output_dir, assembly_dict):
+    output_dir = Path(output_dir)
+    primes_path = str(output_dir.joinpath('gibson_primers.fasta'))
+    expect_construct = str(output_dir.joinpath('expected_construct.gb'))
+    write_primer_list(assembly_dict['primers'], primes_path)
+    assembly_dict['candidate'].write(expect_construct)
+
+    assert os.path.isfile(primes_path)
+    assert os.path.isfile(expect_construct)
+
+    return expect_construct, primes_path
