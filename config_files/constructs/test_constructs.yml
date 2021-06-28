@@ -2,14 +2,14 @@
 
 initiation_construct:
   backbone: "resources/files/genbank/pFC8.gb"
-  insert_downstream_of: "T3"  # insert downstream of existing T3 promotor
+  insert_downstream_of: "T3\\promoter"  # insert downstream of existing T3 promotor
   contents:
     - 'VAR_REGION'
     - 'resources/files/genbank/extension_region.gb'  # example constant extension region
 
 termination_construct :
   backbone: "resources/files/genbank/pFC8.gb"
-  insert_downstream_of: "T3"
+  insert_downstream_of: "T3\\promoter"
   contents:  # since termination region, insert extension region first
     - 'resources/files/genbank/extension_region.gb'
     - 'VAR_REGION'
