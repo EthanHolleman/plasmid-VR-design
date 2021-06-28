@@ -2,6 +2,7 @@ import os
 from pandas.core.reshape.tile import cut
 import yaml
 import copy
+from pathlib import Path
 
 from gibson_assembly import INSERT_KEYWORDS
 
@@ -13,6 +14,7 @@ from pydna.assembly import Assembly
 from Bio.Restriction import Analysis, RestrictionBatch
 from pydna.amplicon import Amplicon
 from Bio import SeqIO
+
 
 class Construct():
 
@@ -31,7 +33,7 @@ class Construct():
                 backbone=attributes['backbone'],
                 downstream_of=attributes['insert_downstream_of'],
                 inserts=attributes['contents']
-                )
+            )
             )
         return constructs
 
@@ -78,10 +80,9 @@ class Construct():
                 each_insert
             )
         self._inserts = insert_instances
-    
+
     def make_assembly(self, variable_region):
         pass
-    
 
     def specify_variable_region(self, vr_genbank_path):
         assert os.path.isfile(vr_genbank_path)
@@ -96,7 +97,8 @@ class Construct():
 
             return var_construct
         else:
-            raise TypeError('This construct does not contain a variable region!')
+            raise TypeError(
+                'This construct does not contain a variable region!')
 
 
 class Backbone():
@@ -104,7 +106,7 @@ class Backbone():
     def __init__(self, filepath):
         self.filepath = filepath
         self.genbank = read(filepath)
-    
+
     @property
     def feature_labels_dict(self):
         # labels of all features
@@ -116,40 +118,41 @@ class Backbone():
                 label = label.pop()
                 features_by_labels[label] = feature
         return features_by_labels
-    
+
     @property
     def feature_labels(self):
         feat_labs = set([])
         for feature in self.genbank.features:
-                label = feature.qualifiers['label']
-                if label:
-                    assert len(label) == 1
-                    label = label.pop()
-                    feat_labs.add(label)
+            label = feature.qualifiers['label']
+            if label:
+                assert len(label) == 1
+                label = label.pop()
+                feat_labs.add(label)
         return feat_labs
-    
 
     def get_closest_downstream_unique_RS(self, feature_label):
         seqFeature = self.feature_labels_dict[feature_label]
         rb = RestrictionBatch([], ['C'])
         cut_analysis = Analysis(rb, self.genbank.seq, linear=False)
         unique_cutters = {
-            enzyme: cut_loc for enzyme, cut_loc in cut_analysis.full().items() 
+            enzyme: cut_loc for enzyme, cut_loc in cut_analysis.full().items()
             if len(cut_loc) == 1
-            }
-        unique_cutters_dist_func = lambda loc: loc[0] - int(seqFeature.location.start)
-        distances = {enzyme: unique_cutters_dist_func(loc) for enzyme, loc in unique_cutters.items()}
-        distances = {enzyme: dist for enzyme, dist in distances.items() if dist * seqFeature.strand > 0}
-    
+        }
+        def unique_cutters_dist_func(
+            loc): return loc[0] - int(seqFeature.location.start)
+        distances = {enzyme: unique_cutters_dist_func(
+            loc) for enzyme, loc in unique_cutters.items()}
+        distances = {enzyme: dist for enzyme,
+                     dist in distances.items() if dist * seqFeature.strand > 0}
+
         # get enzyme with RS min distance from seqFeature
         best_enzyme = min(distances, key=lambda e: abs(distances.get(e)))
         cut_details = {
-                    'distance': distances[best_enzyme], 
-                    'cut_site': unique_cutters[best_enzyme].pop()
-                    }
+            'distance': distances[best_enzyme],
+            'cut_site': unique_cutters[best_enzyme].pop()
+        }
         return best_enzyme, cut_details, seqFeature
-        
-    
+
     def insert_fragments(self, inserts, insert_downstream_of):
         cutter = self.get_closest_downstream_unique_RS(insert_downstream_of)
         enzyme = cutter[0]
@@ -168,10 +171,8 @@ class Backbone():
             'candidate': candidate
         }
 
-
     def _inserts_to_amplicons(self, inserts):
         return [primer_design(each_insert) for each_insert in inserts]
 
 
-# def write_assembly_dir(output_dir, construct, assembly_dict):
-
+def write_assembly_dir(output_dir, construct, assembly_dict):
