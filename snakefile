@@ -27,17 +27,25 @@ include: 'rules/calculate_expectations.smk'
 include: 'rules/RNA_sec_struct.smk'
 include: 'rules/rlooper.smk'
 include: 'rules/plot_variable_regions.smk'
+include: 'rules/gibson.smk'
 
 
 rule all:
     input:
         expand(
-            'output/{var_regions}/sequences/plasmid_sequences.fasta',
-            var_regions=variable_regions.keys()
-        ),
-        expand(
-            'output/{var_regions}/plots/{var_regions}.pdf',
-            var_regions=variable_regions.keys()
-        ),
-        'output/initiation_regions/files/init-1/rankedSeqs/init-1.all_ranked.tsv'
+            'output/{var_name}/files/.assemble_all_plasmid_constructs.done',
+             var_name=variable_regions.keys()
+        )
+
+# rule all:
+#     input:
+#         expand(
+#             'output/{var_regions}/sequences/plasmid_sequences.fasta',
+#             var_regions=variable_regions.keys()
+#         ),
+#         expand(
+#             'output/{var_regions}/plots/{var_regions}.pdf',
+#             var_regions=variable_regions.keys()
+#         ),
+#         'output/initiation_regions/files/init-1/rankedSeqs/init-1.all_ranked.tsv'
         
