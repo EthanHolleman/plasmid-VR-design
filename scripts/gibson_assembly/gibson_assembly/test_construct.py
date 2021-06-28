@@ -28,7 +28,7 @@ def assembly_dir():
 
 @pytest.fixture
 def constructs(construct_yaml):
-    return Construct.init_from_yaml(construct_yaml)
+    return Construct.init_from_yaml(construct_yaml).values()
 
 
 @pytest.fixture
@@ -40,9 +40,7 @@ def vr_constructs(constructs, vr_genbank_file):
     return vr_constructs
 
 
-def test_init_from_yaml(construct_yaml):
-    constructs = Construct.init_from_yaml(construct_yaml)
-    assert constructs
+def test_init_from_yaml(constructs):
     for each_construct in constructs:
         assert isinstance(each_construct, Construct)
         assert each_construct.name

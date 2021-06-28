@@ -26,14 +26,13 @@ class Construct():
             except yaml.YAMLError as exc:
                 raise exc
 
-        constructs = []
+        constructs = {}
         for construct, attributes in yaml_dict.items():
-            constructs.append(cls(
+            constructs[construct] = cls(
                 name=construct,
                 backbone=attributes['backbone'],
                 downstream_of=attributes['insert_downstream_of'],
                 inserts=attributes['contents']
-            )
             )
         return constructs
 
@@ -72,6 +71,8 @@ class Construct():
                 # attempt to read filepaths as genbank entries, these represent
                 # constant regions. Otherwises should be a keyword represeting
                 # type of insert region.
+                print('EACH INSERT')
+                print(each_insert)
                 each_insert = read(each_insert)
             else:
                 assert each_insert in INSERT_KEYWORDS

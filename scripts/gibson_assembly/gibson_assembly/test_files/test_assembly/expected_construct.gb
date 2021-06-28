@@ -1,4 +1,4 @@
-LOCUS       pFC8_init-1             3993 bp    DNA     circular UNK 01-JAN-1980
+LOCUS       init-1_pFC8_test        3993 bp    DNA     circular UNK 01-JAN-1980
 DEFINITION  description.
 ACCESSION   id
 VERSION     id
@@ -16,19 +16,8 @@ FEATURES             Location/Qualifiers
      misc_feature    3575
                      /vntifkey="21"
      CDS             3559..3758
-                     /label="init-1"
+                     /label="TEST_LABEL 1"
                      /modification date="06/28/2021"
-                     /name="init-1"
-                     /gc_skew="0.1"
-                     /gc_content="0.4"
-                     /length="200"
-                     /at_skew="nan"
-                     /at_content="nan"
-                     /cluster_length="nan"
-                     /cluster_nuc="nan"
-                     /clustering_method="nan"
-                     /reverse_complement="1"
-                     /role="initiation_region_1"
      primer_bind     3559..3578
                      /label="f200"
                      /ApEinfo_fwdcolor="#baffa3"

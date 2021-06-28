@@ -33,11 +33,13 @@ def record_data():
 
 @pytest.fixture
 def vr_def_row():
-    df = pd.read_csv(
+    df = pd.read_table(
         'scripts/gibson_assembly/gibson_assembly/test_files/initiation_plamids_short.RC.tsv',
-        sep='\t')
-    for i, row in df.iterrows():
-        return row
+       ).set_index(
+        'name', drop=False)
+    return df.loc[df['name'] == 'init-1']
+        # return vr_tables[wildcards.var_name].loc[
+        # vr_tables[wildcards.var_name]['name'] == wildcards.p_name]
 
 
 @pytest.fixture

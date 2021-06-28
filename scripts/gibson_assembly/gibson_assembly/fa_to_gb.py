@@ -26,12 +26,16 @@ def convert_variable_region_fasta_to_genbank(vr_fasta_path, vr_row_def, genbank_
         
         str: Path to genbank file.
     '''
+    print(type(vr_row_def))
+    print(vr_row_def)
+    vr_row_def = vr_row_def.to_dict(orient='records')
+    assert len(vr_row_def) == 1
+    vr_row_def = vr_row_def[0]
     data = {
-        'locus': vr_row_def['name'],
-        'label': vr_row_def['name'],
-        'definition': vr_row_def['role']
+        'locus': str(vr_row_def['name']),
+        'label': str(vr_row_def['name']),
+        'definition': str(vr_row_def['role'])
     }
-
     to_genbank = fastaToGenbank(vr_fasta_path, data)
     to_genbank.add_label_feature(label=vr_row_def['name'], **dict(vr_row_def))
     to_genbank.write_record(genbank_path)
