@@ -1,6 +1,6 @@
 #!/bin/bash -login
 #SBATCH -p high                      # partition, or queue, to assign to
-#SBATCH -J VR_TESTING              # name for job
+#SBATCH -J VR_RUN              # name for job
 #SBATCH -o j%j.out # file to write STDOUT to
 #SBATCH -e j%j.err # file to write error output to
 #SBATCH -N 1                        # one "node", or computer
