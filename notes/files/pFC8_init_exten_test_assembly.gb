@@ -43,7 +43,7 @@ FEATURES             Location/Qualifiers
                      /label="f330"
                      /ApEinfo_fwdcolor="#baffa3"
                      /ApEinfo_revcolor="#ffbaba"
-     primer_bind     complement(4203..4215)
+     primer_bind     complement(4199..4215)
                      /label="r330"
                      /ApEinfo_fwdcolor="#baffa3"
                      /ApEinfo_revcolor="#ffbaba"
@@ -51,7 +51,7 @@ FEATURES             Location/Qualifiers
                      /label="f330"
                      /ApEinfo_fwdcolor="#baffa3"
                      /ApEinfo_revcolor="#ffbaba"
-     primer_bind     complement(4203..4215)
+     primer_bind     complement(4199..4215)
                      /label="r330"
                      /ApEinfo_fwdcolor="#baffa3"
                      /ApEinfo_revcolor="#ffbaba"
@@ -126,5 +126,5 @@ ORIGIN
      4021 tttgggttag tcaagtactc tgacatgtta ttttcgtccc acaacacgtt tttcttgata
      4081 ttggcatctg tgtacgaata cccttcagct tgaccagagt gtctgccaaa gataccatgc
      4141 aagtttggac caaccttatg tgggccaccc ttttccacgg tgtggcattg tagacatcta
-     4201 gtcttgaaaa gtgtagcacc tttcttagca gaagtaccgg gccccccctc gag
+     4201 gtcttgaaaa gtgtagcacc tttcttagca gaaagggaac aaaagctggg tac
 //

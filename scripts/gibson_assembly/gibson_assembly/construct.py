@@ -71,8 +71,6 @@ class Construct():
                 # attempt to read filepaths as genbank entries, these represent
                 # constant regions. Otherwises should be a keyword represeting
                 # type of insert region.
-                print('EACH INSERT')
-                print(each_insert)
                 each_insert = read(each_insert)
             else:
                 assert each_insert in INSERT_KEYWORDS
@@ -82,17 +80,17 @@ class Construct():
             )
         self._inserts = insert_instances
 
-    def write_assembly(self, output_dir):
-        assembly = self.backbone.insert_fragments(
-            self.inserts, self.downstream_of)
+    # def write_assembly(self, output_dir):
+    #     assembly = self.backbone.insert_fragments(
+    #         self.inserts, self.downstream_of)
 
-        loci = '_'.join(set([self.backbone.genbank.locus] +
-                        [insert.locus for insert in self.inserts]))
+    #     loci = '_'.join(set([self.backbone.genbank.locus] +
+    #                     [insert.locus for insert in self.inserts]))
 
-        assembly['candidate'].locus = loci
+    #     assembly['candidate'].locus = loci
 
-        write_assembly_dir(output_dir, assembly)
-        return output_dir
+    #     write_assembly_dir(output_dir, assembly)
+    #     return output_dir
 
     def specify_variable_region(self, vr_genbank_path):
         assert os.path.isfile(vr_genbank_path)
@@ -125,7 +123,7 @@ class Backbone():
             label = feature.qualifiers['label']
             if label:
                 assert len(label) == 1
-                label = label.pop()
+                label = label[0]
                 features_by_labels[label] = feature
         return features_by_labels
 
@@ -136,7 +134,7 @@ class Backbone():
             label = feature.qualifiers['label']
             if label:
                 assert len(label) == 1
-                label = label.pop()
+                label = label[0]
                 feat_labs.add(label)
         return feat_labs
 
@@ -162,45 +160,55 @@ class Backbone():
             'cut_site': unique_cutters[best_enzyme].pop()
         }
         return best_enzyme, cut_details, seqFeature
+    
 
-    def insert_fragments(self, inserts, insert_downstream_of):
+    def linearize(self, insert_downstream_of):
+        '''Return linearized version of the backbone by cutting with
+        restriction enzyme closest to the feature identified by the
+        insert_downstream_of argument. 
+        '''
         cutter = self.get_closest_downstream_unique_RS(insert_downstream_of)
         enzyme = cutter[0]
-        linear = self.genbank.linearize(enzyme)
-        amplicons = self._inserts_to_amplicons(inserts)
-        frag_list = assembly_fragments(
-            [linear] + amplicons + [linear]
-        )
-        primers = [(y.forward_primer, y.reverse_primer) for y in amplicons]
-        assembly_final = Assembly(frag_list[:-1])
-        candidate = assembly_final.assemble_circular()[0]
-        return {
-            'assembly': assembly_final,
-            'fragments': frag_list,
-            'primers': primers,
-            'candidate': candidate
-        }
+        return self.genbank.linearize(enzyme)
 
-    def _inserts_to_amplicons(self, inserts):
-        return [primer_design(each_insert) for each_insert in inserts]
+    # def insert_fragments(self, inserts, insert_downstream_of):
+    #     cutter = self.get_closest_downstream_unique_RS(insert_downstream_of)
+    #     enzyme = cutter[0]
+    #     linear = self.genbank.linearize(enzyme)
+    #     amplicons = self._inserts_to_amplicons(inserts)
+    #     frag_list = assembly_fragments(
+    #         [linear] + amplicons + [linear]
+    #     )
+    #     primers = [(y.forward_primer, y.reverse_primer) for y in amplicons]
+    #     assembly_final = Assembly(frag_list[:-1])
+    #     candidate = assembly_final.assemble_circular()[0]
+    #     return {
+    #         'assembly': assembly_final,
+    #         'fragments': frag_list,
+    #         'primers': primers,
+    #         'candidate': candidate
+    #     }
 
-
-def write_primer_list(primers, output_path):
-    with open(str(output_path), 'w') as handle:
-        for pair in primers:
-            handle.write(pair[0].format("fasta"))
-            handle.write(pair[1].format("fasta"))
-    return output_path
+    # def _inserts_to_amplicons(self, inserts):
+    #     return [primer_design(each_insert) for each_insert in inserts]
 
 
-def write_assembly_dir(output_dir, assembly_dict):
-    output_dir = Path(output_dir)
-    primes_path = str(output_dir.joinpath('gibson_primers.fasta'))
-    expect_construct = str(output_dir.joinpath('expected_construct.gb'))
-    write_primer_list(assembly_dict['primers'], primes_path)
-    assembly_dict['candidate'].write(expect_construct)
+# def write_primer_list(primers, output_path):
+#     with open(str(output_path), 'w') as handle:
+#         for pair in primers:
+#             handle.write(pair[0].format("fasta"))
+#             handle.write(pair[1].format("fasta"))
+#     return output_path
 
-    assert os.path.isfile(primes_path)
-    assert os.path.isfile(expect_construct)
 
-    return expect_construct, primes_path
+# def write_assembly_dir(output_dir, assembly_dict):
+#     output_dir = Path(output_dir)
+#     primes_path = str(output_dir.joinpath('gibson_primers.fasta'))
+#     expect_construct = str(output_dir.joinpath('expected_construct.gb'))
+#     write_primer_list(assembly_dict['primers'], primes_path)
+#     assembly_dict['candidate'].write(expect_construct)
+
+#     assert os.path.isfile(primes_path)
+#     assert os.path.isfile(expect_construct)
+
+#     return expect_construct, primes_path

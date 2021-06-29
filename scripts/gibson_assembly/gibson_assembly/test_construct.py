@@ -86,30 +86,30 @@ def test_specify_variable_region(vr_genbank_file, constructs):
             assert isinstance(vr_construct.inserts[insert_index], GenbankFile)
 
 
-def test_insert_fragments(vr_genbank_file, constructs):
-    for construct in constructs:
-        vr_construct = construct.specify_variable_region(vr_genbank_file)
-        backbone = vr_construct.backbone
+# def test_insert_fragments(vr_genbank_file, constructs):
+#     for construct in constructs:
+#         vr_construct = construct.specify_variable_region(vr_genbank_file)
+#         backbone = vr_construct.backbone
 
-        assembly = backbone.insert_fragments(
-            vr_construct.inserts, vr_construct.downstream_of)
-        assert isinstance(assembly['assembly'], Assembly)
-        assert isinstance(assembly, dict)
-        assert len(assembly['fragments']) == 2 + len(vr_construct.inserts)
+#         assembly = backbone.insert_fragments(
+#             vr_construct.inserts, vr_construct.downstream_of)
+#         assert isinstance(assembly['assembly'], Assembly)
+#         assert isinstance(assembly, dict)
+#         assert len(assembly['fragments']) == 2 + len(vr_construct.inserts)
 
 
-def test_write_assembly(vr_constructs, assembly_dir):
+# def test_write_assembly(vr_constructs, assembly_dir):
 
-    if os.path.isdir(assembly_dir):
-        shutil.rmtree(str(assembly_dir))
-    os.mkdir(assembly_dir)
-    for each_construct in vr_constructs:
-        each_construct.write_assembly(str(assembly_dir))
-        files = []
-        for each_file in Path(assembly_dir).iterdir():
-            files.append(each_file)
+#     if os.path.isdir(assembly_dir):
+#         shutil.rmtree(str(assembly_dir))
+#     os.mkdir(assembly_dir)
+#     for each_construct in vr_constructs:
+#         each_construct.write_assembly(str(assembly_dir))
+#         files = []
+#         for each_file in Path(assembly_dir).iterdir():
+#             files.append(each_file)
         
-        assert len(files) > 1, files
+#         assert len(files) > 1, files
     
 
 

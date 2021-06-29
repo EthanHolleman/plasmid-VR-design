@@ -2,7 +2,7 @@
 
 initiation_construct:
   backbone: "scripts/gibson_assembly/gibson_assembly/test_files/pFC8_test.gb"
-  insert_downstream_of: "T7\\promoter"  # insert downstream of existing T3 promotor
+  insert_downstream_of: "T3\\promoter"  # insert downstream of existing T3 promotor
   contents:
     - 'VAR_REGION'
     - 'scripts/gibson_assembly/gibson_assembly/test_files/test_gb.gb'  # example constant extension region

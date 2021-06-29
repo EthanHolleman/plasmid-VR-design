@@ -1,21 +1,127 @@
-LOCUS       EXTEN1                   330 bp    DNA     linear   UNK 07-FEB-2017
-DEFINITION  .
-ACCESSION   EXTEN1
-VERSION     EXTEN1
+LOCUS       AY746957                3624 bp    DNA     linear   BCT 26-JUL-2016
+DEFINITION  Serratia sp. MF 416 LacZ (lacZ) and LacY (lacY) genes, partial cds.
+ACCESSION   AY746957
+VERSION     AY746957.1
 KEYWORDS    .
-SOURCE      
-  ORGANISM  .
-            .
-COMMENT     
-            ApEinfo:methylated:1
+SOURCE      Serratia sp. MF 416
+  ORGANISM  Serratia sp. MF 416
+            Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacterales;
+            Yersiniaceae; Serratia; unclassified Serratia.
+REFERENCE   1  (bases 1 to 3624)
+  AUTHORS   Stoebel,D.M.
+  TITLE     Lack of evidence for horizontal transfer of the lac operon into
+            Escherichia coli
+  JOURNAL   Mol. Biol. Evol. 22 (3), 683-690 (2005)
+   PUBMED   15563718
+  REMARK    Erratum:[Mol Biol Evol. 2005 Apr;22(4):1159]
+REFERENCE   2  (bases 1 to 3624)
+  AUTHORS   Stoebel,D.M.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (10-SEP-2004) Deptartment of Ecology and Evolution, Stony
+            Brook University, 1500 Circle Road, Stony Brook, NY 11794-5245, USA
 FEATURES             Location/Qualifiers
-     CDS             1..330
-                     /label="EXTEN-1"
-ORIGIN
-        1 tgaaaaaagc ctgtgagtaa ttctgctaag aaaggtgcta cacttttcaa gactagatgt
-       61 ctacaatgcc acaccgtgga aaagggtggc ccacataagg ttggtccaaa cttgcatggt
-      121 atctttggca gacactctgg tcaagctgaa gggtattcgt acacagatgc caatatcaag
-      181 aaaaacgtgt tgtgggacga aaataacatg tcagagtact tgactaaccc aaagaaatat
-      241 attcctggta ccaagatggc ctttggtggg ttgaagaagg aaaaagacag aaacgactta
-      301 attacctact ccagcttttg ttccctttag
+     source          1..3624
+                     /organism="Serratia sp. MF 416"
+                     /mol_type="genomic DNA"
+                     /strain="MF 416"
+                     /db_xref="taxon:296547"
+     gene            <1..2475
+                     /gene="lacZ"
+     CDS             <1..2475
+                     /gene="lacZ"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="LacZ"
+                     /protein_id="AAW73246.1"
+                     /translation="RMSGIFRDVSLLHKPATHLSDITITTPLSDSFRRGELVVEVRAH
+                     QPQQHRVQVQLWRKDALIAEKMQDFGSEIIDERGAYDERTALRLSVDQPALWSAETPA
+                     LYRAVVKLLSPTGELVEAEAYDVGFRQVEISNGLLKLNGQPLLIRGTNRHEHHPEHGQ
+                     VMDEATMRQDILLMKQHNFNAVRCSHYPNHPLWYKLCDRYGLYVVDEANIETHGMQPM
+                     NRLSNDPLWLPAMSERVTRMVQRDRNHACIIIWSLGNESGHGGNHDALYRWIKSEDPT
+                     RPVQYEGGGANTAATDIICPMYARVEQDQPFPAVPKWSISKWIGLPDEQRPLILCEYA
+                     HAMGNSFGGFDRYWQAFRKHPRLQGGFVWDWVDQGLTRLADDGQSYWAYGGDFGDTPN
+                     DRQFCLNGLVFPDRSPHPALFEAQRAQQFYQFQMLEQQPLTIEVNSEYLFRTSDNERL
+                     YWNVALDGKAIAQGEVELSLAAQGTQKIVLGDIPELNESGELWLNVEVRQIKATAWSE
+                     EHHRCAWDQWRLSRPLTLPTDHSDVQAQSPRLNEHNDAFSIEWGTQRWQFNRQTGLLE
+                     QWWQGEKAALLTPLRDNFTRAPLDNDIGVSDAAHIDPNAWVERWKRAGMYALETRLLQ
+                     CEVDAISQGVQICTAHAYTYQNNILFISRKTFLINRLGKLHIDVNVDVAHGIPAPARI
+                     GLSCQLAEVAERATWLGLGPHENYPDRQLSAQLGRWTLPLSELHTPYIFPTENGLRCN
+                     TRQLNFGHWQWQGDFHFGLSQYGQQQLADTSHNHLLRAEQGVWVNIDGFHMGVGGDDS
+                     WSPSVSPDFILDAEHYNYKLVWQYGG"
+     gene            2689..>3624
+                     /gene="lacY"
+     CDS             2689..>3624
+                     /gene="lacY"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="LacY"
+                     /protein_id="AAW73247.1"
+                     /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINQVSKSD
+                     TGIIFASISFFSLLFQPIFGLLSDKLGLRKHLLWIITGMLVLFAPFFIYVFGPLLRTN
+                     IVLGSIAGGIYLGFIYNGGAPAIEAYIEKVSRRSSFEFGRARLFGCVGWALCASVVGI
+                     MFTINNEFVFWLGSGCAVILAILLLIAKPETGSTAQVADKLGANTKPFNLRLAFELLK
+                     DSKLWFLALYVVGVSCTYDVFDQQFANFFTSFFSSTDQGTRVFGYVTTMGELLNASIM
+                     FFAPLIVNRIGGKNALLLAGLIMSIRIIGSSFASTP"
+ORIGIN      
+        1 GTACCCAGCT TTTGTTCCCT cgatgtcagc ctgttgcata aacccgccac tcatctgagc
+       61 gatatcacta ttaccacgcc attaagcgac agtttccgcc gaggggaatt ggtggtagag
+      121 gtgcgagctc atcagccaca acaacaccgg gtgcaggtgc aactgtggcg taaagatgcc
+      181 ctgatcgccg agaaaatgca ggacttcggc agcgagatta tcgatgagcg cggcgcttat
+      241 gatgagcgta cggccctgcg tttgtcggtg gatcaacccg ccttgtggag tgcagagacg
+      301 ccagcactgt atcgtgcagt ggtcaagttg ctctccccaa cgggtgaatt ggtggaggct
+      361 gaagcctatg atgtgggttt ccgacaggtt gagatcagca acggcttact gaaacttaac
+      421 ggacagccgc tattgatacg tggcaccaac cgccatgagc accatccaga gcatggccaa
+      481 gtcatggatg aagccactat gcgtcaggat atcctgctga tgaagcagca taatttcaac
+      541 gctgtgcgct gttcccatta tccgaaccat ccgctgtggt acaagctgtg cgatcgctac
+      601 ggcctgtatg tagtggatga ggctaatatt gagacccacg gcatgcagcc gatgaaccgg
+      661 ctaagcaacg atccgctctg gctacccgcc atgagcgagc gcgttacgcg tatggtgcag
+      721 cgtgaccgta accacgcttg tattatcatc tggtcattgg gcaatgaatc tggccatggg
+      781 ggtaaccatg atgctctgta ccgctggata aaaagcgagg atcctacccg tccggtacag
+      841 tatgaaggcg gcggagccaa cacagccgca acggatatta tctgcccgat gtacgcaagg
+      901 gttgagcagg atcaaccctt cccagcggta cccaaatggt cgatcagcaa gtggatcggt
+      961 ttacccgacg aacagcgtcc gctgatcctg tgcgagtacg cccatgccat gggcaatagc
+     1021 tttggcggtt ttgatcgtta ttggcaggct tttcgtaaac atccgcgact gcaggggggc
+     1081 tttgtctggg actgggtcga ccaaggtctg acgcgccttg ccgatgatgg tcaatcatac
+     1141 tgggcctacg gcggcgactt cggtgatacg cctaatgacc gccaattttg tcttaacggg
+     1201 ttggtattcc ccgatcgcag tccgcacccg gcactgtttg aagcgcaacg tgcccagcag
+     1261 ttttatcagt tccaaatgct cgaacagcag ccgttaacga ttgaagtgaa cagtgagtat
+     1321 ttattccgta ccagcgataa cgagcggctt tattggaatg tagccttgga cgggaaagct
+     1381 attgcacagg gcgaggttga actgtcatta gcggcgcagg gtacgcagaa aatcgtactg
+     1441 ggtgacattc ccgaactgaa cgagagcggt gaactgtggt tgaacgtgga ggttcgccaa
+     1501 atcaaggcaa cagcatggtc tgaagaacat catcgttgtg cctgggacca gtggcgttta
+     1561 tctcgaccat taaccttacc aaccgaccac agtgacgttc aggcgcagtc acctcggttg
+     1621 aacgagcata atgacgcttt cagcattgag tgggggacac agcgctggca gttcaatcgg
+     1681 caaaccggtt tgcttgagca gtggtggcag ggtgaaaaag ccgctctgtt gacgccgtta
+     1741 cgcgacaatt ttacccgtgc accgcttgat aatgacattg gggtgagcga tgccgcccac
+     1801 atcgatccta atgcgtgggt agaacgttgg aagagggctg gtatgtacgc gctagaaacg
+     1861 cgcctactgc aatgtgaagt tgatgcgatt tcccaaggcg tgcagatctg cacagcccat
+     1921 gcttatacct accaaaacaa catcctgttt atcagccgca agaccttttt gattaaccgc
+     1981 ctgggtaaac tgcatattga tgtcaacgtt gatgtagccc atggaattcc agcgccggcg
+     2041 cggattggct tgagctgcca acttgcggag gttgctgaac gcgcaacgtg gctggggtta
+     2101 ggcccacacg aaaactaccc tgaccgccag ctttccgctc agcttgggcg gtggacgtta
+     2161 ccgctttctg agctacatac gccatacatt ttcccaacgg agaatggatt gcgttgcaat
+     2221 actcgacaac tgaattttgg ccactggcag tggcaggggg atttccactt tggcctcagc
+     2281 caatatggcc agcaacaatt ggctgatacc tcgcataacc atttgttgcg tgcggagcag
+     2341 ggggtttggg tcaatataga tggtttccat atgggggtcg gcggtgatga ctcatggagc
+     2401 ccgagtgtga gcccggattt tatcttggat gctgagcact ataactataa gttggtttgg
+     2461 cagtacggcg gataatactt attcatcaca ggatggattc ttagttgcac ttgtttaccc
+     2521 cagtcacatg gttatctatg tgactggggg cgtgggttta gcaccttccc gcaactcgag
+     2581 tatttaaaat acagaaaagt atctatctcc tacctgatga aaatataaat aatgtcgcgt
+     2641 acttgagtat gaactcaaac gcgcttgggt tttgcacaag gagttcgcat gtactattta
+     2701 aaaaacacta acttctggat gtttgggctg tttttctttt tctacttctt catcatgggc
+     2761 gcctattttc cgtttttccc tatctggttg catgacatca accaggtcag taaaagcgat
+     2821 accggcatta tctttgccag catatccttc ttctcattac tgtttcagcc gatatttggc
+     2881 ttgctgtcgg ataagctggg gttgagaaaa cacttgctgt ggataatcac agggatgctg
+     2941 gtgttgtttg cgccgttctt tatctatgtt tttggcccgt tactacgcac caatattgtt
+     3001 ttaggctcca ttgcgggtgg gatttatctt ggcttcattt ataacggagg tgcgccggct
+     3061 attgaagcgt atatagagaa agtaagccgc cgtagctcgt ttgaatttgg ccgcgcgcgt
+     3121 ttatttggct gtgtgggctg ggcgttgtgt gcctctgtgg ttggcatcat gtttaccatc
+     3181 aacaacgaat ttgtattctg gttaggctct ggttgtgccg tgatactggc gatcctgtta
+     3241 cttatcgcca agcctgaaac cggcagtacc gcccaggttg ctgacaaatt gggcgctaac
+     3301 accaagccat ttaatttacg cttggcgttc gaattattga aagactcaaa actgtggttt
+     3361 ttagccctgt acgtggtagg cgtttcctgt acctatgatg tgtttgatca gcaattcgcc
+     3421 aactttttca cttcgttctt ctcttctacc gatcaaggaa cgcgtgtttt tggttatgtc
+     3481 accacgatgg gggagttgct gaatgcctca atcatgtttt ttgcaccgct cattgtgaat
+     3541 cgtatcggtg gaaaaaatgc gctgttgctc gcggggctaa tcatgtctat acgtattatc
+     3601 ggctcttcat ttgcctctac gccg
 //
