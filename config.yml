@@ -3,7 +3,7 @@
 # inputs to the workflow
 # =============================================================================
 variable_region_definitions:
-  initiation_regions: 'variable_defs/initiation_plamids_short.RC.tsv'
+  initiation_regions: 'config_files/variable_regions/initiation_plamids.RC.tsv'
 
 
 
@@ -21,12 +21,12 @@ PRIMER3_TEMPLATE: 'resources/files/primer3_settings_template.txt'
 # number of different sequence to generate for each variable region definition
 # increasing this value will increase run time but generally increase
 # quality of final sequence
-EXPECTATION_SAMPLES: 25
+EXPECTATION_SAMPLES: 50
 
 # Number of random sequences used to calculate sequence metric expectations.
 # Increasing this value will increase run time but produce a more accurate
 # expectation for each metric
-EXPECT_SAMPLES: 20
+EXPECT_SAMPLES: 200
 
 # =============================================================================
 # Important parameter definitions that will definitely impact the workflow if
