@@ -17,11 +17,11 @@ rule generate_random_seq:
         '../envs/python.yml'
     output:
         fasta=expand(
-            'output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.fasta',
+            'output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}.fasta',
             id_num=CASE_RANGE, allow_missing=True
         ),
         tsv=expand(
-            'output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.tsv',
+            'output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}.tsv',
             id_num=CASE_RANGE, allow_missing=True
         )
     params:
@@ -31,7 +31,7 @@ rule generate_random_seq:
         '../scripts/varmids/varmids.py'
 
 
-rule run_SPOT_RNA_prediction_on_variable_regions:
+rule SPOT_RNA_prediction_on_variable_regions:
     # SPOT RNA insists on adding the fasta header to output files
     # so had to write quick python scruipt to rename back to what
     # snakemake is expecting after run is complete
@@ -39,14 +39,14 @@ rule run_SPOT_RNA_prediction_on_variable_regions:
         '../envs/SPOT-RNA.yml'
     input:
         spot='submodules/SPOT-RNA/SPOT-RNA-models',
-        fasta='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.fasta'
+        fasta='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}.fasta'
     output:
         expand(
-            'output/{var_name}/files/{p_name}/{id_num}/SPOTRNA/{p_name}-{id_num}.{SPOT_EXT}',
+            'output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/SPOTRNA/{p_name}-{id_num}.{SPOT_EXT}',
             SPOT_EXT=SPOT_RNA_EXTS, allow_missing=True)
     params:
         spot_exe=lambda wildcards: os.path.join('submodules/SPOT-RNA', 'SPOT-RNA.py'),
-        output_dir=lambda wildcards: f'output/{wildcards.var_name}/files/{wildcards.p_name}/{wildcards.id_num}/SPOTRNA',
+        output_dir=lambda wildcards: f'output/{wildcards.var_name}/files/{wildcards.p_name}/candidate_seqs/{wildcards.id_num}/SPOTRNA',
         rename_script='scripts/truncate_rename.py'
     shell:'''
     mkdir -p {params.output_dir}
@@ -57,10 +57,10 @@ rule run_SPOT_RNA_prediction_on_variable_regions:
 
 rule annotate_RNAss_predictions:
     input:
-        bpseq='output/{var_name}/files/{p_name}/{id_num}/SPOTRNA/{p_name}-{id_num}.bpseq',
+        bpseq='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/SPOTRNA/{p_name}-{id_num}.bpseq',
         bpRNA='submodules/bpRNA'
     output:
-        'output/{var_name}/files/{p_name}/{id_num}/bpRNA/{p_name}-{id_num}.st'
+        'output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/bpRNA/{p_name}-{id_num}.st'
     params:
         output_dir=lambda wildcards: f'output/{wildcards.var_name}/files/{wildcards.p_name}/{wildcards.id_num}/bpRNA',
         bp_script='submodules/bpRNA/bpRNA.pl',
@@ -74,17 +74,17 @@ rule annotate_RNAss_predictions:
 
 rule parse_bpRNA_annotations:
     input:
-        'output/{var_name}/files/{p_name}/{id_num}/bpRNA/{p_name}-{id_num}.st'
+        'output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/bpRNA/{p_name}-{id_num}.st'
     output:
-        tsv_summary='output/{var_name}/files/{p_name}/{id_num}/parsedRNA/{p_name}.tsv',
+        tsv_summary='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/parsedRNA/{p_name}.tsv',
     script:'../scripts/bpRNA_parser.py'
 
 
 rule format_fasta_header_for_rlooper:
     input:
-        'output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.fasta'
+        'output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}.fasta'
     output:
-        'output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.rlooper_ready.fasta'
+        'output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}.rlooper_ready.fasta'
     params:
         record_name = lambda wildcards: f'{wildcards.p_name}.{wildcards.id_num}'
     script:'../scripts/format_fa_header_for_rlooper.py'
@@ -92,19 +92,19 @@ rule format_fasta_header_for_rlooper:
 
 rule rlooper_variable_region:
     input:
-        fasta='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.rlooper_ready.fasta',
+        fasta='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}.rlooper_ready.fasta',
         rlooper='submodules/rlooper/bin/rlooper'
     output:
         expand(
-            'output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}_{rlooper_suffix}',
+            'output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}_{rlooper_suffix}',
             rlooper_suffix=RLOOPER_FILE_SUFFI, allow_missing=True
             )
     params:
         superhelicity='-0.07',
         domain_size='auto',
         minlength='30',  # value used in R-looper paper
-        out_path=lambda wildcards: f'output/{wildcards.var_name}/files/{wildcards.p_name}/{wildcards.id_num}/{wildcards.p_name}.{wildcards.id_num}',
-        out_dir=lambda wildcards: f'output/{wildcards.var_name}/files/{wildcards.p_name}/{wildcards.id_num}'
+        out_path=lambda wildcards: f'output/{wildcards.var_name}/files/{wildcards.p_name}/candidate_seqs/{wildcards.id_num}/{wildcards.p_name}.{wildcards.id_num}',
+        out_dir=lambda wildcards: f'output/{wildcards.var_name}/files/{wildcards.p_name}/candidate_seqs/{wildcards.id_num}'
     shell:'''
     mkdir -p {params.out_dir}
     chmod 777 {input.rlooper}
@@ -124,15 +124,15 @@ rule aggregate_sequence_metrics:
     conda:
         '../envs/python.yml'
     input:
-        bp_prob='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}_bpprob.wig',
-        lae='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}_avgG.wig',
-        RNAss='output/{var_name}/files/{p_name}/{id_num}/parsedRNA/{p_name}.tsv',
-        fasta='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.fasta',
-        tsv='output/{var_name}/files/{p_name}/{id_num}/{p_name}.{id_num}.tsv',
+        bp_prob='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}_bpprob.wig',
+        lae='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}_avgG.wig',
+        RNAss='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/parsedRNA/{p_name}.tsv',
+        fasta='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}.fasta',
+        tsv='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}.tsv',
         rlooper_expect = lambda wildcards: f'output/expectations/rlooper/rlooper_expect.{sequence_length(wildcards)}.tsv',
         RNAss_expect =lambda wildcards: f'output/expectations/SPOTRNA/spotRNA_expect.{sequence_length(wildcards)}.tsv'
     output:
-        'output/{var_name}/files/{p_name}/{id_num}/aggregatedMetrics/{p_name}.tsv'
+        'output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/aggregatedMetrics/{p_name}.tsv'
     params:
         length = lambda wildcards: sequence_length(wildcards),
         p_name = lambda wildcards: wildcards.p_name,
@@ -145,7 +145,7 @@ rule concatenate_seq_metrics:
         '../envs/python.yml'
     input:
         expand(
-            'output/{var_name}/files/{p_name}/{id_num}/aggregatedMetrics/{p_name}.tsv',
+            'output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/aggregatedMetrics/{p_name}.tsv',
             id_num=CASE_RANGE, allow_missing=True
         )
     output:
