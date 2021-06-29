@@ -47,9 +47,9 @@ We will add a constant extension region of 100 bp, and synthesize and clone a se
 
 ## Running the workflow
 
-Workflow is run via snakemake.
+Workflow is run via snakemake, simplified workflow is shown below.
 
-![](resources/dag.png)
+![](resources/images/dag.png)
 
 Ways to execute workflow
 
