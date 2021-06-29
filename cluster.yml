@@ -1,5 +1,5 @@
 __default__:
-  partition: "high"
+  partition: "med"
   nodes: 1
   cpus: "{threads}"
   name: "{rule}.{wildcards}"
