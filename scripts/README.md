@@ -16,6 +16,6 @@ that are not submodules.
 - `random_seq_gen.py`: Generate a random nucleotide sequence fasta file with R-looper ready header.
 - `rank_seqs.py`: TODO
 - `split_fasta.py`: Splits a multi-record fasta file into individual fasta files, each with one record. This was part of getting around the fact that some programs are ok with multi-record input and others are not and because of this it is easier to just do everything as single records.
-- `truncate_rename.py`: TODO.
+- `truncate_rename.py`: TODO
 
 
