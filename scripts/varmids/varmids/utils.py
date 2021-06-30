@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import csv
 from Bio.Restriction import *
+from Bio.Seq import Seq
 
 SEED = 12311997  # turn this into a parameter in snakemake somewhere in future
 
@@ -154,13 +155,14 @@ class RestrictionSiteChecker():
 
     @cutters.setter
     def cutters(self, new_cutters):
+        print(new_cutters)
         approved_cutters = []
         for each_new_cutter in new_cutters:
             if isinstance(each_new_cutter, str):
                 if each_new_cutter in RestrictionSiteChecker.all_enzymes_dict:
-                    approved_cutters.append[
+                    approved_cutters.append(
                         RestrictionSiteChecker.all_enzymes_dict[each_new_cutter]
-                    ]
+                    )
                 else:
                     raise TypeError('Enzyme not present in collection')
             else:
@@ -169,7 +171,7 @@ class RestrictionSiteChecker():
         self._cutters = RestrictionBatch(approved_cutters)
 
     def _check_for_cutter(self, sequence):
-        a = Analysis(self.cutters, str(sequence), linear=False).full()
+        a = Analysis(self.cutters, Seq(sequence), linear=False).full()
         for cutter, cuts in a.items():
             if len(cuts) > 0:
                 return False
@@ -177,6 +179,6 @@ class RestrictionSiteChecker():
 
     def generate_RE_free_sequence(self):
         seq = self.variable_region.generate_sequence()
-        while self._check_for_cutter(seq.seq) == False:
+        while self._check_for_cutter(seq.nuc_seq) == False:
             seq = self.variable_region.generate_sequence()
         return seq

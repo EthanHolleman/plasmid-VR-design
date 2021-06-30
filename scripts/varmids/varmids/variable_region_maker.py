@@ -1,5 +1,6 @@
 import numpy as np
 from Bio.Seq import Seq
+from Bio.Restriction import *
 
 from varmids.utils import *
 
