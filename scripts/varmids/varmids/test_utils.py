@@ -43,7 +43,7 @@ def tsv_path():
 @pytest.fixture
 def variable_region_file():
     cur_dir = os.path.dirname(os.path.realpath(__file__))
-    return os.path.join(cur_dir, 'test_files/initiation_plamids.csv')
+    return os.path.join(cur_dir, 'test_files/initiation_plamids.tsv')
 
 @pytest.fixture
 def random_cutters():
