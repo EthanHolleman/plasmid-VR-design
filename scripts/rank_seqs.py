@@ -47,7 +47,6 @@ class Sequence():
         labeled_rank_dict.update(self.seq_data)
         labeled_rank_dict.update({'overall_rank': self.rank})
         labeled_rank_dict.update({'overall_distance': self.overall_distance})
-        print(self.rank_dict, 'rank dict')
         return labeled_rank_dict
     
     def __lt__(self, other_seq):
@@ -60,8 +59,6 @@ class Ranker():
         self.sequences = sequences
      
     def rank_sequences_by_metric(self, attribute, direction, divergence):
-        print('%'*10)
-        print('ATTRIBUTE', attribute)
         assert direction == 1 or direction == -1
         assert divergence == 1 or divergence == -1
 
