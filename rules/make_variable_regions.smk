@@ -8,6 +8,13 @@ def get_p_record(wildcards):
 def get_all_p_names(wildcards):
     return list(vr_tables[wildcards.var_name]['name'])
 
+def get_all_p_names_RC(wildcards):
+    # get names of variable regions with reverse complement arg true
+    table = vr_tables[wildcards.var_name]
+    l = list(table.loc[table['reverse_complement'] == 1]['name'])
+    return l
+
+
 # this is where snakemake needs to become aware of revsere somplement files 
 # currently I do not think they are being produced. 
 # one option would be to just expand the user input to include reverse
@@ -167,12 +174,28 @@ rule rank_and_select_sampled_sequences:
     script:'../scripts/rank_seqs.py'
 
 
+rule reverse_complement_top_sequences:
+    conda:
+        '../envs/python.yml'
+    input:
+        fasta='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.fasta',
+        tsv='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.tsv'
+    output:
+        fasta='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}-RC.top_seq.fasta',
+        tsv='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}-RC.top_seq.tsv'
+    script:'../scripts/reverse_complement.py'
+
+
 rule concatenate_top_ranked_sequences_fasta:
     input:
-        lambda wildcards: expand(
+        forward_seqs=lambda wildcards: expand(
             'output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.fasta',
             p_name=get_all_p_names(wildcards), allow_missing=True
-        )      
+        ),
+        reverse_complement=lambda wildcards: expand(
+        'output/{var_name}/files/{p_name}/rankedSeqs/{p_name}-RC.top_seq.fasta',
+        p_name=get_all_p_names_RC(wildcards), allow_missing=True
+        )    
     output:
         'output/{var_name}/sequences/plasmid_sequences.fasta'
     shell:'''
@@ -184,9 +207,13 @@ rule concatenate_to_ranked_sequences_tsv:
     conda:
         '../envs/python.yml'
     input:
-        lambda wildcards: expand(
+        forward_seqs=lambda wildcards: expand(
             'output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.tsv',
             p_name=get_all_p_names(wildcards), allow_missing=True
+        ),
+        reverse_complement=lambda wildcards: expand(
+        'output/{var_name}/files/{p_name}/rankedSeqs/{p_name}-RC.top_seq.fasta',
+        p_name=get_all_p_names_RC(wildcards), allow_missing=True
         )
     output:
         'output/{var_name}/sequences/plasmid_sequences.tsv'
