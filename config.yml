@@ -40,11 +40,11 @@ EXPECTATION_SAMPLES: 5
 # expectation for each metric
 EXPECT_SAMPLES: 200
 
-
+# Parameters defining how the anchor sequence is calculated
 anchor_sequence:
-  max_attempts: 100
-  min_melting_temp: 48
-  anchor_length: 15
+  max_attempts: 100  # number of attempts to create anchor, avoids endless loop
+  min_melting_temp: 48  # min melting temperature of anchor
+  anchor_length: 15  # length of the anchor
 
   
 
