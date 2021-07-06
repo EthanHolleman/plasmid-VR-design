@@ -76,7 +76,7 @@ main <- function(){
     bpprob.files <- snakemake@input$bpprob
     output.path.plot <- as.character(snakemake@output$plot)
     output.path.expect <- as.character(snakemake@output$expect)
-
+    
     ale.means.df <- read_all_wig_means(ale.files)
     plot.ale <- plot_means(
         ale.means.df, 'local average energy'
