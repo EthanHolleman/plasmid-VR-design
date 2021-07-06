@@ -114,7 +114,6 @@ def main():
     metrics = get_metrics(dict_list)
 
     for metric in metrics:
-        print(metric, 'thIS IS IS METRIC')
         ranker.rank_sequences_by_metric(metric, **expect_def_dict[metric])
     
     ranked_seqs = sorted(ranker.sequences, key=lambda x: x.overall_distance)

@@ -1,9 +1,14 @@
 import pytest
 import numpy as np
 import os
+import random
+
+from Bio.Restriction import *
+from Bio.Seq import Seq
 
 from varmids.utils import *
 from varmids.test_variable_region_maker import all_VRs
+from varmids.variable_region_maker import Sequence
 
 
 
@@ -38,8 +43,22 @@ def tsv_path():
 @pytest.fixture
 def variable_region_file():
     cur_dir = os.path.dirname(os.path.realpath(__file__))
-    return os.path.join(cur_dir, 'test_files/initiation_plamids.csv')
+    return os.path.join(cur_dir, 'test_files/initiation_plamids.tsv')
 
+@pytest.fixture
+def random_cutters():
+    n_cutters = 5
+    all_enzymes = list(AllEnzymes)
+    return [
+        str(all_enzymes[random.randint(0, len(all_enzymes))])
+        for e in range(n_cutters)
+        ]
+
+
+@pytest.fixture
+def rsc(all_VRs, random_cutters):
+    for vr in all_VRs:
+        return RestrictionSiteChecker(vr, random_cutters)
 
 
 @pytest.fixture
@@ -165,7 +184,19 @@ def test_write_sequence_list_to_output_files(seq_list, fasta_path, tsv_path):
     os.remove(write_tsv)
 
 
+def test_init_restrictionSiteChecker(rsc):
+    assert isinstance(rsc, RestrictionSiteChecker)
+    assert isinstance(rsc.cutters, RestrictionBatch)
 
+
+def test_generate_RE_free_sequence(rsc):
+    sequence = rsc.generate_RE_free_sequence()
+    assert isinstance(sequence, Sequence)
+    assert isinstance(rsc.cutters, RestrictionBatch)
+    ana_full = Analysis(rsc.cutters, Seq(sequence.nuc_seq)).full()
+    for cutter, cuts in ana_full.items():
+        assert len(cuts) == 0
+    
         
 
 
