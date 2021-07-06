@@ -9,12 +9,14 @@ import numpy as np
 # read in all sequence files and test randoms
 np.random.seed(12311997)
 
+
 def check_enzymes(user_enzymes):
     # check in make sure all user provided enzymes are in enzymes
     enzymes = set([str(e) for e in list(AllEnzymes)])
     for each_e in user_enzymes:
         if each_e not in enzymes:
-            raise TypeError(f'{each_e} is not in list of all restriction enzymes!')
+            raise TypeError(
+                f'{each_e} is not in list of all restriction enzymes!')
 
 
 def read_genbank_records(record_list):
@@ -32,7 +34,7 @@ def check_for_common_substrings(seq_x, seq_y, limit=None):
     the length of seq_y. 
     '''
     if not limit:
-        limit = int(len(seq_y) / 0.75) 
+        limit = int(len(seq_y) / 0.75)
 
     seq_x_rc = seq_x.reverse_complement()
     seq_y_rc = seq_y.reverse_complement()
@@ -49,7 +51,7 @@ def check_for_common_substrings(seq_x, seq_y, limit=None):
             return True
     return False
 
-    
+
 def check_for_prohibited_restriction_sites(candidate_anchor, prohibited_cutters):
     '''Check to ensure that no prohibited restriction enzyme recognition sites
     are present in the anchor sequence. If a prohibited site is present return
@@ -63,7 +65,8 @@ def check_for_prohibited_restriction_sites(candidate_anchor, prohibited_cutters)
     Returns:
         bool: True if no prohibited sites are found, False if any are.
     '''
-    no_cutters = set([str(n_cutter) for n_cutter in list(candidate_anchor.no_cutters())])
+    no_cutters = set([str(n_cutter)
+                     for n_cutter in list(candidate_anchor.no_cutters())])
     # get all non-cutting enzymes as a set of strings
     for each_prohibited_site in prohibited_cutters:
         if not each_prohibited_site in no_cutters:
@@ -88,9 +91,9 @@ def check_melting_temp(candidate_anchor, min_temp=48):
         return False
     else:
         return True
-    
 
-def make_anchor_seq(records, anchor_length, prohibited_cutters, 
+
+def make_anchor_seq(records, anchor_length, prohibited_cutters,
                     max_attempts=10000, min_melting_temp=48):
     '''Make a suitable anchor sequence that does not share common sub strings
     with any record in records arg, has length of anchor_length, and does
@@ -118,7 +121,8 @@ def make_anchor_seq(records, anchor_length, prohibited_cutters,
         sub_str_safe = True
         attempts += 1
         for each_record in records:
-            sub_strings = check_for_common_substrings(each_record, candidate_anchor)
+            sub_strings = check_for_common_substrings(
+                each_record, candidate_anchor)
             if sub_strings:
                 sub_str_safe = False
                 break
@@ -126,12 +130,14 @@ def make_anchor_seq(records, anchor_length, prohibited_cutters,
         if sub_str_safe:  # no common substrings now check for cutters
             additional_checks = [
                 check_melting_temp(candidate_anchor, min_melting_temp),
-                check_for_prohibited_restriction_sites(candidate_anchor, prohibited_cutters)
+                check_for_prohibited_restriction_sites(
+                    candidate_anchor, prohibited_cutters)
             ]
             if False in additional_checks:  # one or more checks failed
                 continue
             else:
                 return candidate_anchor
+
 
 def main():
     print('='*10)
@@ -140,12 +146,13 @@ def main():
     backbones = snakemake.params['backbones']
     variable_regions = str(snakemake.input['variable_regions'])
 
-    prohibited_cutters = [str(c) for c in snakemake.params['prohibited_cutters']]
+    prohibited_cutters = [str(c)
+                          for c in snakemake.params['prohibited_cutters']]
     check_enzymes(prohibited_cutters)
 
     max_attempts = int(snakemake.params['max_attempts'])
     anchor_length = int(snakemake.params['anchor_length'])
-    min_melting_temp= int(snakemake.params['min_melting_temp'])
+    min_melting_temp = int(snakemake.params['min_melting_temp'])
 
     output_path = str(snakemake.output)
 
@@ -160,10 +167,10 @@ def main():
     print('='*10)
     print('Dropping anchor')
     anchor_seq = make_anchor_seq(
-        all_records, anchor_length=15, 
+        all_records, anchor_length=15,
         prohibited_cutters=prohibited_cutters, min_melting_temp=min_melting_temp,
         max_attempts=max_attempts
-    
+
     )
     anchor_seq.id = 'Anchor_sequence'
     anchor_seq.description = ''
@@ -171,6 +178,5 @@ def main():
     print('Done')
 
 
-          
 if __name__ == '__main__':
     main()
