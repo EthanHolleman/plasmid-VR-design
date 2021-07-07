@@ -17,3 +17,4 @@ dependencies:
   - r-scales
   - r-ggsci
   - r-viridis
+  - r-ggally
