@@ -13,6 +13,10 @@ FEATURES             Location/Qualifiers
                      /label="3_prime_HR"
                      /note="Homology arm of variable region insert taken from
                      (base 1) positions 539-569 of pFC8"
+                     /pFC8_start=538
+                     /pFC8_end=568
+                     /pFC8_seguid="vdm_tMoMid1Tn52rB-wpm-eMOGc"
+                     /date="07/07/2021"
 ORIGIN
         1 gaattccccc cccagtcgcc ccacgtaccc
 //
