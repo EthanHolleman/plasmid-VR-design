@@ -1,10 +1,12 @@
 import numpy as np
 import pandas as pd
 import csv
+from Bio.Restriction import *
+from Bio.Seq import Seq
 
 SEED = 12311997  # turn this into a parameter in snakemake somewhere in future
 
-RAND_GEN =  np.random.default_rng(SEED)
+RAND_GEN = np.random.default_rng(SEED)
 
 nuc_cache = {}
 
@@ -26,7 +28,7 @@ def nuc_count_calculator(skew, content, seq_len, closest=True):
 
     nuc_combos = [(i, number_nucs-i) for i in range(1, number_nucs+1)]  # all possible combinations 
     skew_content_dict = {
-        tuple(nuc_combo):(calculate_content(nuc_combo, seq_len), calculate_skew(nuc_combo))
+        tuple(nuc_combo): (calculate_content(nuc_combo, seq_len), calculate_skew(nuc_combo))
         for nuc_combo in nuc_combos
     }
     best_nuc_combo, cur_distance = None, float('inf')
@@ -39,7 +41,7 @@ def nuc_count_calculator(skew, content, seq_len, closest=True):
             break
         elif distance < cur_distance:
             best_nuc_combo, cur_distance = nuc_combo, distance
-    
+
     return best_nuc_combo
 
 
@@ -49,8 +51,8 @@ def calculate_skew(nuc_combo):
 
 def calculate_content(nuc_combo, seq_len):
     return sum(nuc_combo) / seq_len
-        
-    
+
+
 def range_is_occupied(occupied_coords, start, end):
     sites = np.arange(start, end, dtype=int)
     occupied_coords = occupied_coords.astype(int)
@@ -71,7 +73,7 @@ def find_available_random_range(occupied_coords, range_length):
         while True:
             start, end = random_range_of_length_n(
                 len(occupied_coords), range_length
-                )
+            )
             if range_is_occupied(occupied_coords, start, end):
                 continue
             else:
@@ -95,7 +97,7 @@ def get_int_half_length(length):
 
 
 def read_variable_region_dataframe(dataframe):
-    # convert pandas input to clean dictionary 
+    # convert pandas input to clean dictionary
     table = dataframe.to_dict(orient='records')
     for row in table:
         for key, val in row.items():
@@ -103,6 +105,7 @@ def read_variable_region_dataframe(dataframe):
                 row[key] = None
 
     return table
+
 
 def read_variable_region_config_file(file_path):
     table = pd.read_table(file_path)
@@ -123,7 +126,7 @@ def write_sequence_list_to_output_files(seq_list, fasta_path, tsv_path):
             seq_rows.append(seq.to_dict())
 
     pd.DataFrame(seq_rows).to_csv(tsv_path, sep='\t', index=False, na_rep='NA')
-    
+
     return fasta_path, tsv_path
 
 
@@ -138,4 +141,48 @@ def count_nucleotides_in_seq(seq):
     return counts
 
 
+class RestrictionSiteChecker():
 
+    all_enzymes_dict = {str(e): e for e in AllEnzymes}
+
+    @staticmethod
+    def read_REs_from_row(row_dict):
+        return [s.strip() for s in row_dict['excluded_sites'].split(',')]
+
+    def __init__(self, variable_region, cutters):
+        self.variable_region = variable_region
+        self.cutters = cutters
+
+    @property
+    def cutters(self):
+        return self._cutters
+
+    @cutters.setter
+    def cutters(self, new_cutters):
+        print(new_cutters)
+        approved_cutters = []
+        for each_new_cutter in new_cutters:
+            if isinstance(each_new_cutter, str):
+                if each_new_cutter in RestrictionSiteChecker.all_enzymes_dict:
+                    approved_cutters.append(
+                        RestrictionSiteChecker.all_enzymes_dict[each_new_cutter]
+                    )
+                else:
+                    raise TypeError('Enzyme not present in collection')
+            else:
+                raise TypeError(
+                    'Restriction enzymes must be specified by their name as a string')
+        self._cutters = RestrictionBatch(approved_cutters)
+
+    def _check_for_cutter(self, sequence):
+        a = Analysis(self.cutters, Seq(sequence), linear=False).full()
+        for cutter, cuts in a.items():
+            if len(cuts) > 0:
+                return False
+        return True
+
+    def generate_RE_free_sequence(self):
+        seq = self.variable_region.generate_sequence()
+        while self._check_for_cutter(seq.nuc_seq) == False:
+            seq = self.variable_region.generate_sequence()
+        return seq

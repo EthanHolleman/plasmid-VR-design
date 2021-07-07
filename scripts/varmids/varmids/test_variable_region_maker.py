@@ -8,7 +8,7 @@ import os
 
 cur_dir = os.path.dirname(os.path.realpath(__file__))
 
-TEST_PLASMIDS_PATH = os.path.join(cur_dir, 'test_files/initiation_plamids.csv')
+TEST_PLASMIDS_PATH = os.path.join(cur_dir, 'test_files/initiation_plamids.tsv')
 TEST_PLASMIDS_DICT = read_variable_region_config_file(TEST_PLASMIDS_PATH)
 
 

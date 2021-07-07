@@ -26,7 +26,7 @@ rule plot_variable_regions:
             var_name=wildcards.var_name, p_name=get_all_p_names(wildcards),
             id_num=CASE_RANGE
         ),
-        expectation_files = lambda wildcards: all_expectations(wildcards) 
+        expectation_files = lambda wildcards: set(all_expectations(wildcards) )
     output:
         'output/{var_name}/plots/{var_name}.pdf'
     script:'../scripts/plot.R'

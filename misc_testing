@@ -30,5 +30,4 @@ include: 'rules/RNA_sec_struct.smk'
 
 rule all:
     input:
-        'testing/rlooper_benchmarking/plots/rand_seq_LAE_dist.png',
-        'testing/RNA_sec_struct/plots/plot.png'
+        'testing/rlooper_benchmarking/plots/rand_seq_LAE_dist.png'

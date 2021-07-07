@@ -78,7 +78,7 @@ read_name_and_id_num_from_parsed_RNA <- function(parsed.RNA.filepath){
 
     split <- unlist(strsplit(as.character(parsed.RNA.filepath), '/'))  
     id.num <- split[length(split)-2]
-    name <-  split[length(split)-3]
+    name <-  split[length(split)-4]
 
     c(name, id.num)
 }
@@ -385,7 +385,7 @@ plot_seq <- function(df, i){
 
 extract_vr_name_from_rlooper_filepath <- function(file.path){
     split <- unlist(strsplit(as.character(file.path), '/'))
-    split[length(split)-2]
+    split[length(split)-3]
 
 }
 
@@ -440,8 +440,9 @@ plot_rlooper_calcs <- function(df, i, rlooper_attributes){
         cn <- paste(attribute, 'path', sep='_')
         message(cn)
         file.path <- df[i, c(cn)]
+        print('filepath')
         message(file.path)
-
+        print(colnames(df))
         df.seq <- read_rlooper_wig_file(file.path)
         seq <- df[i, ]$Sequence
         p <- ggplot(df.seq, aes(x=position, y=value)) + 
@@ -465,18 +466,26 @@ main <- function(){
     print('================================')
     input.path <- as.character(snakemake@input['variable_regions'])
     output.path <- as.character(snakemake@output)
-    #save.image('plot.RData')
+    save.image('plot.RData')
+    print('Reading variable regions')
     df <- read_variable_region_tsv(input.path)
+    
+    # add local average energy calculations 
+    print('Adding local average energy')
     df <- merge_rlooper_calculations(
         df, 
         snakemake@input['rlooper_lae']$rlooper_lae,
         'local_average_energy'
     )
+
+    # add bpprob calcs
+    print('Adding bpprob calculations')
     df <- merge_rlooper_calculations(
         df, 
         snakemake@input['rlooper_bprob']$rlooper_bprob,
         'bp_prob'
     )
+
     df <- merge_SPOT_RNA_predictions(snakemake@input['parsed_RNA']$parsed_RNA, df)
 
     expectation.filepaths <- unique(snakemake@input['expectation_files']$expectation_files)
@@ -484,16 +493,26 @@ main <- function(){
     print('================================')
     print('Making plots')
     print('================================')
+    print(head(df))
     pdf(output.path, width=26, height=26)
     for (i in 1:nrow(df)){
         skew_content_plot <- skew_content_plot_from_df_row(df, i, WINDOW_SIZE)
+        print('Made skew plots')
         vr_table <- variable_region_table(df, i)
+        print('Made VR table')
         diffs_barplot <- calculated_windowed_skew_content_vs_params(df, i, WINDOW_SIZE)
+        print('Made diff barplots')
         nuc_props <- nucleotide_proportions(df, i)
+        print('Made nucleotide prop plot')
         sequence <- plot_seq(df, i)
+        print('Plot sequence ')
         clustering <- plot_distance_to_next_same_nucleotide(df, i)
+        print('Plot clustering distance')
         rlooper <- plot_rlooper_calcs(df, i, c('local_average_energy', 'bp_prob'))
+        print('Plotting rlooper calcs')
         expectations <- plot_deviation_from_expectation_metrics(expectation.filepaths, df, i)
+        print('Plotting expectations')
+
 
         skew_and_rlooper <- ggarrange(
             skew_content_plot, rlooper, nrow=2, ncol=1, heights=c(1, 0.75)

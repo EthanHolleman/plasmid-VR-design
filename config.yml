@@ -6,6 +6,18 @@ variable_region_definitions:
   initiation_regions: 'config_files/variable_regions/initiation_plamids_rlooper.tsv'
 
 
+# List of names of restriction enzymes who's recognition sites should not be
+# present in any generated sequence. Case sensitive. 
+prohibited_restriction_enzyme_recognition_sites:
+  - 'EcoRI'
+  - 'KpnI'
+  - 'HindIII'
+
+
+# List of paths to genbank formatted files describing plasmid backbones that inserts
+# will be cloned into
+backbones:
+  - 'resources/files/genbank/pFC8.gb'
 
 # =============================================================================
 # Program constants and parameters you can but probably don't need to
@@ -27,6 +39,15 @@ EXPECTATION_SAMPLES: 100
 # Increasing this value will increase run time but produce a more accurate
 # expectation for each metric
 EXPECT_SAMPLES: 200
+
+# Parameters defining how the anchor sequence is calculated
+anchor_sequence:
+  max_attempts: 100  # number of attempts to create anchor, avoids endless loop
+  min_melting_temp: 48  # min melting temperature of anchor
+  anchor_length: 15  # length of the anchor
+
+  
+
 
 # =============================================================================
 # Important parameter definitions that will definitely impact the workflow if
