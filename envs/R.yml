@@ -16,3 +16,4 @@ dependencies:
   - r-ggridges
   - r-scales
   - r-ggsci
+  - r-viridis
