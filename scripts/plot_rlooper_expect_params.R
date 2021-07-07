@@ -121,19 +121,38 @@ plot_densities <- function(params.merge.df, random.merge.df){
 
     params.merge.df.cats.all <- as.data.frame(rbind(params.merge.df.cats.type, random.merge.df))
 
+    gc_skew_labels <- paste('GC skew', gc_skew_levels, sep=' ')
+    names(gc_skew_labels) <- gc_skew_levels
+
+    gc_content_labels <- paste('GC content', gc_content_levels, sep=' ')
+    names(gc_content_labels) <- gc_content_levels
+
+
     bpprob <- ggplot(params.merge.df.cats.all, aes(y=mean_bpprob, x=type, fill=type)) +
-              geom_boxplot() + stat_compare_means(method='t.test') +
-            facet_grid(rows=vars(GC_skew), cols=vars(GC_content)) +
+              geom_boxplot() +
+            facet_grid(
+                rows=vars(GC_skew), 
+                cols=vars(GC_content),
+                labeller = labeller(GC_skew=gc_skew_labels, GC_content=gc_content_labels)
+            ) +
             theme_pubr() + 
             labs(x='Mean per base R-loop probability') +
-            theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+            theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+            theme(legend.key.size = unit(2, 'cm')) +
+            theme(text = element_text(size=24))
     
     ale <- ggplot(params.merge.df.cats.all, aes(y=mean_ale, x=type, fill=type)) +
-              geom_boxplot() + stat_compare_means(method='t.test') +
-            facet_grid(rows=vars(GC_skew), cols=vars(GC_content)) +
+              geom_boxplot() +
+            facet_grid(
+                rows=vars(GC_skew), 
+                cols=vars(GC_content),
+                labeller = labeller(GC_skew=gc_skew_labels, GC_content=gc_content_labels)
+            ) +
             theme_pubr() + 
             labs(x='Mean per base average local energy') +
-            theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+            theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+            theme(legend.key.size = unit(2, 'cm')) +
+            theme(text = element_text(size=24))
 
 
     params.merge.df.cats.agg.mean <- aggregate(.~GC_skew+GC_content, params.merge.df.cats, mean)
@@ -146,10 +165,19 @@ plot_densities <- function(params.merge.df, random.merge.df){
         params.merge.df.cats.agg.mean,  params.merge.df.cats.agg.sd, by=c('GC_skew', 'GC_content')
         )
     bpprob_scatter <- ggplot(params.merge.df.cats.merge, aes(x=GC_skew, y=GC_content, fill=average_mean_bpprob)) +
-                        geom_tile() + theme_pubr() +  scale_fill_viridis(discrete=FALSE)
+                        geom_tile() + theme_pubr() + 
+                        scale_fill_viridis(discrete=FALSE) + 
+                        labs(x='GC skew', y='GC content', fill='Mean R-loop probility per sequence') +
+                        theme(legend.key.size = unit(2, 'cm')) +
+                        theme(text = element_text(size=24))
+
     
     lae_scatter <- ggplot(params.merge.df.cats.merge, aes(x=GC_skew, y=GC_content, fill=average_mean_ale)) +
-                        geom_tile() + theme_pubr() +  scale_fill_viridis(discrete=FALSE)
+                        geom_tile() + theme_pubr() +  
+                        scale_fill_viridis(discrete=FALSE) + 
+                        labs(x='GC skew', y='GC content', fill='Mean local average energy per sequence') +
+                        theme(legend.key.size = unit(2, 'cm')) +
+                        theme(text = element_text(size=24))
     
 
     ggarrange(bpprob, ale, bpprob_scatter, lae_scatter, nrow=2, ncol=2)
@@ -222,7 +250,7 @@ main <- function(){
 
     param.seqs.df.ale.bpprob <- cbind(param.seqs.df.ale, param.seqs.df.bpprob[, c('mean_bpprob', 'sd_bpprob')])
     plot_dense <- plot_densities(param.seqs.df.ale.bpprob, random.bpprob.df.merge)
-    ggsave(as.character(snakemake@output$plot), plot_dense, height=24, width=24)
+    ggsave(as.character(snakemake@output$plot), plot_dense, height=30, width=30)
 
 }
 
