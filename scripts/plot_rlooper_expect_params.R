@@ -222,7 +222,7 @@ main <- function(){
 
     param.seqs.df.ale.bpprob <- cbind(param.seqs.df.ale, param.seqs.df.bpprob[, c('mean_bpprob', 'sd_bpprob')])
     plot_dense <- plot_densities(param.seqs.df.ale.bpprob, random.bpprob.df.merge)
-    ggsave(as.character(snakemake@output), plot_dense, height=24, width=24)
+    ggsave(as.character(snakemake@output$plot), plot_dense, height=24, width=24)
 
 }
 
