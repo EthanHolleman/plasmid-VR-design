@@ -33,7 +33,8 @@ rule generate_random_seq:
         )
     params:
         p_record=lambda wildcards: get_p_record(wildcards),
-        num_cases=NUM_CASES  # change to config param
+        num_cases=NUM_CASES,  # change to config param,
+        excluded_restriction_sites=config['prohibited_restriction_enzyme_recognition_sites']
     script:
         '../scripts/varmids/varmids.py'
 

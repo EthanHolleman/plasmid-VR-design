@@ -30,12 +30,6 @@ rule random_fasta_record_file:
     script:'../scripts/random_seq_gen.py'
 
 
-# rule calculate_gc_skew_content_random_sequence:
-#     conda:
-#         '../envs/R.yml'
-
-
-
 rule plot_rlooper_rand_seq_distribution_parameter_informed:
     conda:
         '../envs/R.yml'
@@ -53,11 +47,13 @@ rule plot_rlooper_rand_seq_distribution_parameter_informed:
             p_name=get_all_p_names(wildcards), id_num=CASE_RANGE, allow_missing=True
         ),
         random_ale=lambda wildcards: expand(
-            expand('testing/rlooper_benchmarking/completed_runs/{rand_fasta}.{length}/{rand_fasta}.{length}_avgG.wig', allow_missing=True, length=get_all_sequence_lengths(wildcards)),
+            expand('testing/rlooper_benchmarking/completed_runs/{rand_fasta}.{length}/{rand_fasta}.{length}_avgG.wig', 
+            allow_missing=True, length=get_all_sequence_lengths(wildcards)),
             zip, rand_fasta=RAND_SEQ_NAMES
         ),
         random_bpprob=lambda wildcards: expand(
-            expand('testing/rlooper_benchmarking/completed_runs/{rand_fasta}.{length}/{rand_fasta}.{length}_bpprob.wig', allow_missing=True, length=get_all_sequence_lengths(wildcards)),
+            expand('testing/rlooper_benchmarking/completed_runs/{rand_fasta}.{length}/{rand_fasta}.{length}_bpprob.wig', 
+            allow_missing=True, length=get_all_sequence_lengths(wildcards)),
             zip, rand_fasta=RAND_SEQ_NAMES
         )
     output:
@@ -97,4 +93,17 @@ rule plot_spot_rna_rand_seq:
         plot='output/expectations/SPOTRNA/spotRNA_expect.{length}.png',
         expect='output/expectations/SPOTRNA/spotRNA_expect.{length}.tsv'
     script:'../scripts/plot_rna_struct_expect.R'
+
+
+rule plot_spot_rna_params:
+    conda:
+        '../envs/R.yml'
+    input:
+        lambda wildcards: expand(
+            'output/{var_name}/files/{p_name}/concatAggMetrics/{p_name}.tsv',
+            p_name=get_all_p_names(wildcards), allow_missing=True
+        )
+    output:
+        'output/expectations/{var_name}/SPOT-RNA/rna_secondary_structure.png'
+    script:'../scripts/plot_rna_expect_params.R'
 
