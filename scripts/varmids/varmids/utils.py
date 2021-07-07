@@ -145,9 +145,9 @@ class RestrictionSiteChecker():
 
     all_enzymes_dict = {str(e): e for e in AllEnzymes}
 
-    @staticmethod
-    def read_REs_from_row(row_dict):
-        return [s.strip() for s in row_dict['excluded_sites'].split(',')]
+    # @staticmethod
+    # def read_REs_from_row(row_dict):
+    #     return [s.strip() for s in row_dict['excluded_sites'].split(',')]
 
     def __init__(self, variable_region, cutters):
         self.variable_region = variable_region

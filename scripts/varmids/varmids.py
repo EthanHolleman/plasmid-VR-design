@@ -11,7 +11,8 @@ def main():
         snakemake.params['p_record']).pop()
 
     vr = VariableRegion.init_from_csv_row(p_record)
-    excluded_restriction_sites = RestrictionSiteChecker.read_REs_from_row(p_record)
+    excluded_restriction_sites = snakemake.params['excluded_restriction_sites']
+    print(excluded_restriction_sites)
     
     for i in range(0, int(snakemake.params.num_cases)):
         output_fasta = str(snakemake.output['fasta'][i])
