@@ -25,12 +25,18 @@ def write_formated_fasta(formated_fasta_lines, output_path):
 
 
 def main():
+    print('Getting snakemake input')
     input_fasta = str(snakemake.input)
     output_fasta = str(snakemake.output)
     record_name = str(snakemake.params['record_name'])
 
+    print('Reading original fasta file')
     lines = read_single_record_fasta(input_fasta)
+
+    print('Formating')
     formated_lines = format_header(lines, record_name)
+
+    print('Writing formated version')
     write_formated_fasta(formated_lines, output_fasta)
 
 

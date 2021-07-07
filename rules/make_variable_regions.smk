@@ -136,14 +136,12 @@ rule aggregate_sequence_metrics:
         RNAss='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/parsedRNA/{p_name}.tsv',
         fasta='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}.fasta',
         tsv='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}.tsv',
-        rlooper_expect = lambda wildcards: f'output/expectations/rlooper/rlooper_expect.{sequence_length(wildcards)}.tsv',
-        RNAss_expect =lambda wildcards: f'output/expectations/SPOTRNA/spotRNA_expect.{sequence_length(wildcards)}.tsv'
     output:
         'output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/aggregatedMetrics/{p_name}.tsv'
     params:
         length = lambda wildcards: sequence_length(wildcards),
         p_name = lambda wildcards: wildcards.p_name,
-        id_num = lambda wildcards: wildcards.id_num,
+        id_num = lambda wildcards: wildcards.id_num
     script:'../scripts/agg_seq_metrics.py'
 
 
@@ -174,32 +172,29 @@ rule rank_and_select_sampled_sequences:
     script:'../scripts/rank_seqs.py'
 
 
-rule reverse_complement_top_sequences:
-    conda:
-        '../envs/python.yml'
+rule p_coords_ranked_seqs:
     input:
-        fasta='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.fasta',
-        tsv='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.tsv'
+        'output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.all_ranked.tsv'
     output:
-        fasta='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}-RC.top_seq.fasta',
-        tsv='output/{var_name}/files/{p_name}/rankedSeqs/{p_name}-RC.top_seq.tsv'
-    script:'../scripts/reverse_complement.py'
-
+        'output/{var_name}/files/{p_name}/plots/{p_name}.all_ranked.png'
+    script:
+        '../scripts/p_coords_plot.R'
+        
 
 rule concatenate_top_ranked_sequences_fasta:
     input:
-        forward_seqs=lambda wildcards: expand(
+        concat = lambda wildcards: expand(
             'output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.fasta',
             p_name=get_all_p_names(wildcards), allow_missing=True
         ),
-        reverse_complement=lambda wildcards: expand(
-        'output/{var_name}/files/{p_name}/rankedSeqs/{p_name}-RC.top_seq.fasta',
-        p_name=get_all_p_names_RC(wildcards), allow_missing=True
-        )    
+        coord_plots = lambda wildcards: expand(
+            'output/{var_name}/files/{p_name}/plots/{p_name}.all_ranked.png',
+            p_name=get_all_p_names(wildcards), allow_missing=True
+        )
     output:
         'output/{var_name}/sequences/plasmid_sequences.fasta'
     shell:'''
-    cat {input} > {output}
+    cat {input.concat} > {output}
     '''
 
 

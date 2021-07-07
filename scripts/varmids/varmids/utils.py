@@ -26,7 +26,7 @@ def nuc_count_calculator(skew, content, seq_len, closest=True):
 
     number_nucs = int(seq_len * content)
 
-    nuc_combos = [(i, number_nucs-i) for i in range(1, number_nucs+1)]
+    nuc_combos = [(i, number_nucs-i) for i in range(1, number_nucs+1)]  # all possible combinations 
     skew_content_dict = {
         tuple(nuc_combo): (calculate_content(nuc_combo, seq_len), calculate_skew(nuc_combo))
         for nuc_combo in nuc_combos
@@ -46,7 +46,7 @@ def nuc_count_calculator(skew, content, seq_len, closest=True):
 
 
 def calculate_skew(nuc_combo):
-    return (nuc_combo[1] - nuc_combo[0]) / sum(nuc_combo)
+    return (nuc_combo[0] - nuc_combo[1]) / sum(nuc_combo)
 
 
 def calculate_content(nuc_combo, seq_len):

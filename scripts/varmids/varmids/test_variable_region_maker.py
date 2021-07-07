@@ -81,20 +81,20 @@ def test_all_gc_content(all_VRs):
     for each_vr in all_VRs:
         if each_vr.gc_content:
             seq = each_vr.generate_sequence()
-            assert abs(each_vr.gc_content - seq.gc_content) <= 0.05
+            assert abs(each_vr.gc_content - seq.gc_content) <= 0.06
 
 def test_all_at_content(all_VRs):
     for each_vr in all_VRs:
         if each_vr.at_content:
             seq = each_vr.generate_sequence()
-            assert abs(each_vr.at_content - seq.at_content) <= 0.05
+            assert abs(each_vr.at_content - seq.at_content) <= 0.06
 
 
 def test_all_gc_skew(all_VRs):
     for each_vr in all_VRs:
         if each_vr.gc_skew:
             seq = each_vr.generate_sequence()
-            assert abs(each_vr.gc_skew - seq.gc_skew) <= 0.05
+            assert abs(each_vr.gc_skew - seq.gc_skew) <= 0.06
 
 
 def test_count_vs_nuc_dict(all_VRs):

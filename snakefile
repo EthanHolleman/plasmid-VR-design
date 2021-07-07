@@ -32,11 +32,15 @@ include: 'rules/plot_variable_regions.smk'
 rule all:
     input:
         expand(
-            'output/{var_regions}/sequences/plasmid_sequences.fasta',
-            var_regions=variable_regions.keys()
-        ),
-        expand(
-            'output/{var_regions}/plots/{var_regions}.pdf',
-            var_regions=variable_regions.keys()
+            'output/expectations/{var_name}/rlooper/rlooper_expect.png',
+            var_name=variable_regions.keys()
         )
+        # expand(
+        #     'output/{var_regions}/sequences/plasmid_sequences.fasta',
+        #     var_regions=variable_regions.keys()
+        # ),
+        # expand(
+        #     'output/{var_regions}/plots/{var_regions}.pdf',
+        #     var_regions=variable_regions.keys()
+        # )
         
