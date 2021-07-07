@@ -21,7 +21,7 @@ PRIMER3_TEMPLATE: 'resources/files/primer3_settings_template.txt'
 # number of different sequence to generate for each variable region definition
 # increasing this value will increase run time but generally increase
 # quality of final sequence
-EXPECTATION_SAMPLES: 50
+EXPECTATION_SAMPLES: 10
 
 # Number of random sequences used to calculate sequence metric expectations.
 # Increasing this value will increase run time but produce a more accurate
@@ -52,18 +52,10 @@ EXPECTATION_DEFS:
   # of the metric expectation. Is only really important if divergence = 1.
   # divergence: defines if the distance (in standard deviations) from the
   # metric expectation should minimized (-1) or maximized (1).
-  bp_prob:
-    direction: 1  
-    divergence: 1
-  local_average_energy:
-    direction: -1
-    divergence: 1
-  prop_hairpin:
-    direction: -1
-    divergence: 1
-  prop_unpaired:
-    direction: 1
-    divergence: 1
+  bp_prob: 'max' 
+  local_average_energy: 'min'
+  prop_hairpin: 'min'
+  prop_unpaired: 'max'
 
 
 
