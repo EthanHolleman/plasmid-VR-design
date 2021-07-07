@@ -21,7 +21,7 @@ PRIMER3_TEMPLATE: 'resources/files/primer3_settings_template.txt'
 # number of different sequence to generate for each variable region definition
 # increasing this value will increase run time but generally increase
 # quality of final sequence
-EXPECTATION_SAMPLES: 10
+EXPECTATION_SAMPLES: 100
 
 # Number of random sequences used to calculate sequence metric expectations.
 # Increasing this value will increase run time but produce a more accurate
