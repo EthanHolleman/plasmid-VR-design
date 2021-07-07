@@ -4,7 +4,7 @@ __default__:
   cpus: "{threads}"
   name: "{rule}.{wildcards}"
   output: "logs/{rule}.{wildcards}.out"
-  time: "00:30:00"
+  time: "00:35:00"
   email: 'etholleman@ucdavis.edu'
   mem: "8000"
   attempt: 3
@@ -28,9 +28,6 @@ random_fasta_record_file:
   mem: "2000"
   time: "00:09:00"
 
-generate_random_seq:
-  mem: "2000"
-  time: "00:09:00"
 
 annotate_RNAss_predictions:
   mem: "4000"
