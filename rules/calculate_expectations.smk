@@ -1,7 +1,7 @@
 
 def get_all_sequence_lengths(wildcards):
     table = vr_tables[wildcards.var_name]
-    return list(table['length'])
+    return list(set(table['length']))
 
 
 def all_expectations_by_length(wildcards, expectation_path):
@@ -17,7 +17,6 @@ def all_expectations(wildcards):
         wildcards, 'output/expectations/rlooper/rlooper_expect.{length}.tsv'
     )
     return rna + rlooper
-
 
 
 rule random_fasta_record_file:
@@ -48,12 +47,12 @@ rule plot_rlooper_rand_seq_distribution_parameter_informed:
             p_name=get_all_p_names(wildcards), id_num=CASE_RANGE, allow_missing=True
         ),
         random_ale=lambda wildcards: expand(
-            'testing/rlooper_benchmarking/completed_runs/{rand_fasta}.{length}/{rand_fasta}.{length}_avgG.wig',
-            rand_fasta=RAND_SEQ_NAMES, allow_missing=True, length=get_all_sequence_lengths(wildcards)
+            expand('testing/rlooper_benchmarking/completed_runs/{rand_fasta}.{length}/{rand_fasta}.{length}_avgG.wig', allow_missing=True, length=get_all_sequence_lengths(wildcards)),
+            zip, rand_fasta=RAND_SEQ_NAMES
         ),
         random_bpprob=lambda wildcards: expand(
-            'testing/rlooper_benchmarking/completed_runs/{rand_fasta}.{length}/{rand_fasta}.{length}_bpprob.wig',
-            rand_fasta=RAND_SEQ_NAMES, allow_missing=True, length=get_all_sequence_lengths(wildcards)
+            expand('testing/rlooper_benchmarking/completed_runs/{rand_fasta}.{length}/{rand_fasta}.{length}_bpprob.wig', allow_missing=True, length=get_all_sequence_lengths(wildcards)),
+            zip, rand_fasta=RAND_SEQ_NAMES
         )
     output:
         plot='output/expectations/{var_name}/rlooper/rlooper_expect.png',
