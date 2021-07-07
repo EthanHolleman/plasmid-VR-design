@@ -129,14 +129,12 @@ rule aggregate_sequence_metrics:
         RNAss='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/parsedRNA/{p_name}.tsv',
         fasta='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}.fasta',
         tsv='output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}.tsv',
-        rlooper_expect = lambda wildcards: f'output/expectations/rlooper/rlooper_expect.{sequence_length(wildcards)}.tsv',
-        RNAss_expect =lambda wildcards: f'output/expectations/SPOTRNA/spotRNA_expect.{sequence_length(wildcards)}.tsv'
     output:
         'output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/aggregatedMetrics/{p_name}.tsv'
     params:
         length = lambda wildcards: sequence_length(wildcards),
         p_name = lambda wildcards: wildcards.p_name,
-        id_num = lambda wildcards: wildcards.id_num,
+        id_num = lambda wildcards: wildcards.id_num
     script:'../scripts/agg_seq_metrics.py'
 
 

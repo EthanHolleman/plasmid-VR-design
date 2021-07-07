@@ -30,6 +30,12 @@ rule random_fasta_record_file:
     script:'../scripts/random_seq_gen.py'
 
 
+# rule calculate_gc_skew_content_random_sequence:
+#     conda:
+#         '../envs/R.yml'
+
+
+
 rule plot_rlooper_rand_seq_distribution_parameter_informed:
     conda:
         '../envs/R.yml'
