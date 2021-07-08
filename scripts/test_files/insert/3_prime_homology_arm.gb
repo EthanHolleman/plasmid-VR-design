@@ -1,0 +1,22 @@
+LOCUS       3'_homology_arm           30 bp    DNA     linear   UNK 01-JAN-1980
+DEFINITION  SEGUID_wYPwHKZCwMQRh0O8-jS1Jts6tlQ.
+ACCESSION   v1
+VERSION     v1.0
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     misc            1..30
+                     /name="3' homology arm"
+                     /author="Ethan Holleman"
+                     /label="3_prime_HR"
+                     /note="Homology arm of variable region insert taken from
+                     (base 1) positions 540-570 of pFC9"
+                     /pFC9_start=539
+                     /pFC9_end=569
+                     /pFC9_seguid="NenxzxpELoRBEdYEmmDjvk0mvTk"
+                     /date="07/08/2021"
+ORIGIN
+        1 gaattcgtcg cagtgaccga ggcgaggagg
+//
