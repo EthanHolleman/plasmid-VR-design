@@ -9,7 +9,7 @@ SOURCE      .
 FEATURES             Location/Qualifiers
      CDS             1..200
                      /label="TEST_LABEL 1"
-                     /modification date="07/07/2021"
+                     /modification date="07/08/2021"
 ORIGIN
         1 ccaactccta aatttaatcg tggcagtttc cttatacaaa ccgaatattt acaagtgacg
        61 actccgcatt actcttggaa tgaattaata cgacagagtc gctgctatct gttttcgtat

@@ -9,7 +9,7 @@ SOURCE      .
 FEATURES             Location/Qualifiers
      CDS             1..200
                      /label="init-1"
-                     /modification date="07/07/2021"
+                     /modification date="07/08/2021"
                      /name="init-1"
                      /gc_skew="0.1"
                      /gc_content="0.4"

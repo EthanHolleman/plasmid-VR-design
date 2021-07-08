@@ -1,7 +1,7 @@
-library(ggplot2)
-library(ggpubr)
-library(viridis)
-library(RColorBrewer)
+# library(ggplot2)
+# library(ggpubr)
+# library(viridis)
+# library(RColorBrewer)
 
 
 read_param_seq_tsv_files <- function(tsv.files){
@@ -12,6 +12,9 @@ read_param_seq_tsv_files <- function(tsv.files){
         tsv.rows[[i]] <- as.data.frame(
             read.table(cur_file, sep='\t', header=T)
         )
+        if (any(as.numeric(as.character(tsv.rows[[i]]$id)) > length(tsv.files))){
+            print(tsv.rows[[i]])
+        }
     
     }
     do.call(rbind, tsv.rows)

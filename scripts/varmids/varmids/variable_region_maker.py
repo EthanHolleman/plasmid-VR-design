@@ -378,26 +378,18 @@ class VariableRegion():
             self.at_count = get_int_half_length(
                 self.length - sum(self.gc_count))
     
-    def check_for_restriction_sites(self, enzymes):
-        '''Check if a sequence contains cut sites for enzymes in a restriction
-        batch. If cut sites are present for any enzymes returns True, False
-        otherwise. Should be used to regenerate sequences to avoid including
-        specific cut sites.
 
-        Args:
-            enzymes (RestrictionBatch): RestrictionBatch including enzymes who's
-            cut sites should be present in the variable region sequence.
-        '''
-        pass
-
-    def generate_sequence(self):
+    def generate_sequence(self, seq_id_num=None):
         if sum(self.nuc_dict.values()) == 0:
             self.calculate_nucleotide_counts()
 
         self._generated_sequences += 1
+        if not seq_id_num:
+            seq_id_num = self._generated_sequences
+        
         return Sequence(
             self.name,
-            self._generated_sequences,
+            seq_id_num,
             self._sequence_name(),
             self.cluster_length,
             self.cluster_nuc,
