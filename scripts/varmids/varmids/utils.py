@@ -152,7 +152,6 @@ class RestrictionSiteChecker():
     def __init__(self, variable_region, cutters):
         self.variable_region = variable_region
         self.cutters = cutters
-        self.sequence_counter = 1
 
     @property
     def cutters(self):
@@ -182,9 +181,8 @@ class RestrictionSiteChecker():
                 return False
         return True
 
-    def generate_RE_free_sequence(self):
-        seq = self.variable_region.generate_sequence()
+    def generate_RE_free_sequence(self, seq_id_num):
+        seq = self.variable_region.generate_sequence(seq_id_num)
         while self._check_for_cutter(seq.nuc_seq) == False:
-            seq = self.variable_region.generate_sequence(self.sequence_counter)
-        self.sequence_counter += 1
+            seq = self.variable_region.generate_sequence(seq_id_num)
         return seq

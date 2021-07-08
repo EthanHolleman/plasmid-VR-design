@@ -18,9 +18,8 @@ def main():
         output_tsv = str(snakemake.output['tsv'][i])
         seq = RestrictionSiteChecker(
             vr, excluded_restriction_sites
-            ).generate_RE_free_sequence()
-        
-        assert seq.id_num == i + 1
+            ).generate_RE_free_sequence(seq_id_num=i+1)  # make base 1
+        assert seq.id_num == (i+1)
         write_sequence_list_to_output_files([seq], output_fasta, output_tsv)
 
 
