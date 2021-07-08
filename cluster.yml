@@ -7,7 +7,6 @@ __default__:
   time: "00:35:00"
   email: 'etholleman@ucdavis.edu'
   mem: "8000"
-  attempt: 3
 
 run_bpRNA:
   time: "00:09:00"
