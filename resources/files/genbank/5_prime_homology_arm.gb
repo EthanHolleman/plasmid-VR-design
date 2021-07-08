@@ -1,5 +1,5 @@
 LOCUS       5'_homology_arm           30 bp    DNA     linear   UNK 01-JAN-1980
-DEFINITION  SEGUID_dvsY5foO9Cb-z7BlNqzr34e0qPU.
+DEFINITION  SEGUID_nmTgXrEAHcfOhbIfz9S-PP_R8Sw.
 ACCESSION   v1
 VERSION     v1.0
 KEYWORDS    .
@@ -12,11 +12,11 @@ FEATURES             Location/Qualifiers
                      /author="Ethan Holleman"
                      /label="5_prime_HR"
                      /note="Homology arm of variable region insert taken from
-                     (base 1) positions 1004-1034 of pFC8"
-                     /pFC8_start=1003
-                     /pFC8_end=1033
-                     /pFC8_seguid="vdm_tMoMid1Tn52rB-wpm-eMOGc"
-                     /date="07/07/2021"
+                     (base 1) positions 27-57 of pFC9"
+                     /pFC9_start=26
+                     /pFC9_end=56
+                     /pFC9_seguid="NenxzxpELoRBEdYEmmDjvk0mvTk"
+                     /date="07/08/2021"
 ORIGIN
-        1 ctccaagacc tcgagggggg gcccggtacc
+        1 tagggcgaat tggagctcca catcggtacc
 //
