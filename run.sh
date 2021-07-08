@@ -6,4 +6,4 @@ snakemake -j 100 --cluster-config cluster.yml \
 -n {cluster.cpus} --mem {cluster.mem} -J {cluster.name} -o {cluster.output} \
 -e {cluster.output} --mail-type ALL --mail-user {cluster.email}" \
 --conda-frontend=mamba --configfile config.yml \
---latency-wait 25 --verbose --use-conda --rerun-incomplete
+--latency-wait 120 --verbose --use-conda --rerun-incomplete

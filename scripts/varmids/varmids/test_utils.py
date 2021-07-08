@@ -190,12 +190,15 @@ def test_init_restrictionSiteChecker(rsc):
 
 
 def test_generate_RE_free_sequence(rsc):
-    sequence = rsc.generate_RE_free_sequence()
+    seq_id = random.randint(1, 1000)
+    sequence = rsc.generate_RE_free_sequence(seq_id)
+    assert sequence.id_num == seq_id
     assert isinstance(sequence, Sequence)
     assert isinstance(rsc.cutters, RestrictionBatch)
     ana_full = Analysis(rsc.cutters, Seq(sequence.nuc_seq)).full()
     for cutter, cuts in ana_full.items():
         assert len(cuts) == 0
+    
     
         
 
