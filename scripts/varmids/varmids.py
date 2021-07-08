@@ -4,7 +4,6 @@ from varmids.variable_region_maker import *
 from varmids.utils import *
 
 
-
 def main():
     
     p_record = read_variable_region_dataframe(
@@ -20,6 +19,8 @@ def main():
         seq = RestrictionSiteChecker(
             vr, excluded_restriction_sites
             ).generate_RE_free_sequence()
+        
+        assert seq.id_num == i + 1
         write_sequence_list_to_output_files([seq], output_fasta, output_tsv)
 
 
