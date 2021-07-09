@@ -135,7 +135,7 @@ class T7TerminationSeries(Series):
             backbone_record = read_genbank_record(backbone_path)
             backbone_name = Path(backbone_path).stem
 
-            series_name = f'T7_term_{backbone_name}_{insert_name}'
+            series_name = f'T7_term_{insert_name}'
 
             series = cls(series_name, backbone_record, insert_record, initiator)
 
