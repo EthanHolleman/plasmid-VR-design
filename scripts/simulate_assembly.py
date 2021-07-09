@@ -34,6 +34,20 @@ class Series():
         self.name = name
         self.backbone = backbone
         self.insert = insert
+    
+    @property
+    def backbone(self):
+        return self._backbone
+    
+    @backbone.setter
+    def backbone(self, new_bone):
+        if isinstance(new_bone, str):
+            # assume it is a filepath
+            self._backbone = read_genbank_record(new_bone)
+        elif isinstance(new_bone, Dseqrecord):
+            self._backbone = new_bone
+        else:
+            raise TypeError('Not a filepath or a Dseqrecord!')
 
     @property
     def linear_backbone(self):
@@ -113,6 +127,7 @@ class T7TerminationSeries(Series):
     def write_assemblies_from_insert_list(cls, insert_paths, backbone_path, 
                                         initiator, output_dir):
         output_files = []
+        Path(output_dir).mkdir(exist_ok=True, parents=True)
         for each_insert in insert_paths:
             insert_record = read_genbank_record(each_insert)
             insert_name = Path(each_insert).stem
@@ -144,9 +159,25 @@ class T7TerminationSeries(Series):
             self.initiator.cut(T7TerminationSeries.si_linearizers)
         )
         return di
+    
+    @property
+    def initiator(self):
+        return self._initiator
+    
+    @initiator.setter
+    def initiator(self, new_init):
+        if isinstance(new_init, str):
+            # assume it is a filepath
+            self._initiator = read_genbank_record(new_init)
+        elif isinstance(new_init, Dseqrecord):
+            self._initiator = new_init
+        else:
+            raise TypeError('Not a filepath or a Dseqrecord!')
+
 
     @property
     def backbone_initiator_digest_lf(self):
+
         # linearize backbone with HindIII and EcoRI to insert strong init
         lf = Series.select_largest_fragment(
             self.backbone.cut(T7TerminationSeries.si_linearizers)
@@ -160,7 +191,6 @@ class T7TerminationSeries(Series):
             [self.backbone_initiator_digest_lf, self.digested_initiator],
             limit=4, algorithm=terminal_overlap
         ).assemble_circular()
-        print(a)
         if len(a) < 1:
             raise Exception('No complete constructs created!')
         else:
