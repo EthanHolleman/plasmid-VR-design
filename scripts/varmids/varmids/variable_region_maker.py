@@ -390,19 +390,19 @@ class VariableRegion():
         return Sequence(
             self.name,
             seq_id_num,
-            self._sequence_name(),
+            self._sequence_name(seq_id_num),
             self.cluster_length,
             self.cluster_nuc,
             self.cluster_dist_func,
             nuc_counts=self.nuc_dict
         )
 
-    def _sequence_name(self):
+    def _sequence_name(self, seq_id_num):
         if self.cluster_nuc:
             cluster = self.cluster_nuc
         else:
             cluster = False
-        return f'{VariableRegion.name_prefix}_{self.name}-{self._generated_sequences}_{self.role}_GCskew:{round(self.gc_skew, 2)}_GCcontent:{round(self.gc_content, 2)}_ATskew:{round(self.at_skew, 2)}_ATcontent:{round(self.at_content, 2)}_Clustered:{cluster}'
+        return f'{VariableRegion.name_prefix}_{self.name}-{seq_id_num}_{self.role}_GCskew:{round(self.gc_skew, 2)}_GCcontent:{round(self.gc_content, 2)}_ATskew:{round(self.at_skew, 2)}_ATcontent:{round(self.at_content, 2)}_Clustered:{cluster}'
 
 
 def main():

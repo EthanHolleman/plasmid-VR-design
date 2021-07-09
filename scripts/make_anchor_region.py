@@ -1,13 +1,17 @@
 from pydna.dseqrecord import Dseqrecord
 from pydna.common_sub_strings import common_sub_strings
+from pydna.genbankrecord import GenbankRecord
 from pydna.readers import read
 from Bio import SeqIO
 from Bio.Restriction import *
 from Bio.SeqUtils import MeltingTemp as mt
 import numpy as np
+import datetime
 
 # read in all sequence files and test randoms
 np.random.seed(12311997)
+
+MOD_DATE = datetime.date.strftime(datetime.datetime.now(), "%d-%b-%Y").upper()
 
 
 def check_enzymes(user_enzymes):
@@ -139,6 +143,26 @@ def make_anchor_seq(records, anchor_length, prohibited_cutters,
                 return candidate_anchor
 
 
+def write_genbank_file(record, output_path):
+    g_record = GenbankRecord(record)
+
+    g_record.id = g_record.seq.seguid()
+    insert.description = ''  # clear junk
+    insert.definition = ''
+
+    g_record.annotations['data_file_division'] = 'SYN'
+    g_record.annotations['date'] = MOD_DATE
+
+    g_record.locus = 'anchor_region'
+    g_record.add_feature(
+        0, len(g_record.seq), type='CDS', 
+        note='Anchor sequence for primer binding',
+        label='Anchor region'
+    )
+    g_record.stamp()
+    g_record.write(output_path)
+
+
 def main():
     print('='*10)
     print('Reading snakemake input')
@@ -162,7 +186,6 @@ def main():
     vr_records = list(SeqIO.parse(variable_regions, 'fasta'))
 
     all_records = backbone_records + vr_records
-    print(all_records)
 
     print('='*10)
     print('Dropping anchor')
@@ -170,11 +193,9 @@ def main():
         all_records, anchor_length=15,
         prohibited_cutters=prohibited_cutters, min_melting_temp=min_melting_temp,
         max_attempts=max_attempts
-
     )
-    anchor_seq.id = 'Anchor_sequence'
-    anchor_seq.description = ''
-    SeqIO.write([anchor_seq], output_path, 'fasta')
+
+    write_genbank_file(anchor_seq, output_path)
     print('Done')
 
 

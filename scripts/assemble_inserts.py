@@ -3,6 +3,9 @@ from pydna.readers import read
 import pandas as pd
 from pydna.genbankrecord import GenbankRecord
 
+MOD_DATE = datetime.date.strftime(datetime.datetime.now(), "%d-%b-%Y").upper()
+
+
 
 def read_variable_region_tsv(filepath):
     records = pd.read_table(filepath, sep='\t').to_dict(orient='records')
@@ -11,7 +14,6 @@ def read_variable_region_tsv(filepath):
 
 
 def variable_region_to_labeled_record(vr_dict, id, **kwargs):
-    mod_date = datetime.date.strftime(datetime.datetime.now(), "%m/%d/%Y")
     record = GenbankRecord(
         vr_dict['Sequence'].strip()
     )
@@ -23,7 +25,8 @@ def variable_region_to_labeled_record(vr_dict, id, **kwargs):
         gc_skew=vr_dict['GC_skew'], gc_content=vr_dict['GC_content'],
         at_skew=vr_dict['AT_skew'], at_content=vr_dict['AT_content'],
         clustered_nucleotide=vr_dict['Clustered_nucleotide'],
-        date=mod_date,
+        label='Variable region',
+        date=MOD_DATE,
         type='CDS',
         **kwargs
     )
@@ -42,6 +45,23 @@ def read_records(records):
     return records
 
 
+def set_insert_attributes(insert, vr_dict, version):
+    # cleanup insert genbank attributes
+    name = f'insert_{vr_dict["name"]}'
+    insert.locus = name
+    insert.id = insert.seq.seguid()
+
+    insert.description = ''  # clear junk
+    insert.definition = ''
+
+    insert.definition = name
+    insert.annotations['data_file_division'] = 'SYN'
+    insert.annotations['date'] = MOD_DATE
+    insert.annotations['sequence_version'] = version
+
+    return insert
+
+
 def main():
 
     vr_tsv = str(snakemake.input['variable_region'])
@@ -49,15 +69,19 @@ def main():
     downstream_sequences = snakemake.input['downstream_sequences']
 
     upstream_records = read_records(upstream_sequences)
-    downstream_records = read_records(downstream_records)
+    downstream_records = read_records(downstream_sequences)
+
+    version = str(snakemake.params['design_version'])
 
     output_file = str(snakemake.output)
 
     vr_dict = read_variable_region_tsv(vr_tsv)
-    vr_record = variable_region_to_labeled_record(vr_dict)
+    vr_record = variable_region_to_labeled_record(
+        vr_dict, version,
+        **snakemake.params['feature_annotations']
+    )
     insert = assemble_insert(*upstream_records, vr_record, *downstream_records)
-    insert.locus = f'insert_{vr_dict["name"]}'
-    insert.stamp()
+    insert = set_insert_attributes(insert, vr_dict, version)
     insert.write(output_file)
 
 

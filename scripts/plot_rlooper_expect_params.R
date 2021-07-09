@@ -1,7 +1,7 @@
-# library(ggplot2)
-# library(ggpubr)
-# library(viridis)
-# library(RColorBrewer)
+library(ggplot2)
+library(ggpubr)
+library(viridis)
+library(RColorBrewer)
 
 
 read_param_seq_tsv_files <- function(tsv.files){
