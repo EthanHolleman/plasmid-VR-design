@@ -17,8 +17,8 @@ prohibited_restriction_enzyme_recognition_sites:
 # List of paths to genbank formatted files describing plasmid backbones that inserts
 # will be cloned into
 backbones:
-  t7_initiation: 'resources/files/genbank/pFC8.gb'
-  t7_termination: 'resources/files/genbank/pFC9.gb'
+  t7_termination: 'resources/files/genbank/pFC8.gb'
+  t7_initiation: 'resources/files/genbank/pFC9.gb'
   tac: 'resources/files/genbank/pFC53tacT1T2.gb'
 
 
