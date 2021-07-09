@@ -27,18 +27,20 @@ include: 'rules/calculate_expectations.smk'
 include: 'rules/RNA_sec_struct.smk'
 include: 'rules/rlooper.smk'
 include: 'rules/plot_variable_regions.smk'
+include: 'rules/insert_assembly.smk'
 
 
 rule all:
     input:
         expand(
-            'output/expectations/{var_name}/rlooper/rlooper_expect.png',
+            'output/{var_regions}/inserts/complete_inserts.fa',
+            var_regions=variable_regions.keys()
+        ),
+        expand(
+            'output/{var_name}/inserts/complete_inserts.md5sum',
             var_name=variable_regions.keys()
+
         )
-        # expand(
-        #     'output/{var_regions}/sequences/plasmid_sequences.fasta',
-        #     var_regions=variable_regions.keys()
-        # ),
         # expand(
         #     'output/{var_regions}/plots/{var_regions}.pdf',
         #     var_regions=variable_regions.keys()
