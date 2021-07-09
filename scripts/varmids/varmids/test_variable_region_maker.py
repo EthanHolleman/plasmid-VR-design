@@ -3,6 +3,7 @@ import pytest
 
 from varmids.variable_region_maker import *
 from varmids.utils import *
+import random
 
 import os
 
@@ -29,7 +30,7 @@ def test_VR():
 
 @pytest.fixture
 def test_VR_with_at():
-    p = TEST_PLASMIDS_DICT[1] 
+    p = TEST_PLASMIDS_DICT[1]
     # second variable region also has AT content and skew
     # set
     return VariableRegion.init_from_csv_row(p)
@@ -49,7 +50,7 @@ def test_VR_creation_from_file(all_VRs):
 def test_calculate_nucleotide_counts(all_VRs):
     for each_vr in all_VRs:
         each_vr.calculate_nucleotide_counts()
-        assert sum(each_vr.gc_count) > 1 
+        assert sum(each_vr.gc_count) > 1
         assert sum(each_vr.at_count) > 1
         assert sum(each_vr.nuc_dict.values()) == each_vr.length
 
@@ -60,7 +61,7 @@ def test_generate_sequence(all_VRs):
         assert isinstance(seq, Sequence)
         assert len(seq.nuc_seq) == each_vr.length
         assert isinstance(seq.nuc_seq, str)
-        assert len(set(seq.nuc_seq)) <= 4  # no more than 4 diff nucleotides 
+        assert len(set(seq.nuc_seq)) <= 4  # no more than 4 diff nucleotides
 
 
 def test_nuc_seq_nucleotide_count(all_VRs):
@@ -72,9 +73,10 @@ def test_nuc_seq_nucleotide_count(all_VRs):
 
 
 def test_seq_name(all_VRs):
+    seq_id_num = random.randint(0, 1000)
     for each_vr in all_VRs:
-        assert isinstance(each_vr._sequence_name(), str)
-        assert each_vr._sequence_name()
+        assert isinstance(each_vr._sequence_name(seq_id_num), str)
+        assert each_vr._sequence_name(seq_id_num)
 
 
 def test_all_gc_content(all_VRs):
@@ -82,6 +84,7 @@ def test_all_gc_content(all_VRs):
         if each_vr.gc_content:
             seq = each_vr.generate_sequence()
             assert abs(each_vr.gc_content - seq.gc_content) <= 0.06
+
 
 def test_all_at_content(all_VRs):
     for each_vr in all_VRs:
@@ -124,9 +127,3 @@ def test_reverse_complement(all_VRs):
         # gc and at skew should be same but opposite
         assert seq.gc_skew == -rc.gc_skew
         assert seq.at_skew == -rc.at_skew
-
-
-
-
-        
-    
