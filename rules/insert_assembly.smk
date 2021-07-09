@@ -5,7 +5,7 @@ rule make_anchor_sequence:
     input:
         variable_regions='output/{var_name}/sequences/variable_regions.fasta'
     params:
-        backbones=config['backbones'],
+        backbones=lambda wildcards: list(config['backbones'].values()),
         prohibited_cutters=config['prohibited_restriction_enzyme_recognition_sites'],
         max_attempts=config['anchor_sequence']['max_attempts'],
         anchor_length=config['anchor_sequence']['anchor_length'],
@@ -23,6 +23,7 @@ rule md5sum_anchor:
     shell:'''
     md5sum {input} > {output}
     '''
+
 
 rule assemble_inserts:
     conda:
@@ -46,9 +47,12 @@ rule assemble_inserts:
 
 rule insert_checksum:
     input:
-        'output/{var_name}/inserts/genbank_files/{p_name}.insert.gb'
+        lambda wildcards: expand(
+            'output/{var_name}/inserts/genbank_files/{p_name}.insert.gb',
+            p_name=get_all_p_names(wildcards), allow_missing=True
+        )
     output:
-        'output/{var_name}/inserts/genbank_files/{p_name}.insert.md5sum'
+        'output/{var_name}/inserts/genbank_files/inserts.md5sum'
     shell:'''
     md5sum {input} > {output}
     '''
@@ -62,10 +66,7 @@ rule aggregate_inserts_into_fasta:
             'output/{var_name}/inserts/genbank_files/{p_name}.insert.gb',
             p_name=get_all_p_names(wildcards), allow_missing=True
         ),
-        checksums=lambda wildcards: expand(
-            'output/{var_name}/inserts/genbank_files/{p_name}.insert.md5sum',
-             p_name=get_all_p_names(wildcards), allow_missing=True
-        )
+        checksums='output/{var_name}/inserts/genbank_files/inserts.md5sum'
     output:
         'output/{var_name}/inserts/complete_inserts.fa'
     script:'../scripts/agg_gb_inserts_to_fa.py'
