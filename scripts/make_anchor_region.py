@@ -147,8 +147,8 @@ def write_genbank_file(record, output_path):
     g_record = GenbankRecord(record)
 
     g_record.id = g_record.seq.seguid()
-    insert.description = ''  # clear junk
-    insert.definition = ''
+    g_record.description = ''  # clear junk
+    g_record.definition = ''
 
     g_record.annotations['data_file_division'] = 'SYN'
     g_record.annotations['date'] = MOD_DATE

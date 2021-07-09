@@ -28,6 +28,7 @@ include: 'rules/RNA_sec_struct.smk'
 include: 'rules/rlooper.smk'
 include: 'rules/plot_variable_regions.smk'
 include: 'rules/insert_assembly.smk'
+include: 'rules/simulate_constructs.smk'
 
 
 rule all:
@@ -40,7 +41,13 @@ rule all:
             'output/{var_name}/inserts/complete_inserts.md5sum',
             var_name=variable_regions.keys()
 
+        ),
+        expand(
+            'output/{var_name}/constructs',
+            var_name=variable_regions.keys()
+
         )
+        # exp
         # expand(
         #     'output/{var_regions}/plots/{var_regions}.pdf',
         #     var_regions=variable_regions.keys()
