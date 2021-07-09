@@ -70,7 +70,7 @@ rule annotate_RNAss_predictions:
     output:
         'output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/bpRNA/{p_name}-{id_num}.st'
     params:
-        output_dir=lambda wildcards: f'output/{wildcards.var_name}/files/{wildcards.p_name}/{wildcards.id_num}/bpRNA',
+        output_dir=lambda wildcards: f'output/{wildcards.var_name}/files/{wildcards.p_name}/candidate_seqs/{wildcards.id_num}/bpRNA',
         bp_script='submodules/bpRNA/bpRNA.pl',
         script_output=lambda wildcards: f'{wildcards.p_name}-{wildcards.id_num}.st'  # script just spews into CWD 
     shell:'''
@@ -187,13 +187,13 @@ rule concatenate_top_ranked_sequences_fasta:
         concat = lambda wildcards: expand(
             'output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.fasta',
             p_name=get_all_p_names(wildcards), allow_missing=True
-        ),
-        coord_plots = lambda wildcards: expand(
-            'output/{var_name}/files/{p_name}/plots/{p_name}.all_ranked.png',
-            p_name=get_all_p_names(wildcards), allow_missing=True
         )
+        # coord_plots = lambda wildcards: expand(
+        #     'output/{var_name}/files/{p_name}/plots/{p_name}.all_ranked.png',
+        #     p_name=get_all_p_names(wildcards), allow_missing=True
+        # )
     output:
-        'output/{var_name}/sequences/plasmid_sequences.fasta'
+        'output/{var_name}/sequences/variable_regions.fasta'
     shell:'''
     cat {input.concat} > {output}
     '''
@@ -212,7 +212,7 @@ rule concatenate_to_ranked_sequences_tsv:
         p_name=get_all_p_names_RC(wildcards), allow_missing=True
         )
     output:
-        'output/{var_name}/sequences/plasmid_sequences.tsv'
+        'output/{var_name}/sequences/variable_regions.tsv'
     script:'../scripts/concate_tsvs.py'
 
     
