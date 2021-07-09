@@ -7,7 +7,7 @@ SOURCE      .
   ORGANISM  .
             .
 FEATURES             Location/Qualifiers
-     misc            1..30
+     CDS             1..30
                      /name="5' homology arm"
                      /author="Ethan Holleman"
                      /label="5_prime_HR"
