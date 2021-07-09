@@ -3,7 +3,7 @@
 # inputs to the workflow
 # =============================================================================
 variable_region_definitions:
-  initiation_regions: 'config_files/variable_regions/initiation_plamids_rlooper.tsv'
+  insert_sequences: 'config_files/variable_regions/variable_regions.tsv'
 
 
 # List of names of restriction enzymes who's recognition sites should not be
@@ -18,6 +18,19 @@ prohibited_restriction_enzyme_recognition_sites:
 # will be cloned into
 backbones:
   - 'resources/files/genbank/pFC8.gb'
+  - 'resources/files/genbank/pFC9.gb'
+  - 'resources/files/genbank/pFC53tacT1T2.gb'
+
+
+insert_design:
+  upstream_regions:
+    - "resources/files/genbank/5_prime_homology_arm.gb"
+  downstream_regions:
+    - "resources/files/genbank/3_prime_homology_arm.gb"
+  feature_annotations:  # additional annotations to be added to variable region
+    author: 'Ethan Holleman'
+  design_version: "1.0"
+
 
 # =============================================================================
 # Program constants and parameters you can but probably don't need to
