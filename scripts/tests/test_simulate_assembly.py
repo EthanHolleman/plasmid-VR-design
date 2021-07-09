@@ -148,3 +148,4 @@ def test_write_assemble_dir_t7_termination(assembled_insert_paths,
         )
     for each_file in output_files:
         assert each_file.is_file()
+        os.remove(str(each_file))
