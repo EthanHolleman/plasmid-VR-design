@@ -1,4 +1,4 @@
-LOCUS       insert_VR-12             275 bp    DNA     linear   SYN 09-JUL-2021
+LOCUS       insert_VR-12             275 bp    DNA     linear   SYN 11-JUL-2021
 DEFINITION  insert_VR-12.
 ACCESSION   QFmXehaU4eH4Wzzo3imNBYQIalU
 VERSION     QFmXehaU4eH4Wzzo3imNBYQIalU
@@ -28,7 +28,7 @@ FEATURES             Location/Qualifiers
                      /at_content="0.5"
                      /clustered_nucleotide="nan"
                      /label="Variable region"
-                     /date="09-JUL-2021"
+                     /date="11-JUL-2021"
                      /author="Ethan Holleman"
      CDS             246..275
                      /name="3' homology arm"
