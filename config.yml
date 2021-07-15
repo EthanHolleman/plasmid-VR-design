@@ -3,7 +3,7 @@
 # inputs to the workflow
 # =============================================================================
 variable_region_definitions:
-  insert_sequences: 'config_files/variable_regions/variable_regions.tsv'
+  insert_sequences_250: 'config_files/variable_regions/variable_regions.tsv'
 
 
 # List of names of restriction enzymes who's recognition sites should not be
@@ -30,6 +30,8 @@ insert_design:
     - "resources/files/genbank/5_prime_homology_arm.gb"
   downstream_regions:
     - "resources/files/genbank/3_prime_homology_arm.gb"
+  homology_target_backbone:
+    'resources/files/genbank/pFC9.gb'
   feature_annotations:  # additional annotations to be added to variable region
     author: 'Ethan Holleman'
   design_version: "1.0"
@@ -49,11 +51,12 @@ PRIMER3_TEMPLATE: 'resources/files/primer3/primer3_settings_template.txt'
 # number of different sequence to generate for each variable region definition
 # increasing this value will increase run time but generally increase
 # quality of final sequence
-EXPECTATION_SAMPLES: 100
+EXPECTATION_SAMPLES: 250
 
 # Number of random sequences used to calculate sequence metric expectations.
 # Increasing this value will increase run time but produce a more accurate
 # expectation for each metric
+# DEPRECIATED
 EXPECT_SAMPLES: 200
 
 # Parameters defining how the anchor sequence is calculated
