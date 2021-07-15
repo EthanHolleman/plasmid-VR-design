@@ -44,9 +44,12 @@ rule all:
 
         ),
         expand(
-            'output/{var_name}/.variable_region_primers.done',
+            'output/{var_name}/inserts/.all_checks.passed',
             var_name=variable_regions.keys()
-
+        ),
+        expand(
+            'output/{var_name}/constructs',
+            var_name=variable_regions.keys()
         )
         # exp
         # expand(
