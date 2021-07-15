@@ -58,6 +58,36 @@ rule insert_checksum:
     '''
 
 
+rule final_insert_check:
+    conda:
+        '../envs/pyGibson.yml'
+    input:
+        anchor_seq='output/{var_name}/sequences/anchor.gb',
+        insert_record='output/{var_name}/inserts/genbank_files/{p_name}.insert.gb',
+        homology_target=config['insert_design']['homology_target_backbone'],
+        five_prime_arm = config['insert_design']['upstream_regions'],
+        three_prime_arm = config['insert_design']['downstream_regions']
+    params:
+        attributes=lambda wildcards: get_p_record(wildcards),
+        prohibited_cutters=config['prohibited_restriction_enzyme_recognition_sites'],
+    output:
+        'output/{var_name}/inserts/genbank_files/.{p_name}.insert.passed'
+    script:'../scripts/verify_inserts.py'
+
+
+rule check_all_inserts:
+    input:
+        lambda wildcards: expand(
+            'output/{var_name}/inserts/genbank_files/.{p_name}.insert.passed',
+             p_name=get_all_p_names(wildcards), allow_missing=True
+        )
+    output:
+        'output/{var_name}/inserts/.all_checks.passed'
+    shell:'''
+    touch {output}
+    '''
+
+
 rule aggregate_inserts_into_fasta:
     conda:
         '../envs/pyGibson.yml'
@@ -66,7 +96,8 @@ rule aggregate_inserts_into_fasta:
             'output/{var_name}/inserts/genbank_files/{p_name}.insert.gb',
             p_name=get_all_p_names(wildcards), allow_missing=True
         ),
-        checksums='output/{var_name}/inserts/genbank_files/inserts.md5sum'
+        checksums='output/{var_name}/inserts/genbank_files/inserts.md5sum',
+        checks='output/{var_name}/inserts/.all_checks.passed'
     output:
         'output/{var_name}/inserts/complete_inserts.fa'
     script:'../scripts/agg_gb_inserts_to_fa.py'

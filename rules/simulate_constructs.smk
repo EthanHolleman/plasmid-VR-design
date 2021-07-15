@@ -10,6 +10,7 @@ rule simulate_construct_assembly:
         ),
         t7_init_backbone=config['backbones']['t7_initiation'],
         t7_term_backbone=config['backbones']['t7_termination'],
+        tac_backbone=config['backbones']['tac'],
         initiator=config['termination_series_initiator']
     output:
         directory('output/{var_name}/constructs')
