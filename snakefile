@@ -29,6 +29,7 @@ include: 'rules/rlooper.smk'
 include: 'rules/plot_variable_regions.smk'
 include: 'rules/insert_assembly.smk'
 include: 'rules/simulate_constructs.smk'
+include: 'rules/primer3.smk'
 
 
 rule all:
@@ -43,7 +44,7 @@ rule all:
 
         ),
         expand(
-            'output/{var_name}/constructs',
+            'output/{var_name}/.variable_region_primers.done',
             var_name=variable_regions.keys()
 
         )
