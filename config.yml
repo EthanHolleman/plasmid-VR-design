@@ -44,7 +44,7 @@ insert_design:
 # to change primer3 parameters that can be easily done by adjusting the
 # default file's contents. Just watch out for "{}" those get filled by python
 # with sequence specific info.
-PRIMER3_TEMPLATE: 'resources/files/primer3_settings_template.txt'
+PRIMER3_TEMPLATE: 'resources/files/primer3/primer3_settings_template.txt'
 
 # number of different sequence to generate for each variable region definition
 # increasing this value will increase run time but generally increase
