@@ -1,10 +1,11 @@
-
 # User defined parameters, these can and should be change to specify input
 # inputs to the workflow
 # =============================================================================
+
+# Variable regions parameters filepaths. Defines the sequence content
+# of all variable regions that should be generated.
 variable_region_definitions:
   insert_sequences_250: 'config_files/variable_regions/variable_regions.tsv'
-
 
 # List of names of restriction enzymes who's recognition sites should not be
 # present in any generated sequence. Case sensitive. 
@@ -13,7 +14,6 @@ prohibited_restriction_enzyme_recognition_sites:
   - 'KpnI'
   - 'HindIII'
 
-
 # List of paths to genbank formatted files describing plasmid backbones that inserts
 # will be cloned into
 backbones:
@@ -21,7 +21,8 @@ backbones:
   t7_initiation: 'resources/files/genbank/pFC9.gb'
   tac: 'resources/files/genbank/pFC53tacT1T2.gb'
 
-
+# "String initiator" sequence that will be used as the initiator in the
+# T7 termination series constructs. 
 termination_series_initiator: 'resources/files/genbank/placeholder_initiator.gb'
 
 
@@ -51,12 +52,14 @@ PRIMER3_TEMPLATE: 'resources/files/primer3/primer3_settings_template.txt'
 # number of different sequence to generate for each variable region definition
 # increasing this value will increase run time but generally increase
 # quality of final sequence
-EXPECTATION_SAMPLES: 250
+NUMBER_REPLICATES: 10
 
 # Number of random sequences used to calculate sequence metric expectations.
 # Increasing this value will increase run time but produce a more accurate
 # expectation for each metric
-# DEPRECIATED
+# DEPRECIATED. This was used to when purely random sequences were used to
+# inform sequence ranking. Kept in pipeline in case want to generate random
+# sequences in the future. 
 EXPECT_SAMPLES: 200
 
 # Parameters defining how the anchor sequence is calculated
@@ -66,12 +69,11 @@ anchor_sequence:
   anchor_length: 15  # length of the anchor
 
   
-
-
 # =============================================================================
 # Important parameter definitions that will definitely impact the workflow if
 # changed. Avoid changing without good reason. 
 
+# file suffi produced by R-looper in one run.
 RLOOPER_FILE_SUFFI:
   - 'avgG.wig'
   - 'bpprob.wig'
@@ -79,19 +81,14 @@ RLOOPER_FILE_SUFFI:
   - 'mfe.bed'
   - 'mfe.wig'
 
+# file suffi produced by spot-rna for one run 
 SPOT_RNA_EXTS:
   - 'bpseq'
   - 'ct'
   - 'prob'
 
-
+# defines what a "good" value for each sequence metric looks like.
 EXPECTATION_DEFS:
-  # defines what a "good" value for each sequence metric looks like.
-  # direction and divergence should either be 1 or -1.
-  # direction: defines if metric value should be to the right (1) or left (-1)
-  # of the metric expectation. Is only really important if divergence = 1.
-  # divergence: defines if the distance (in standard deviations) from the
-  # metric expectation should minimized (-1) or maximized (1).
   bp_prob: 'max' 
   local_average_energy: 'min'
   prop_hairpin: 'min'

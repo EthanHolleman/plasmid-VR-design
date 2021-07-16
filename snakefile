@@ -12,10 +12,10 @@ vr_tables = {
 RLOOPER_FILE_SUFFI = config['RLOOPER_FILE_SUFFI']
 SPOT_RNA_EXTS = config['SPOT_RNA_EXTS']
 
-NUM_CASES = config['EXPECTATION_SAMPLES']
+NUM_CASES = config['NUMBER_REPLICATES']
 CASE_RANGE = range(1, NUM_CASES+1)
 
-EXPECTATION_SAMPLES = config['EXPECTATION_SAMPLES']
+NUMBER_REPLICATES = config['NUMBER_REPLICATES']
 EXPECT_SAMPLES = config['EXPECT_SAMPLES']
 RAND_SEQ_NAMES = [f'RAND-SEQ:{i}' for i in range(0, EXPECT_SAMPLES)]
 
@@ -34,26 +34,30 @@ include: 'rules/primer3.smk'
 
 rule all:
     input:
-        expand(
+        expand(  # make all complete insert sequences
             'output/{var_regions}/inserts/complete_inserts.fa',
             var_regions=variable_regions.keys()
         ),
-        expand(
+        expand(  # make complete insert checksums 
             'output/{var_name}/inserts/complete_inserts.md5sum',
             var_name=variable_regions.keys()
 
         ),
-        expand(
+        expand(  # verify all complete inserts
             'output/{var_name}/inserts/.all_checks.passed',
             var_name=variable_regions.keys()
-        ),
+        ), # rlooper results all sequences
         expand(
+            'output/expectations/{var_name}/rlooper/rlooper_expect.png',
+            var_name=variable_regions.keys()
+        ),  # same thing but for spot-rna predictions
+        expand(
+            'output/expectations/{var_name}/SPOT-RNA/rna_secondary_structure.png',
+            var_name=variable_regions.keys()
+        )
+        expand(  # Simulate construct assembly
             'output/{var_name}/constructs',
             var_name=variable_regions.keys()
         )
-        # exp
-        # expand(
-        #     'output/{var_regions}/plots/{var_regions}.pdf',
-        #     var_regions=variable_regions.keys()
-        # )
+        
         
