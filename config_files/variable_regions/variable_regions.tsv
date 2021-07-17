@@ -1,30 +1,29 @@
-name	gc_skew	gc_content	length	at_skew	at_content	cluster_length	cluster_nuc	clustering_method	reverse_complement	role
-VR-1	0.2	0.4	200	NA	NA	NA	NA	NA	1	variable_region_1
-VR-2	0.1	0.3	200	NA	NA	NA	NA	NA	0	variable_region_2
-VR-3	0.6	0.6	200	NA	NA	NA	NA	NA	0	variable_region_3
-VR-4	0.4	0.3	200	NA	NA	NA	NA	NA	1	variable_region_4
-VR-5	0.2	0.3	200	NA	NA	NA	NA	NA	1	variable_region_5
-VR-6	0	0.3	200	NA	NA	NA	NA	NA	1	variable_region_6
-VR-7	0	0.6	200	NA	NA	NA	NA	NA	0	variable_region_7
-VR-8	0.6	0.5	200	NA	NA	NA	NA	NA	0	variable_region_8
-VR-9	0.1	0.6	200	NA	NA	NA	NA	NA	0	variable_region_9
-VR-10	0.4	0.6	200	NA	NA	NA	NA	NA	0	variable_region_10
-VR-11	0.2	0.6	200	NA	NA	NA	NA	NA	0	variable_region_11
-VR-12	0	0.5	200	NA	NA	NA	NA	NA	1	variable_region_12
-VR-13	0.6	0.4	200	NA	NA	NA	NA	NA	0	variable_region_13
-VR-14	0	0.4	200	NA	NA	NA	NA	NA	1	variable_region_14
-VR-15	0.1	0.5	200	NA	NA	NA	NA	NA	0	variable_region_15
-VR-16	0.6	0.3	200	NA	NA	NA	NA	NA	0	variable_region_16
-VR-17	0.4	0.5	200	NA	NA	NA	NA	NA	1	variable_region_17
-VR-18	0.2	0.5	200	NA	NA	NA	NA	NA	1	variable_region_18
-VR-19	0.1	0.4	200	NA	NA	NA	NA	NA	0	variable_region_19
-VR-20	0.4	0.4	200	NA	NA	NA	NA	NA	1	variable_region_20
-VR-21	0.4	0.6	200	0	NA	1	G	find_available_random_range	1	variable_region_21
-VR-22	0.4	0.6	200	0	NA	2	G	find_available_random_range	1	variable_region_22
-VR-23	0.4	0.6	200	0	NA	3	G	find_available_random_range	1	variable_region_23
-VR-24	0.4	0.6	200	0	NA	4	G	find_available_random_range	1	variable_region_24
-VR-25	0.4	0.6	200	0.2	NA	1	G	find_available_random_range	1	variable_region_25
-VR-26	0.4	0.6	200	0.2	NA	2	G	find_available_random_range	1	variable_region_26
-VR-27	0.4	0.6	200	0.2	NA	3	G	find_available_random_range	1	variable_region_27
-VR-28	0.4	0.6	200	0.2	NA	4	G	find_available_random_range	1	variable_region_28
-VR-29	0.4	0.6	200	0.4	NA	1	G	find_available_random_range	1	variable_region_29
+gc_skew	gc_content	at_skew	cluster_length	name	role	reverse_complement	length	at_content	clustering_method	cluster_nuc
+0.0	0.4	0.0	NA	VR-1	Variable region 1	1	200	0.6	NA	NA
+0.0	0.5	0.0	NA	VR-2	Variable region 2	1	200	0.5	NA	NA
+0.0	0.6	0.0	NA	VR-3	Variable region 3	1	200	0.4	NA	NA
+0.0	0.7	0.0	NA	VR-4	Variable region 4	1	200	0.3	NA	NA
+0.1	0.4	0.0	NA	VR-5	Variable region 5	1	200	0.6	NA	NA
+0.1	0.5	0.0	NA	VR-6	Variable region 6	1	200	0.5	NA	NA
+0.1	0.6	0.0	NA	VR-7	Variable region 7	1	200	0.4	NA	NA
+0.1	0.7	0.0	NA	VR-8	Variable region 8	1	200	0.3	NA	NA
+0.2	0.4	0.0	NA	VR-9	Variable region 9	1	200	0.6	NA	NA
+0.2	0.5	0.0	NA	VR-10	Variable region 10	1	200	0.5	NA	NA
+0.2	0.6	0.0	NA	VR-11	Variable region 11	1	200	0.4	NA	NA
+0.2	0.7	0.0	NA	VR-12	Variable region 12	1	200	0.3	NA	NA
+0.4	0.4	0.0	NA	VR-13	Variable region 13	1	200	0.6	NA	NA
+0.4	0.5	0.0	NA	VR-14	Variable region 14	1	200	0.5	NA	NA
+0.4	0.6	0.0	NA	VR-15	Variable region 15	1	200	0.4	NA	NA
+0.4	0.7	0.0	NA	VR-16	Variable region 16	1	200	0.3	NA	NA
+0.6	0.4	0.0	NA	VR-17	Variable region 17	1	200	0.6	NA	NA
+0.6	0.5	0.0	NA	VR-18	Variable region 18	1	200	0.5	NA	NA
+0.6	0.6	0.0	NA	VR-19	Variable region 19	1	200	0.4	NA	NA
+0.6	0.7	0.0	NA	VR-20	Variable region 20	1	200	0.3	NA	NA
+0.4	0.6	0.2	NA	VR-21	Variable region 21	1	200	0.4	NA	NA
+0.4	0.6	0.2	2	VR-22	Variable region 22	1	200	0.4	find_available_random_range	G
+0.4	0.6	0.2	3	VR-23	Variable region 23	1	200	0.4	find_available_random_range	G
+0.4	0.6	0.2	4	VR-24	Variable region 24	1	200	0.4	find_available_random_range	G
+0.4	0.6	0.4	NA	VR-25	Variable region 25	1	200	0.4	NA	NA
+0.4	0.6	0.4	2	VR-26	Variable region 26	1	200	0.4	find_available_random_range	G
+0.4	0.6	0.4	3	VR-27	Variable region 27	1	200	0.4	find_available_random_range	G
+0.4	0.6	0.4	4	VR-28	Variable region 28	1	200	0.4	find_available_random_range	G
