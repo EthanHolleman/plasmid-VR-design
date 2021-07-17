@@ -10,6 +10,7 @@ read_all_agg_metric_files <- function(file.path.list){
     for (i in 1:length(file.path.list)){
 
         file.path <- as.character(file.path.list[[i]])
+        print(file.path)
         dfs[[i]] <- as.data.frame(read.table(file.path, sep='\t', header=TRUE))
 
     }
