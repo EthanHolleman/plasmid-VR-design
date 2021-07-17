@@ -160,6 +160,7 @@ class T7TerminationSeries(Series):
         di = Series.select_largest_fragment(
             self.initiator.cut(T7TerminationSeries.si_linearizers)
         )
+        di.write('digested_record.gb')
         return di
     
     @property

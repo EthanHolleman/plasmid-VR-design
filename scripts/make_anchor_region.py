@@ -6,6 +6,7 @@ from Bio import SeqIO
 from Bio.Restriction import *
 from Bio.SeqUtils import MeltingTemp as mt
 import numpy as np
+from pathlib import Path
 import datetime
 
 # read in all sequence files and test randoms
@@ -29,7 +30,10 @@ def read_genbank_records(record_list):
 
 
 def random_sequence(length):
-    return Dseqrecord(''.join(list(np.random.choice(['A', 'T', 'G', 'C'], length))))
+    string = ''.join(list(np.random.choice(['A', 'T', 'G', 'C'], length-1)))
+    string += 'G'  # make last base a G for GC clamp when used as primer
+    return Dseqrecord(string)
+
 
 
 def check_for_common_substrings(seq_x, seq_y, limit=None):
@@ -97,6 +101,37 @@ def check_melting_temp(candidate_anchor, min_temp=48):
         return True
 
 
+def check_gc_content(candidate_anchor):
+    '''Make sure the gc content of the candidate anchor is between 40 and 60
+    percent.
+
+    Args:
+        candidate_anchor (Dseqrecord): Candidate anchor sequence.
+    '''
+    G_count = str(candidate_anchor.seq).upper().count('G')
+    C_count = str(candidate_anchor.seq).upper().count('C')
+    gc_content = (G_count + C_count) / len(candidate_anchor.seq)
+    print('GC_content:', gc_content)
+    if gc_content >= 0.4 and gc_content <= 0.6:
+        return True
+    else:
+        return False
+
+
+def check_for_single_base_runs(candidate_anchor):
+    bases = ['A', 'T', 'G', 'C']
+    for each_base in bases:
+        counter = 0
+        for each_nuc in str(candidate_anchor.seq).upper():
+            if each_nuc == each_base:
+                counter += 1
+            else:
+                counter = 0
+            if counter > 3:
+                return False
+    return True
+
+
 def make_anchor_seq(records, anchor_length, prohibited_cutters,
                     max_attempts=10000, min_melting_temp=48):
     '''Make a suitable anchor sequence that does not share common sub strings
@@ -133,9 +168,10 @@ def make_anchor_seq(records, anchor_length, prohibited_cutters,
 
         if sub_str_safe:  # no common substrings now check for cutters
             additional_checks = [
-                check_melting_temp(candidate_anchor, min_melting_temp),
                 check_for_prohibited_restriction_sites(
-                    candidate_anchor, prohibited_cutters)
+                    candidate_anchor, prohibited_cutters),
+                check_gc_content(candidate_anchor),
+                check_for_single_base_runs(candidate_anchor)
             ]
             if False in additional_checks:  # one or more checks failed
                 continue
@@ -161,6 +197,13 @@ def write_genbank_file(record, output_path):
     )
     g_record.stamp()
     g_record.write(output_path)
+
+
+def write_fasta_file(record, output_path):
+    output_path = Path(output_path).with_suffix('.fa')
+    with open(str(output_path), 'w') as handle:
+        handle.write(record.format('fasta'))
+    return output_path
 
 
 def main():
@@ -196,6 +239,7 @@ def main():
     )
 
     write_genbank_file(anchor_seq, output_path)
+    write_fasta_file(anchor_seq, output_path)
     print('Done')
 
 

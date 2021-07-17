@@ -63,7 +63,7 @@ rule plot_rlooper_rand_seq_distribution_parameter_informed:
         id_nums=lambda wildcards: CASE_RANGE
     script:'../scripts/plot_rlooper_expect_params.R'
 
-
+# no longer used in main pipeline 
 rule plot_rlooper_rand_seq_distribution:
     conda:
         '../envs/R.yml'
@@ -81,7 +81,7 @@ rule plot_rlooper_rand_seq_distribution:
         expect='output/expectations/rlooper/rlooper_expect.{length}.tsv'
     script:'../scripts/plot_rlooper_expect.R'
 
-
+# no longer used in main pipeline 
 rule plot_spot_rna_rand_seq:
     conda:
         '../envs/R.yml'
@@ -99,9 +99,13 @@ rule plot_spot_rna_params:
     conda:
         '../envs/R.yml'
     input:
-        lambda wildcards: expand(
+        metrics=lambda wildcards: expand(
             'output/{var_name}/files/{p_name}/concatAggMetrics/{p_name}.tsv',
             p_name=get_all_p_names(wildcards), allow_missing=True
+        ),
+        tsv_files=lambda wildcards: expand(
+            'output/{var_name}/files/{p_name}/candidate_seqs/{id_num}/{p_name}.{id_num}.tsv',
+            p_name=get_all_p_names(wildcards), id_num=CASE_RANGE, allow_missing=True
         )
     output:
         'output/expectations/{var_name}/SPOT-RNA/rna_secondary_structure.png'

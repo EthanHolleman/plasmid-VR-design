@@ -174,6 +174,8 @@ rule rank_and_select_sampled_sequences:
 
 
 rule p_coords_ranked_seqs:
+    conda:
+        '../envs/R.yml'
     input:
         'output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.all_ranked.tsv'
     output:
@@ -188,10 +190,10 @@ rule concatenate_top_ranked_sequences_fasta:
             'output/{var_name}/files/{p_name}/rankedSeqs/{p_name}.top_seq.fasta',
             p_name=get_all_p_names(wildcards), allow_missing=True
         ),
-        # coord_plots = lambda wildcards: expand(
-        #     'output/{var_name}/files/{p_name}/plots/{p_name}.all_ranked.png',
-        #     p_name=get_all_p_names(wildcards), allow_missing=True
-        # )
+        coord_plots = lambda wildcards: expand(
+            'output/{var_name}/files/{p_name}/plots/{p_name}.all_ranked.png',
+            p_name=get_all_p_names(wildcards), allow_missing=True
+        )
     output:
         'output/{var_name}/sequences/variable_regions.fasta'
     shell:'''
