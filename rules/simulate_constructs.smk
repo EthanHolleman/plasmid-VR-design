@@ -11,7 +11,9 @@ rule simulate_construct_assembly:
         t7_init_backbone=config['backbones']['t7_initiation'],
         t7_term_backbone=config['backbones']['t7_termination'],
         tac_backbone=config['backbones']['tac'],
-        initiator=config['termination_series_initiator']
+        initiator=config['termination_series_initiator'],
+        tac_init_primers='output/{var_name}/sequences/tac_initiation_series_primers.fa',
+        tac_term_primers='output/{var_name}/sequences/tac_termination_series_primers.fa'
     output:
         directory('output/{var_name}/constructs')
     script:'../scripts/simulate_assembly.py'
@@ -49,7 +51,7 @@ rule write_protocol_notebook:
         backbone_concentration=None  # placeholder value ng / ul
     output:
         library='output/{var_name}/protocols/t7_init_library.tsv',
-        inserts='output/{var_name}/protocols/t6_init_inserts.tsv'
+        inserts='output/{var_name}/protocols/t7_init_inserts.tsv'
     log:
         notebook='output/{var_name}/protocols/protocol_notebook.ipynb'
     notebook: '../notebooks/neb_gibson_protocol.ipynb'
