@@ -1,7 +1,7 @@
-LOCUS       insert_VR-29             275 bp    DNA     linear   SYN 11-JUL-2021
+LOCUS       insert_VR-29             275 bp    DNA     linear   SYN 18-JUL-2021
 DEFINITION  insert_VR-29.
-ACCESSION   RmxIda30q9dasays9U85tIInbxY
-VERSION     RmxIda30q9dasays9U85tIInbxY
+ACCESSION   m_PPHGpj9dTGYSpL2aM4sx7zBKQ
+VERSION     m_PPHGpj9dTGYSpL2aM4sx7zBKQ
 KEYWORDS    .
 SOURCE      .
   ORGANISM  .
@@ -22,13 +22,13 @@ FEATURES             Location/Qualifiers
                      /label="Anchor region"
      CDS             46..245
                      /name="variable_region"
-                     /gc_skew="0.4"
-                     /gc_content="0.6"
-                     /at_skew="0.4"
-                     /at_content="0.4"
-                     /clustered_nucleotide="G"
+                     /gc_skew="0.6"
+                     /gc_content="0.5"
+                     /at_skew="0.0"
+                     /at_content="0.5"
+                     /clustered_nucleotide="nan"
                      /label="Variable region"
-                     /date="11-JUL-2021"
+                     /date="18-JUL-2021"
                      /author="Ethan Holleman"
      CDS             246..275
                      /name="3' homology arm"
@@ -41,9 +41,9 @@ FEATURES             Location/Qualifiers
                      /pFC9_seguid="NenxzxpELoRBEdYEmmDjvk0mvTk"
                      /date="07/08/2021"
 ORIGIN
-        1 tagggcgaat tggagctcca catcggtacc cacgtttggc caccagaggg gggagaaaca
-       61 aaacaggtca gggcagcaga aatgcgccag ggaagagtgg gcagtcagtc cgcagcatag
-      121 aactcggcga tggtgttaga actgatagag gggcggagtg ctaagcgctc ccgggtggcc
-      181 acgaatgtgg gcaagaaaag gtaggagagt ggggtcaccg gagtgagcca tgggaagggg
-      241 gcagcgaatt cgtcgcagtg accgaggcga ggagg
+        1 tagggcgaat tggagctcca catcggtacc caaacactcc ctcggaggtg aaccttggga
+       61 gatcaggtag agaacgttag gtatggcagg ggaatagaga cggtctgggc tcttctcaga
+      121 tgatttattt aagagttggg agaagctgat ggtatagtgg gagattagga aatcttgtag
+      181 gtgagggtgg taggcggtgg aaggaatcgg tgcatgcgag tcattcgtgt gtgaggtggc
+      241 gaggagaatt cgtcgcagtg accgaggcga ggagg
 //

@@ -1,7 +1,7 @@
-LOCUS       insert_VR-18             275 bp    DNA     linear   SYN 11-JUL-2021
+LOCUS       insert_VR-18             275 bp    DNA     linear   SYN 18-JUL-2021
 DEFINITION  insert_VR-18.
-ACCESSION   wFpmIvRWQflYBPY81IU27sFbZd4
-VERSION     wFpmIvRWQflYBPY81IU27sFbZd4
+ACCESSION   C7rSVWiXasW-4djQnyFQabGohR8
+VERSION     C7rSVWiXasW-4djQnyFQabGohR8
 KEYWORDS    .
 SOURCE      .
   ORGANISM  .
@@ -22,13 +22,13 @@ FEATURES             Location/Qualifiers
                      /label="Anchor region"
      CDS             46..245
                      /name="variable_region"
-                     /gc_skew="0.2"
-                     /gc_content="0.5"
+                     /gc_skew="0.4"
+                     /gc_content="0.6"
                      /at_skew="0.0"
-                     /at_content="0.5"
+                     /at_content="0.4"
                      /clustered_nucleotide="nan"
                      /label="Variable region"
-                     /date="11-JUL-2021"
+                     /date="18-JUL-2021"
                      /author="Ethan Holleman"
      CDS             246..275
                      /name="3' homology arm"
@@ -41,9 +41,9 @@ FEATURES             Location/Qualifiers
                      /pFC9_seguid="NenxzxpELoRBEdYEmmDjvk0mvTk"
                      /date="07/08/2021"
 ORIGIN
-        1 tagggcgaat tggagctcca catcggtacc cacgtttggc caccaggttg tagttctagg
-       61 tgcgggtgca tgctgaggtg ccctaccgag ggagcgacca acgctatctt aatgaacgcg
-      121 ggcgtttagt gcggtgtacg gttgggtaga atacccttag ctgatatatt ggcgccaacg
-      181 attcaccgaa aaacacctgc actaacgcgg catgatgatt ggaatgtata taagactaag
-      241 tttgggaatt cgtcgcagtg accgaggcga ggagg
+        1 tagggcgaat tggagctcca catcggtacc caaacactcc ctcggccgta gcggggcaag
+       61 gagcgatggt gacggagctc ctggaatcct ctggttcgct ggacactcag ttagggtggt
+      121 ggggcgcgcg ggcaagcacg acagggaagg tacggagtat atctacagcg atcggcatgt
+      181 gaggctgagc gtgcttggtg catgagagga tggttttagg gcggaggaga gtttaagggc
+      241 tgtgggaatt cgtcgcagtg accgaggcga ggagg
 //

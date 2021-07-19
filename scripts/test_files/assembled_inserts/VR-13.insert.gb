@@ -1,7 +1,7 @@
-LOCUS       insert_VR-13             275 bp    DNA     linear   SYN 11-JUL-2021
+LOCUS       insert_VR-13             275 bp    DNA     linear   SYN 18-JUL-2021
 DEFINITION  insert_VR-13.
-ACCESSION   F-umROlWXPNmCnU9huosc24irXk
-VERSION     F-umROlWXPNmCnU9huosc24irXk
+ACCESSION   kqbenjtMhy1ZDZ-DI0xo2lrLlwc
+VERSION     kqbenjtMhy1ZDZ-DI0xo2lrLlwc
 KEYWORDS    .
 SOURCE      .
   ORGANISM  .
@@ -22,13 +22,13 @@ FEATURES             Location/Qualifiers
                      /label="Anchor region"
      CDS             46..245
                      /name="variable_region"
-                     /gc_skew="0.6"
+                     /gc_skew="0.4"
                      /gc_content="0.4"
                      /at_skew="0.0"
                      /at_content="0.6"
                      /clustered_nucleotide="nan"
                      /label="Variable region"
-                     /date="11-JUL-2021"
+                     /date="18-JUL-2021"
                      /author="Ethan Holleman"
      CDS             246..275
                      /name="3' homology arm"
@@ -41,9 +41,9 @@ FEATURES             Location/Qualifiers
                      /pFC9_seguid="NenxzxpELoRBEdYEmmDjvk0mvTk"
                      /date="07/08/2021"
 ORIGIN
-        1 tagggcgaat tggagctcca catcggtacc cacgtttggc caccaaaatg gagaggttag
-       61 ttggaatttg gcgtaggtga aggcaaaaat agaaatcggt ataatgtttc aaggatgtta
-      121 acaaggtgtg aaagaggtcg gtgacagaag tctttaaata gttatgtctc aaattactca
-      181 gtagtttgag gaggtattgt aggacgttat tccgataggg tttatgtgcg tgatggggtg
-      241 gtgaggaatt cgtcgcagtg accgaggcga ggagg
+        1 tagggcgaat tggagctcca catcggtacc caaacactcc ctcggcacat tagagtacgt
+       61 agaggcagtg catcctgggc ggtttgaatt aggttaactc gagggtaagt tgtacttaac
+      121 atagaggaga ggcattcgag gcttggtctg taaaactgtt tagtattggg taaagcggaa
+      181 atctaatttc aacgagctct ataggaaata attaatggaa gatagtggtg ttatcgttag
+      241 atttggaatt cgtcgcagtg accgaggcga ggagg
 //

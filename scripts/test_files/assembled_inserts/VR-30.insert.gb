@@ -1,7 +1,7 @@
-LOCUS       insert_VR-3              275 bp    DNA     linear   SYN 18-JUL-2021
-DEFINITION  insert_VR-3.
-ACCESSION   qv8U2ZXzPuV-eRFwpiL-t80vvr8
-VERSION     qv8U2ZXzPuV-eRFwpiL-t80vvr8
+LOCUS       insert_VR-30             275 bp    DNA     linear   SYN 18-JUL-2021
+DEFINITION  insert_VR-30.
+ACCESSION   dmQltEcWWnOJeaccewuO1mx6Z1U
+VERSION     dmQltEcWWnOJeaccewuO1mx6Z1U
 KEYWORDS    .
 SOURCE      .
   ORGANISM  .
@@ -22,7 +22,7 @@ FEATURES             Location/Qualifiers
                      /label="Anchor region"
      CDS             46..245
                      /name="variable_region"
-                     /gc_skew="0.0"
+                     /gc_skew="0.6"
                      /gc_content="0.6"
                      /at_skew="0.0"
                      /at_content="0.4"
@@ -41,9 +41,9 @@ FEATURES             Location/Qualifiers
                      /pFC9_seguid="NenxzxpELoRBEdYEmmDjvk0mvTk"
                      /date="07/08/2021"
 ORIGIN
-        1 tagggcgaat tggagctcca catcggtacc caaacactcc ctcggcaatc ggtatccccg
-       61 cgactgcgcc ttggggacat atcgcccctt ggaagatgcc aacgcggtag gtggcttgtt
-      121 ctgcccacgc agctggtcac gcgtaatgcg ccggggactc acagcggtgt atttgtctaa
-      181 gatgagcagt tcaagatacc acgaacggcc agtctggacg agacccggca tgctggacgc
-      241 cccttgaatt cgtcgcagtg accgaggcga ggagg
+        1 tagggcgaat tggagctcca catcggtacc caaacactcc ctcggtgggg cctgggtggg
+       61 gggaggtgaa gagcacagcg cggatagcgg gaaagaagga atgtgtcggg gattggatat
+      121 agcggctgga agggagtgtg cgcaagggtt agtagatggg gggggataat catccggtcc
+      181 ttctttattg gtggcagggt gttgtagata attctgggtg gaggggcggc gcggaggcag
+      241 ggggggaatt cgtcgcagtg accgaggcga ggagg
 //
