@@ -59,6 +59,14 @@ def strong_initiator():
     # with an EcoRI site so generate it it here.
     return read_genbank_record(INITIATOR)
 
+@pytest.fixture
+def tac_initiation_series_primers():
+    return str(TEST_FILES.joinpath('primers/tac_initiation_series_primers.fa'))
+
+@pytest.fixture
+def tac_termination_series_primers():
+    return str(TEST_FILES.joinpath('primers/tac_termination_series_primers.fa'))
+
 
 @pytest.fixture
 def T7_init_backbone():
@@ -151,20 +159,21 @@ def test_write_assemble_dir_t7_termination(assembled_insert_paths,
         os.remove(str(each_file))
 
 
-def test_tac_initiation_series_init(t7_init_series, tac_backbone, dummy_output_dir):
-    output_file = Path(dummy_output_dir).joinpath('test_tac_assembly.gb')
-    for each_construct in t7_init_series:
+# def test_tac_initiation_series_init(t7_init_series, tac_backbone, dummy_output_dir,
+#                                     tac_initiation_series_primers):
+#     output_file = Path(dummy_output_dir).joinpath('test_tac_assembly.gb')
+#     for each_construct in t7_init_series:
 
-        each_construct.write_assembly(str(output_file), 'test_tac_assembly', 1, 'test')
+#         each_construct.write_assembly(str(output_file), 'test_tac_assembly', 1, 'test')
 
-        assert os.path.isfile(str(output_file))
+#         assert os.path.isfile(str(output_file))
 
-        tac_init_series = TacInitiationSeries(
-            'test_tac', str(output_file), str(tac_backbone)
-            )
-        assert isinstance(tac_init_series, TacInitiationSeries)
-        assert tac_init_series.parent_construct
-        assert isinstance(tac_init_series.parent_construct, GenbankRecord)
+#         tac_init_series = TacInitiationSeries(
+#             'test_tac', str(output_file), str(tac_backbone)
+#             )
+#         assert isinstance(tac_init_series, TacInitiationSeries)
+#         assert tac_init_series.parent_construct
+#         assert isinstance(tac_init_series.parent_construct, GenbankRecord)
 
 
 @pytest.fixture
@@ -181,7 +190,7 @@ def t7_initiation_series_assemblies(assembled_insert_paths, dummy_output_dir):
 
 @pytest.fixture
 def t7_termination_series_assemblies(assembled_insert_paths,
-                                           dummy_output_dir, strong_initiator):
+                                    dummy_output_dir, strong_initiator):
     t7_dir = Path(dummy_output_dir).joinpath('t7_term_assemblies')
     t7_dir.mkdir(exist_ok=True, parents=True)
     output_files = T7TerminationSeries.write_assemblies_from_insert_list(
@@ -191,42 +200,42 @@ def t7_termination_series_assemblies(assembled_insert_paths,
     return output_files
 
 
-# def test_tac_init_write_assemblies(t7_initiation_series_assemblies, 
-#                                    tac_backbone, dummy_output_dir):
+def test_tac_init_write_assemblies(t7_initiation_series_assemblies, 
+                                   tac_backbone, tac_initiation_series_primers,
+                                   dummy_output_dir):
 
-#     out_dir = Path(dummy_output_dir).joinpath('Tac_init_constructs')
-#     out_dir.mkdir(exist_ok=True, parents=True)
-#     primer_path = out_dir.joinpath('primers.fa')
-#     output_files = TacInitiationSeries.write_assemblies_from_parent_constructs(
-#         t7_initiation_series_assemblies, str(tac_backbone), out_dir
-#     )
-#     for each_file in output_files:
-#         record = GenbankRecord(read(each_file))
-#         assert len(record) > 0
-#         #assert len(record.features) == 13
-#         feature_types = [each_feature.type for each_feature in record.features]
-#         assert 'promoter' in feature_types
-#         assert 'terminator' in feature_types
+    out_dir = Path(dummy_output_dir).joinpath('Tac_init_constructs')
+    out_dir.mkdir(exist_ok=True, parents=True)
+    primer_path = out_dir.joinpath('primers.fa')
+    output_files = TacInitiationSeries.write_assemblies_from_parent_constructs(
+        t7_initiation_series_assemblies, str(tac_backbone), 
+        tac_initiation_series_primers, out_dir
+    )
+    for each_file in output_files:
+        record = GenbankRecord(read(each_file))
+        assert len(record) > 0
+        feature_types = [each_feature.type for each_feature in record.features]
+        assert 'promoter' in feature_types
+        assert 'terminator' in feature_types
     
-#     TacInitiationSeries.write_primers(primer_path)
 
-# def test_tac_term_write_assemblies(t7_termination_series_assemblies, 
-#                                     tac_backbone, dummy_output_dir):
-#     out_dir = Path(dummy_output_dir).joinpath('Tac_term_constructs')
-#     out_dir.mkdir(exist_ok=True, parents=True)
-#     primer_path = out_dir.joinpath('primers.fa')
-#     output_files = TacTerminationSeries.write_assemblies_from_parent_constructs(
-#         t7_termination_series_assemblies, tac_backbone, out_dir
-#     )
-#     for each_file in output_files:
-#         record = GenbankRecord(read(each_file))
-#         assert len(record) > 0
-#         assert len(record.features) == 12
-#         feature_types = [each_feature.type for each_feature in record.features]
-#         assert 'promoter' in feature_types
-#         assert 'terminator' in feature_types
-    
-#     TacTerminationSeries.write_primers(primer_path)
+def test_tac_term_write_assemblies(t7_termination_series_assemblies, 
+                                    tac_backbone, dummy_output_dir,
+                                    tac_termination_series_primers):
+
+    out_dir = Path(dummy_output_dir).joinpath('Tac_term_constructs')
+    out_dir.mkdir(exist_ok=True, parents=True)
+
+    output_files = TacTerminationSeries.write_assemblies_from_parent_constructs(
+        t7_termination_series_assemblies, tac_backbone, 
+        tac_termination_series_primers, out_dir
+    )
+    for each_file in output_files:
+        record = GenbankRecord(read(each_file))
+        assert len(record) > 0
+        feature_types = [each_feature.type for each_feature in record.features]
+        assert 'promoter' in feature_types
+        assert 'terminator' in feature_types
 
 
 
