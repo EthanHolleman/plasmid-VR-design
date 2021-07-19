@@ -3,6 +3,7 @@ import pandas as pd
 import csv
 from Bio.Restriction import *
 from Bio.Seq import Seq
+from math import floor
 
 SEED = 12311997  # turn this into a parameter in snakemake somewhere in future
 
@@ -68,16 +69,35 @@ def random_range_of_length_n(length_seq, range_length):
     return start, end
 
 
-def find_available_random_range(occupied_coords, range_length):
+def evenly_distribute_clusters(bins, number_clusters, cluster_length):
+    cluster_length = int(cluster_length)
+    seq_length = len(bins)
+    unclustered_nucs = seq_length - (cluster_length * number_clusters)
+    number_gaps = number_clusters - 1
+    nucs_per_gap = floor(unclustered_nucs / number_gaps)
+    extra = unclustered_nucs - (nucs_per_gap * number_gaps)
+    extra_top = floor(extra/2)
+
+    for i in range(number_clusters):
+        cluster_start = ((i* cluster_length) + (i * nucs_per_gap)) + extra_top
+        cluster_end = cluster_start + cluster_length
+        bins[cluster_start:cluster_end] = [1] * (cluster_end-cluster_start)
+
+    
+    return bins
+
+
+def find_available_random_range(occupied_coords, range_length, spacing=3):
+    # spacing is min number of bases between clusters 
     if longest_unoccupied_gap(occupied_coords) >= range_length:
         while True:
             start, end = random_range_of_length_n(
-                len(occupied_coords), range_length
+                len(occupied_coords), (range_length + spacing*2)
             )
             if range_is_occupied(occupied_coords, start, end):
                 continue
             else:
-                return int(start), int(end)
+                return int(start) + spacing, int(end) - spacing
     else:
         # no possible ranges
         return False
