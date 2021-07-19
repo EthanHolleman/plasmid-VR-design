@@ -30,10 +30,18 @@ include: 'rules/plot_variable_regions.smk'
 include: 'rules/insert_assembly.smk'
 include: 'rules/simulate_constructs.smk'
 include: 'rules/primer3.smk'
+include: 'rules/rclone.smk'
+
+
+if config['rclone']['sync']:
+    rclone_output = expand('output/{var_name}/.synced.done', var_name=variable_regions.keys())
+else:
+    rclone_output = expand('output/{var_name}/.no_sync', var_name=variable_regions.keys())
 
 
 rule all:
     input:
+        rclone_output,
         expand(  # make all complete insert sequences
             'output/{var_regions}/inserts/complete_inserts.fa',
             var_regions=variable_regions.keys()
@@ -63,6 +71,11 @@ rule all:
             ['output/{var_name}/sequences/tac_initiation_series_primers.fa',
             'output/{var_name}/sequences/tac_termination_series_primers.fa'],
             var_name=variable_regions.keys()
+        ),
+        expand(
+            'output/{var_name}/protocols/t7_init_library.tsv',
+            var_name=variable_regions.keys()
         )
+
         
         

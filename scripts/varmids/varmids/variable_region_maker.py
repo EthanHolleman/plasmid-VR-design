@@ -14,14 +14,14 @@ class Sequence():
         return rc_name
 
     def __init__(self, name, id_num, description, cluster_length=None,
-                 cluster_nuc=None, cluster_dist_func=None, nuc_counts={},
+                 cluster_nuc=None, nuc_counts={},
                  nuc_seq=None):
         self.name = name
         self.id_num = id_num
         self.description = description
         self.cluster_length = cluster_length
         self.cluster_nuc = cluster_nuc
-        self.cluster_dist_func = cluster_dist_func
+        #self.cluster_dist_func = cluster_dist_func
         self.nuc_counts = nuc_counts
         self.nuc_seq = nuc_seq
 
@@ -54,16 +54,16 @@ class Sequence():
         else:
             raise TypeError
 
-    @property
-    def cluster_dist_func(self):
-        return self._cluster_dist_func
+    # @property
+    # def cluster_dist_func(self):
+    #     return self._cluster_dist_func
 
-    @cluster_dist_func.setter
-    def cluster_dist_func(self, new_func):
-        if callable(new_func):
-            self._cluster_dist_func = new_func
-        else:
-            self._cluster_dist_func = find_available_random_range
+    # @cluster_dist_func.setter
+    # def cluster_dist_func(self, new_func):
+    #     if callable(new_func):
+    #         self._cluster_dist_func = new_func
+    #     else:
+    #         self._cluster_dist_func = find_available_random_range
 
     @property
     def count_dict(self):
@@ -94,8 +94,8 @@ class Sequence():
         rc_name = Sequence.rename_seq_for_rc(self.name)
         rc_description = self.description.replace(self.name, rc_name)
         return Sequence(
-            rc_name, rc_description, self.cluster_length, self.cluster_nuc,
-            self.cluster_dist_func, nuc_seq=rc
+            rc_name, rc_description, self.cluster_length, self.cluster_nuc, 
+            nuc_seq=rc
         )
 
     def __len__(self):
@@ -120,7 +120,7 @@ class Sequence():
         # if this method is being called sequence needs to be generated and
         # as not already been passed in via the nuc_seq parameter during
         # initiation
-        if self.cluster_length:
+        if self.cluster_length and self.cluster_length > 1:
             bins = self._distribute_nucleotides_with_clustering(bins)
         else:
             bins = self._randomly_distribute_all_nucleotides(bins)
@@ -148,15 +148,17 @@ class Sequence():
             self.cluster_length = int(self.nuc_counts[self.cluster_nuc])
 
         seq_bins = [None for _ in range(len(bins))]
-        for i in range(number_clusters):
-            rand_range = self.cluster_dist_func(bins, self.cluster_length)
+        bins = evenly_distribute_clusters(
+            bins, number_clusters, self.cluster_length)
+        # for i in range(number_clusters):
+        #     rand_range = self.cluster_dist_func(bins, self.cluster_length)
 
-            if rand_range:
-                start, end = rand_range
-                for i in range(start, end):
-                    bins[i] = 1
-            else:
-                break  # exit since no more clusters can be added
+        #     if rand_range:
+        #         start, end = rand_range
+        #         for i in range(start, end):
+        #             bins[i] = 1
+        #     else:
+        #         break  # exit since no more clusters can be added
 
         # set up seq_list as random nucleotide sequence. This is to avoid having
         # empty bins in cases where rounding in order to get the closest possible
@@ -167,8 +169,9 @@ class Sequence():
         for i in np.where(bins == 1)[0]:
             seq_list[i] = self.cluster_nuc
 
-        seq_list = self._randomly_distribute_all_nucleotides(bins,
-                                                             ignore_nucs=[self.cluster_nuc], seq_list=seq_list)
+        seq_list = self._randomly_distribute_all_nucleotides(
+            bins, ignore_nucs=[self.cluster_nuc], seq_list=seq_list
+            )
         return seq_list
 
     def _randomly_distribute_all_nucleotides(self, bins, ignore_nucs=[], seq_list=[]):
@@ -216,7 +219,7 @@ class Sequence():
             'AT_skew': self.at_skew,
             'Cluster_length': self.cluster_length,
             'Clustered_nucleotide': self.cluster_nuc,
-            'Clustering method': self.cluster_dist_func.__name__,
+            'Clustering method': 'even_distribution',
             'Sequence': self.nuc_seq,
         }
 
@@ -231,8 +234,8 @@ class VariableRegion():
         return cls(**row_dict)
 
     def __init__(self, name, length, gc_content=None, gc_skew=None, at_skew=None,
-                 at_content=None, cluster_length=None, cluster_nuc=None,
-                 cluster_dist_func=None, reverse_complement=False, role=None, **kwargs):
+                 at_content=None, cluster_length=1, cluster_nuc=None,
+                 reverse_complement=False, role=None, **kwargs):
 
         self.gc_count = (0, 0)
         self.at_count = (0, 0)
@@ -245,7 +248,7 @@ class VariableRegion():
         self.at_content = at_content
         self.cluster_length = cluster_length
         self.cluster_nuc = cluster_nuc
-        self.cluster_dist_func = cluster_dist_func
+        #self.cluster_dist_func = cluster_dist_func
         self.role = role
         self.reverse_complement = reverse_complement
 
@@ -393,7 +396,6 @@ class VariableRegion():
             self._sequence_name(seq_id_num),
             self.cluster_length,
             self.cluster_nuc,
-            self.cluster_dist_func,
             nuc_counts=self.nuc_dict
         )
 

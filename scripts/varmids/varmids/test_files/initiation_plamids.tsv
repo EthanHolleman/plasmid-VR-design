@@ -1,65 +1,32 @@
-name	gc_skew	gc_content	length	at_skew	at_content	cluster_length	cluster_nuc	clustering_method	construct	reverse_complement	excluded_sites	role
-init-1	0.1	0.4	200						initiation	1	EcoRI, HindIII	initiation_region_1
-init-2	0.4	0.7	200						initiation	1	EcoRI, HindIII	initiation_region_2
-init-3	0.6	0.6	200						initiation	1	EcoRI, HindIII	initiation_region_3
-init-4	0.1	0.7	200						initiation	1	EcoRI, HindIII	initiation_region_4
-init-5	0.0	0.6	200						initiation	1	EcoRI, HindIII	initiation_region_5
-init-6	0.2	0.4	200						initiation	1	EcoRI, HindIII	initiation_region_6
-init-7	0.4	0.6	200						initiation	1	EcoRI, HindIII	initiation_region_7
-init-8	0.6	0.5	200						initiation	1	EcoRI, HindIII	initiation_region_8
-init-9	0.1	0.6	200						initiation	1	EcoRI, HindIII	initiation_region_9
-init-10	0.0	0.5	200						initiation	1	EcoRI, HindIII	initiation_region_10
-init-11	0.2	0.7	200						initiation	1	EcoRI, HindIII	initiation_region_11
-init-12	0.4	0.5	200						initiation	1	EcoRI, HindIII	initiation_region_12
-init-13	0.2	0.6	200						initiation	1	EcoRI, HindIII	initiation_region_13
-init-14	0.1	0.5	200						initiation	1	EcoRI, HindIII	initiation_region_14
-init-15	0.0	0.4	200						initiation	1	EcoRI, HindIII	initiation_region_15
-init-16	0.6	0.4	200						initiation	1	EcoRI, HindIII	initiation_region_16
-init-17	0.6	0.7	200						initiation	1	EcoRI, HindIII	initiation_region_17
-init-18	0.0	0.7	200						initiation	1	EcoRI, HindIII	initiation_region_18
-init-19	0.4	0.4	200						initiation	1	EcoRI, HindIII	initiation_region_19
-init-20	0.2	0.5	200						initiation	1	EcoRI, HindIII	initiation_region_20
-init-21	0.4	0.6	200	0.0		1.0	G	find_available_random_range	initiation	1	EcoRI, HindIII	init-G_clustered
-init-22	0.4	0.6	200	0.0		2.0	G	find_available_random_range	initiation	1	EcoRI, HindIII	init-G_clustered
-init-23	0.4	0.6	200	0.0		3.0	G	find_available_random_range	initiation	1	EcoRI, HindIII	init-G_clustered
-init-24	0.4	0.6	200	0.0		4.0	G	find_available_random_range	initiation	1	EcoRI, HindIII	init-G_clustered
-init-25	0.4	0.6	200	0.2		1.0	G	find_available_random_range	initiation	1	EcoRI, HindIII	init-G_clustered
-init-26	0.4	0.6	200	0.2		2.0	G	find_available_random_range	initiation	1	EcoRI, HindIII	init-G_clustered
-init-27	0.4	0.6	200	0.2		3.0	G	find_available_random_range	initiation	1	EcoRI, HindIII	init-G_clustered
-init-28	0.4	0.6	200	0.2		4.0	G	find_available_random_range	initiation	1	EcoRI, HindIII	init-G_clustered
-init-29	0.4	0.6	200	0.4		1.0	G	find_available_random_range	initiation	1	EcoRI, HindIII	init-G_clustered
-init-30	0.4	0.6	200	0.4		2.0	G	find_available_random_range	initiation	1	EcoRI, HindIII	init-G_clustered
-init-31	0.4	0.6	200	0.4		3.0	G	find_available_random_range	initiation	1	EcoRI, HindIII	init-G_clustered
-init-32	0.4	0.6	200	0.4		4.0	G	find_available_random_range	initiation	1	EcoRI, HindIII	init-G_clustered
-init-1-RC	-0.1	0.4	200						termination	1	EcoRI, HindIII	initiation_region_1
-init-2-RC	-0.4	0.7	200						termination	1	EcoRI, HindIII	initiation_region_2
-init-3-RC	-0.6	0.6	200						termination	1	EcoRI, HindIII	initiation_region_3
-init-4-RC	-0.1	0.7	200						termination	1	EcoRI, HindIII	initiation_region_4
-init-5-RC	-0.0	0.6	200						termination	1	EcoRI, HindIII	initiation_region_5
-init-6-RC	-0.2	0.4	200						termination	1	EcoRI, HindIII	initiation_region_6
-init-7-RC	-0.4	0.6	200						termination	1	EcoRI, HindIII	initiation_region_7
-init-8-RC	-0.6	0.5	200						termination	1	EcoRI, HindIII	initiation_region_8
-init-9-RC	-0.1	0.6	200						termination	1	EcoRI, HindIII	initiation_region_9
-init-10-RC	-0.0	0.5	200						termination	1	EcoRI, HindIII	initiation_region_10
-init-11-RC	-0.2	0.7	200						termination	1	EcoRI, HindIII	initiation_region_11
-init-12-RC	-0.4	0.5	200						termination	1	EcoRI, HindIII	initiation_region_12
-init-13-RC	-0.2	0.6	200						termination	1	EcoRI, HindIII	initiation_region_13
-init-14-RC	-0.1	0.5	200						termination	1	EcoRI, HindIII	initiation_region_14
-init-15-RC	-0.0	0.4	200						termination	1	EcoRI, HindIII	initiation_region_15
-init-16-RC	-0.6	0.4	200						termination	1	EcoRI, HindIII	initiation_region_16
-init-17-RC	-0.6	0.7	200						termination	1	EcoRI, HindIII	initiation_region_17
-init-18-RC	-0.0	0.7	200						termination	1	EcoRI, HindIII	initiation_region_18
-init-19-RC	-0.4	0.4	200						termination	1	EcoRI, HindIII	initiation_region_19
-init-20-RC	-0.2	0.5	200						termination	1	EcoRI, HindIII	initiation_region_20
-init-21-RC	-0.4	0.6	200	-0.0		1.0	G	find_available_random_range	termination	1	EcoRI, HindIII	init-G_clustered
-init-22-RC	-0.4	0.6	200	-0.0		2.0	G	find_available_random_range	termination	1	EcoRI, HindIII	init-G_clustered
-init-23-RC	-0.4	0.6	200	-0.0		3.0	G	find_available_random_range	termination	1	EcoRI, HindIII	init-G_clustered
-init-24-RC	-0.4	0.6	200	-0.0		4.0	G	find_available_random_range	termination	1	EcoRI, HindIII	init-G_clustered
-init-25-RC	-0.4	0.6	200	-0.2		1.0	G	find_available_random_range	termination	1	EcoRI, HindIII	init-G_clustered
-init-26-RC	-0.4	0.6	200	-0.2		2.0	G	find_available_random_range	termination	1	EcoRI, HindIII	init-G_clustered
-init-27-RC	-0.4	0.6	200	-0.2		3.0	G	find_available_random_range	termination	1	EcoRI, HindIII	init-G_clustered
-init-28-RC	-0.4	0.6	200	-0.2		4.0	G	find_available_random_range	termination	1	EcoRI, HindIII	init-G_clustered
-init-29-RC	-0.4	0.6	200	-0.4		1.0	G	find_available_random_range	termination	1	EcoRI, HindIII	init-G_clustered
-init-30-RC	-0.4	0.6	200	-0.4		2.0	G	find_available_random_range	termination	1	EcoRI, HindIII	init-G_clustered
-init-31-RC	-0.4	0.6	200	-0.4		3.0	G	find_available_random_range	termination	1	EcoRI, HindIII	init-G_clustered
-init-32-RC	-0.4	0.6	200	-0.4		4.0	G	find_available_random_range	termination	1		init-G_clustered
+gc_skew	gc_content	at_skew	cluster_length	reverse_complement	length	at_content	cluster_nuc	name	role
+0	0.4	0	NA	1	200	0.6	NA	VR-1	Variable region 1
+0	0.5	0	NA	1	200	0.5	NA	VR-2	Variable region 2
+0	0.6	0	NA	1	200	0.4	NA	VR-3	Variable region 3
+0	0.7	0	NA	1	200	0.3	NA	VR-4	Variable region 4
+0.1	0.4	0	NA	1	200	0.6	NA	VR-5	Variable region 5
+0.1	0.5	0	NA	1	200	0.5	NA	VR-6	Variable region 6
+0.1	0.6	0	NA	1	200	0.4	NA	VR-7	Variable region 7
+0.1	0.7	0	NA	1	200	0.3	NA	VR-8	Variable region 8
+0.2	0.4	0	NA	1	200	0.6	NA	VR-9	Variable region 9
+0.2	0.5	0	NA	1	200	0.5	NA	VR-10	Variable region 10
+0.2	0.6	0	NA	1	200	0.4	NA	VR-11	Variable region 11
+0.2	0.7	0	NA	1	200	0.3	NA	VR-12	Variable region 12
+0.4	0.4	0	NA	1	200	0.6	NA	VR-13	Variable region 13
+0.4	0.5	0	NA	1	200	0.5	NA	VR-14	Variable region 14
+0.4	0.6	0	2	1	200	0.4	G	VR-15	Variable region 15
+0.4	0.6	0	3	1	200	0.4	G	VR-16	Variable region 16
+0.4	0.6	0	4	1	200	0.4	G	VR-17	Variable region 17
+0.4	0.6	0	NA	1	200	0.4	NA	VR-18	Variable region 18
+0.4	0.6	0.2	2	1	200	0.4	G	VR-19	Variable region 19
+0.4	0.6	0.2	3	1	200	0.4	G	VR-20	Variable region 20
+0.4	0.6	0.2	4	1	200	0.4	G	VR-21	Variable region 21
+0.4	0.6	0.2	NA	1	200	0.4	NA	VR-22	Variable region 22
+0.4	0.6	0.4	2	1	200	0.4	G	VR-23	Variable region 23
+0.4	0.6	0.4	3	1	200	0.4	G	VR-24	Variable region 24
+0.4	0.6	0.4	4	1	200	0.4	G	VR-25	Variable region 25
+0.4	0.6	0.4	NA	1	200	0.4	NA	VR-26	Variable region 26
+0.4	0.7	0	NA	1	200	0.3	NA	VR-27	Variable region 27
+0.6	0.4	0	NA	1	200	0.6	NA	VR-28	Variable region 28
+0.6	0.5	0	NA	1	200	0.5	NA	VR-29	Variable region 29
+0.6	0.6	0	NA	1	200	0.4	NA	VR-30	Variable region 30
+0.6	0.7	0	NA	1	200	0.3	NA	VR-31	Variable region 31
