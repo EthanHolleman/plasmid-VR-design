@@ -229,30 +229,7 @@ class TacSeries(Series):
 
     linearizers = [HindIII, KpnI]
     series_id='Tac'
-  
-    # # @classmethod
-    # # def write_primers(cls, output_path):
-    # #     # get primers with unique sequences
-    # #     primer_ids = {}
-    # #     for each_primer_pair in cls.all_primers:
-    # #         for each_primer in each_primer_pair:
-    # #             primer_id = each_primer.seguid()
-    # #             if primer_id in primer_ids:
-    # #                 primer_ids[primer_id].append(each_primer)
-    # #             else:
-    # #                 primer_ids[primer_id] = [each_primer]
-        
-       
-    #     with open(str(output_path), 'w') as handle:
-    #         for each_primer_id, each_primer_list in primer_ids.items():
-    #             final_primer = each_primer_list[0]
-    #             final_primer.description = f"{final_primer.description.split(' ')[0]} {cls.__name__}"
-    #             final_primer.stamp()
-    #             handle.write(final_primer.format('fasta'))
-        
-    #     return output_path
-
-        
+          
     @classmethod
     def write_assemblies_from_parent_constructs(cls, parent_construct_paths,
                                         backbone_path, primers, output_dir):
@@ -299,7 +276,6 @@ class TacSeries(Series):
         self.primers = primers
         super().__init__(name, backbone, self.pcr_fragment)
 
-    
     @property
     def parent_construct(self):
         return self._parent_construct
@@ -389,17 +365,11 @@ def main():
         termination_dir
     )
 
-    # tac initiation and termination assemblies are having issues that
-    # seem to be due to details in pydna that I am working on figuring
-    # out. For now creating primers for these assemblies manually and adding
-    # script to confirm that primers will produce assemblable amplicons.
-
     tac_initiation_dir = Path(output_dir).joinpath('Tac_initiation_series')
     tac_init_primers = str(snakemake.input['tac_init_primers'])
     TacInitiationSeries.write_assemblies_from_parent_constructs(
         t7_init_assemblies, tac_backbone, tac_init_primers, tac_initiation_dir
     )
-    # TacInitiationSeries.write_primers(tac_init_primers)
 
     tac_termination_dir = Path(output_dir).joinpath('Tac_termination_series')
     tac_term_primers = str(snakemake.input['tac_term_primers'])
