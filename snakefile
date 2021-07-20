@@ -75,6 +75,10 @@ rule all:
         expand(
             'output/{var_name}/protocols/t7_init_library.tsv',
             var_name=variable_regions.keys()
+        ),
+        expand(
+            'output/{var_name}/.variable_region_primers.done',
+            var_name=variable_regions.keys()
         )
 
         
