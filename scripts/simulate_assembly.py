@@ -16,9 +16,7 @@ from pathlib import Path
 MOD_DATE = datetime.date.strftime(datetime.datetime.now(), "%d-%b-%Y").upper()
 
 def read_genbank_record(filepath):
-    return GenbankRecord(
-        read(filepath)
-    )
+    return GenbankRecord(read(str(filepath)))
 
 
 class Series():
@@ -294,13 +292,10 @@ class TacSeries(Series):
         '''Defines the region that will be amplified from the parent_construct.
         '''
         pcr_frag = pcr(*self.primers, self.parent_construct)
-        print(pcr_frag)
-        pcr_frag.write('test_frag.gb')
         return pcr_frag
     
     @property
     def fragment_list(self):
-        self.large_fragment.write('test_large_frag.gb')
         return (
             self.large_fragment, self.pcr_fragment
         )
@@ -349,33 +344,51 @@ def main():
 
     insert_sequences = snakemake.input['inserts']
     output_dir = str(snakemake.output)
-    t7_init_backbone = str(snakemake.input['t7_init_backbone'])
-    t7_term_backbone = str(snakemake.input['t7_term_backbone'])
-    tac_backbone = str(snakemake.input['tac_backbone'])
-    initiator = str(snakemake.input['initiator'])
 
-    initiation_dir = Path(output_dir).joinpath('T7_initiation_series')
-    t7_init_assemblies = T7InitiationSeries.write_assemblies_from_insert_list(
-        insert_sequences, t7_init_backbone, initiation_dir
-    )
+    t7_backbones = ['t7_init_backbone', 't7_term_backbone']
+    
+    if t7_backbones[0] in dict(snakemake.input) and t7_backbones[1] in dict(snakemake.input):
 
-    termination_dir = Path(output_dir).joinpath('T7_termination_series')
-    t7_term_assemblies = T7TerminationSeries.write_assemblies_from_insert_list(
-        insert_sequences, t7_term_backbone, initiator,
-        termination_dir
-    )
+        t7_init_backbone = str(snakemake.input['t7_init_backbone'])
+        t7_term_backbone = str(snakemake.input['t7_term_backbone'])
+        initiator = str(snakemake.input['initiator'])
 
-    tac_initiation_dir = Path(output_dir).joinpath('Tac_initiation_series')
-    tac_init_primers = str(snakemake.input['tac_init_primers'])
-    TacInitiationSeries.write_assemblies_from_parent_constructs(
-        t7_init_assemblies, tac_backbone, tac_init_primers, tac_initiation_dir
-    )
+        initiation_dir = Path(snakemake.output['t7_init'])
+        t7_init_assemblies = T7InitiationSeries.write_assemblies_from_insert_list(
+            insert_sequences, t7_init_backbone, initiation_dir
+        )
 
-    tac_termination_dir = Path(output_dir).joinpath('Tac_termination_series')
-    tac_term_primers = str(snakemake.input['tac_term_primers'])
-    TacTerminationSeries.write_assemblies_from_parent_constructs(
-        t7_term_assemblies, tac_backbone, tac_term_primers, tac_termination_dir, 
-    )
+        termination_dir = Path(snakemake.output['t7_term'])
+        t7_term_assemblies = T7TerminationSeries.write_assemblies_from_insert_list(
+            insert_sequences, t7_term_backbone, initiator,
+            termination_dir
+        )
+    elif 'tac_init_primers' in dict(snakemake.input):
+
+        # read the T7 constructs
+        t7_init_construct_dir = Path(str(snakemake.input['t7_init']))
+        t7_term_construct_dir = Path(str(snakemake.input['t7_term']))
+
+        t7_init_constructs = [str(r) for r in t7_init_construct_dir.iterdir() 
+                              if r.suffix=='.gb']
+        t7_term_constructs = [str(r) for r in t7_term_construct_dir.iterdir()
+                              if r.suffix=='.gb']
+
+        tac_backbone = str(snakemake.input['tac_backbone'])
+        tac_initiation_dir = str(snakemake.output['tac_init'])
+        tac_init_primers = str(snakemake.input['tac_init_primers'])
+
+        TacInitiationSeries.write_assemblies_from_parent_constructs(
+            t7_init_constructs, tac_backbone, tac_init_primers, tac_initiation_dir
+        )
+
+        tac_termination_dir = str(snakemake.output['tac_term'])
+        tac_term_primers = str(snakemake.input['tac_term_primers'])
+        TacTerminationSeries.write_assemblies_from_parent_constructs(
+            t7_term_constructs, tac_backbone, tac_term_primers, tac_termination_dir, 
+        )
+    else:
+        raise Exception('Check snakemake input names!')
 
 if __name__ == '__main__':
     main()

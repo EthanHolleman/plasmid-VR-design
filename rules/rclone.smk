@@ -2,7 +2,7 @@ from pathlib import Path
 
 rule backup_results:
     input:
-        constructs='output/{var_name}/constructs'
+        constructs='output/{var_name}/constructs/.all_costructs.done'
     output:
         done_marker='output/{var_name}/.synced.done'
     params:
