@@ -41,7 +41,7 @@ else:
 
 rule all:
     input:
-        rclone_output,
+        #rclone_output,
         expand(  # make all complete insert sequences
             'output/{var_regions}/inserts/complete_inserts.fa',
             var_regions=variable_regions.keys()
@@ -63,13 +63,8 @@ rule all:
             'output/expectations/{var_name}/SPOT-RNA/rna_secondary_structure.png',
             var_name=variable_regions.keys()
         ),
-        expand(  # Simulate construct assembly
-            'output/{var_name}/constructs',
-            var_name=variable_regions.keys()
-        ),
-        expand(  # tac series primers
-            ['output/{var_name}/sequences/tac_initiation_series_primers.fa',
-            'output/{var_name}/sequences/tac_termination_series_primers.fa'],
+        expand( 
+            'output/{var_name}/constructs/.all_costructs.done',
             var_name=variable_regions.keys()
         ),
         expand(
@@ -78,6 +73,10 @@ rule all:
         ),
         expand(
             'output/{var_name}/.variable_region_primers.done',
+            var_name=variable_regions.keys()
+        ),
+        expand(
+            'output/{var_name}/ordering/thermo_fischer.tsv',
             var_name=variable_regions.keys()
         )
 

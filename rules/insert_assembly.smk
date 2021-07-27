@@ -112,6 +112,16 @@ rule fasta_checksum:
     md5sum {input} > {output}
     '''
 
+rule thermo_fischer_order_format:
+    conda:
+        '../envs/python.yml'
+    input:
+        'output/{var_name}/inserts/complete_inserts.fa'
+    output:
+        'output/{var_name}/ordering/thermo_fischer.tsv'
+    script:'../scripts/fasta_to_tsv.py'
+        
+
 
 
 
