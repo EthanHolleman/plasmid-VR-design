@@ -7,16 +7,16 @@ SOURCE      .
   ORGANISM  .
             .
 FEATURES             Location/Qualifiers
-     CDS             1..30
+     misc            1..30
                      /name="3' homology arm"
                      /author="Ethan Holleman"
                      /label="3_prime_HR"
                      /note="Homology arm of variable region insert taken from
-                     (base 1) positions 540-570 of pFC9"
-                     /pFC9_start=539
-                     /pFC9_end=569
-                     /pFC9_seguid="NenxzxpELoRBEdYEmmDjvk0mvTk"
-                     /date="07/08/2021"
+                     (base 1) positions 533-563 of pFC9"
+                     /pFC9_start=532
+                     /pFC9_end=562
+                     /pFC9_seguid="GgwWaQfD9ayC9M7teGIRvtekf94"
+                     /date="07/27/2021"
 ORIGIN
         1 gaattcgtcg cagtgaccga ggcgaggagg
 //

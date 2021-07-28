@@ -104,6 +104,7 @@ def main():
                         homology_target_backbone)
     
     check_homology_arms_for_required_cutter(five_prime_arm, 'KpnI')
+    check_homology_arms_for_required_cutter(five_prime_arm, 'SacI')
     check_homology_arms_for_required_cutter(three_prime_arm, 'EcoRI')
 
     vr_record = get_feature_by_name(insert_record, 'variable_region')

@@ -5,13 +5,14 @@
 # Variable regions parameters filepaths. Defines the sequence content
 # of all variable regions that should be generated.
 variable_region_definitions:
-  insert_sequences_100: 'config_files/variable_regions/variable_regions.tsv'
+  insert_sequences_100_v2: 'config_files/variable_regions/variable_regions.tsv'
 
 # List of names of restriction enzymes who's recognition sites should not be
 # present in any generated sequence. Case sensitive. 
 prohibited_restriction_enzyme_recognition_sites:
   - 'EcoRI'
   - 'KpnI'
+  - 'SacI'
   - 'HindIII'
 
 # List of paths to genbank formatted files describing plasmid backbones that inserts
@@ -21,7 +22,7 @@ backbones:
   t7_initiation: 'resources/files/genbank/pFC9.gb'
   tac: 'resources/files/genbank/pFC53tacT1T2.gb'
 
-# "String initiator" sequence that will be used as the initiator in the
+# "Strong initiator" sequence that will be used as the initiator in the
 # T7 termination series constructs. 
 termination_series_initiator: 'resources/files/genbank/placeholder_initiator.gb'
 

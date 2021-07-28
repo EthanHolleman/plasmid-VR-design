@@ -91,6 +91,8 @@ class Series():
 
 class T7InitiationSeries(Series):
 
+    linearizers = [SacI, EcoRI]  # change KpnI to SacI
+
     @classmethod
     def write_assemblies_from_insert_list(cls, insert_paths, backbone_path, 
                                          output_dir):
