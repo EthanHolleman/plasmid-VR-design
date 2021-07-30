@@ -11,7 +11,7 @@ rule simulate_construct_assembly_t7:
         t7_init_backbone=config['backbones']['t7_initiation'],
         t7_term_backbone=config['backbones']['t7_termination'],
         tac_backbone=config['backbones']['tac'],
-        initiator=config['termination_series_initiator'],
+        initiator=config['termination_series_initiator']
     output:
         t7_init=directory('output/{var_name}/constructs/T7_initiation_series'),
         t7_term=directory('output/{var_name}/constructs/T7_termination_series')
@@ -49,7 +49,6 @@ rule simulate_all_constructs:
     touch {output}
     '''
 
-
 rule make_tac_primers:
     conda:
         '../envs/pyGibson.yml'
@@ -57,7 +56,7 @@ rule make_tac_primers:
         t7_init='output/{var_name}/constructs/T7_initiation_series',
         t7_term='output/{var_name}/constructs/T7_termination_series',
         tac_backbone=config['backbones']['tac'],
-        protocol='output/{var_name}/protocols/t6_init_inserts.tsv'
+        protocol='output/{var_name}/protocols/t7_init_inserts.tsv'
     output:
         init_primers='output/{var_name}/sequences/tac_initiation_series_primers.fa',
         term_primers='output/{var_name}/sequences/tac_termination_series_primers.fa'

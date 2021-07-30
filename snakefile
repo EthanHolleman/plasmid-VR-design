@@ -43,8 +43,8 @@ rule all:
     input:
         rclone_output,
         expand(  # make all complete insert sequences
-            'output/{var_regions}/inserts/complete_inserts.fa',
-            var_regions=variable_regions.keys()
+            'output/{var_regions}/inserts/complete_inserts.{extension}',
+            var_regions=variable_regions.keys(), extension=['fa', 'tsv']
         ),
         expand(  # make complete insert checksums 
             'output/{var_name}/inserts/complete_inserts.md5sum',
@@ -61,10 +61,6 @@ rule all:
         ),  # same thing but for spot-rna predictions
         expand(
             'output/expectations/{var_name}/SPOT-RNA/rna_secondary_structure.png',
-            var_name=variable_regions.keys()
-        ),
-        expand(  # Simulate construct assembly
-            'output/{var_name}/constructs',
             var_name=variable_regions.keys()
         ),
         expand(  # tac series primers
