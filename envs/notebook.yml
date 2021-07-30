@@ -5,9 +5,9 @@ channels:
   - defaults
   - bjornfjohansson
 dependencies:
-  - python=3.8
-  - pydna
-  - biopython
+  - python
+  - pydna==4.0.0a9
+  - biopython>=1.79  # see https://github.com/BjornFJohansson/pydna/issues/69
   - pandas
   - r-ggplot2
   - r-ggpubr

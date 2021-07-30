@@ -67,7 +67,6 @@ rule write_protocol_notebook:
     conda:
         '../envs/pyGibson.yml'
     input:
-        constructs_dir='output/{var_name}/constructs',
         t7_init_backbone = config['backbones']['t7_initiation'],
         inserts=lambda wildcards: expand(
             'output/{var_name}/inserts/genbank_files/{p_name}.insert.gb',

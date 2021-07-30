@@ -87,7 +87,6 @@ rule check_all_inserts:
     touch {output}
     '''
 
-
 rule aggregate_inserts_into_fasta:
     conda:
         '../envs/pyGibson.yml'
@@ -102,6 +101,15 @@ rule aggregate_inserts_into_fasta:
         'output/{var_name}/inserts/complete_inserts.fa'
     script:'../scripts/agg_gb_inserts_to_fa.py'
 
+rule insert_fasta_to_tsv:
+    conda:
+        '../envs/pyGibson.yml'
+    input:
+        'output/{var_name}/inserts/complete_inserts.fa'
+    output:
+        'output/{var_name}/inserts/complete_inserts.tsv'
+    script:'../scripts/fasta_to_tsv.py'
+
 
 rule fasta_checksum:
     input:
@@ -111,6 +119,23 @@ rule fasta_checksum:
     shell:'''
     md5sum {input} > {output}
     '''
+
+rule summary_notebook:
+    conda:
+        '../envs/notebook.yml'
+    input:
+        insert_genbank=lambda wildcards: expand(
+            'output/{var_name}/inserts/genbank_files/{p_name}.insert.gb',
+            p_name=get_all_p_names(wildcards), allow_missing=True
+        ),
+        vr_defs_file=lambda wildcards: config['variable_region_definitions'][wildcards.var_name]
+    log:
+        notebook='output/{var_name}/inserts/insert_summary.ipynb'
+    params:
+        vr_defs=lambda wildcards: variable_regions[wildcards.var_name],
+        cutters=config['prohibited_restriction_enzyme_recognition_sites']
+    notebook:
+        "../notebooks/insert_summary.py.ipynb"
 
 
 
