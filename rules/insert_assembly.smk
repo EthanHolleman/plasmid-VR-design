@@ -134,6 +134,9 @@ rule summary_notebook:
     params:
         vr_defs=lambda wildcards: variable_regions[wildcards.var_name],
         cutters=config['prohibited_restriction_enzyme_recognition_sites']
+    output:
+        insert_attributes='output/{var_name}/plots/insert_variable_region_attributes.png',
+        insert_G_clustering='output/{var_name}/plots/insert_variable_region_G_clustering.png'
     notebook:
         "../notebooks/insert_summary.py.ipynb"
 

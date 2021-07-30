@@ -41,7 +41,7 @@ else:
 
 rule all:
     input:
-        rclone_output,
+        #rclone_output,
         expand(  # make all complete insert sequences
             'output/{var_regions}/inserts/complete_inserts.{extension}',
             var_regions=variable_regions.keys(), extension=['fa', 'tsv']
@@ -74,6 +74,10 @@ rule all:
         ),
         expand(
             'output/{var_name}/.variable_region_primers.done',
+            var_name=variable_regions.keys()
+        ),
+        expand(  # jupyter notebook with plots showing insert seq attributes
+            'output/{var_name}/inserts/insert_summary.ipynb',
             var_name=variable_regions.keys()
         )
 
