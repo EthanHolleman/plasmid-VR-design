@@ -1,0 +1,15 @@
+channels:
+  - bioconda
+  - conda-forge
+  - r
+  - defaults
+  - bjornfjohansson
+dependencies:
+  - python=3.8
+  - pydna
+  - biopython
+  - pandas
+  - r-ggplot2
+  - r-ggpubr
+  - rpy2
+  - jupyterlab
