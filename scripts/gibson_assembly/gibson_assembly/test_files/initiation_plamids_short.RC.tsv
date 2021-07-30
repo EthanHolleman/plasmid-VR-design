@@ -1,3 +1,0 @@
-name	gc_skew	gc_content	length	at_skew	at_content	cluster_length	cluster_nuc	clustering_method	reverse_complement	role
-init-1	0.1	0.4	200						1	initiation_region_1
-init-1-RC	-0.1	0.4	200						1	initiation_region_1

@@ -1,5 +1,0 @@
-
-
-INSERT_KEYWORDS = [
-    'VAR_REGION'
-]

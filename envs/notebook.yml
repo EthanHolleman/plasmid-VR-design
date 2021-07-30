@@ -1,0 +1,15 @@
+channels:
+  - bioconda
+  - conda-forge
+  - r
+  - defaults
+  - bjornfjohansson
+dependencies:
+  - python
+  - pydna==4.0.0a9
+  - biopython>=1.79  # see https://github.com/BjornFJohansson/pydna/issues/69
+  - pandas
+  - r-ggplot2
+  - r-ggpubr
+  - rpy2
+  - jupyterlab

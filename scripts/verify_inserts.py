@@ -58,8 +58,9 @@ def check_insert_for_sequence(insert_record, seq_record):
 
 def check_homology_arms(insert_record, homology_arm, source_backbone):
     assert insert_record.seq.find(str(homology_arm.seq)) != -1
-    assert source_backbone.seq.find(str(homology_arm.seq)) != -1
-
+    #assert source_backbone.seq.find(str(homology_arm.seq)) != -1
+    # removed check because 5' arm now as SacI site followed by
+    # kpnI site that is not present in the og backbone 
 
 def check_homology_arms_for_required_cutter(homology_arm, cutter):
     assert cutter in one_cutters_as_string_set(homology_arm)

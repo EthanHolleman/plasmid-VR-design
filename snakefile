@@ -41,10 +41,10 @@ else:
 
 rule all:
     input:
-        rclone_output,
+        #rclone_output,
         expand(  # make all complete insert sequences
-            'output/{var_regions}/inserts/complete_inserts.fa',
-            var_regions=variable_regions.keys()
+            'output/{var_regions}/inserts/complete_inserts.{extension}',
+            var_regions=variable_regions.keys(), extension=['fa', 'tsv']
         ),
         expand(  # make complete insert checksums 
             'output/{var_name}/inserts/complete_inserts.md5sum',
@@ -63,10 +63,6 @@ rule all:
             'output/expectations/{var_name}/SPOT-RNA/rna_secondary_structure.png',
             var_name=variable_regions.keys()
         ),
-        expand(  # Simulate construct assembly
-            'output/{var_name}/constructs',
-            var_name=variable_regions.keys()
-        ),
         expand(  # tac series primers
             ['output/{var_name}/sequences/tac_initiation_series_primers.fa',
             'output/{var_name}/sequences/tac_termination_series_primers.fa'],
@@ -78,6 +74,10 @@ rule all:
         ),
         expand(
             'output/{var_name}/.variable_region_primers.done',
+            var_name=variable_regions.keys()
+        ),
+        expand(  # jupyter notebook with plots showing insert seq attributes
+            'output/{var_name}/inserts/insert_summary.ipynb',
             var_name=variable_regions.keys()
         )
 
